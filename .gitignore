@@ -1,0 +1,7 @@
+.*
+*.py[cod]
+*.cfg
+!.gitignore
+
+__pycache__/
+migrations/
