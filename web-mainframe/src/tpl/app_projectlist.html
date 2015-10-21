@@ -15,18 +15,18 @@
     <!-- / main header -->
     <div class="wrapper-md" ng-controller="FlotChartDemoCtrl">
       <!-- stats -->
-      <div class="row">
-        <div class="col-md-5">
+        <div>
           <div class="row row-sm text-center">
-            <ul class="col-xs-6">
-              <li class="panel padder-v item">
-                <div class="h1 text-info font-thin h1">521</div>
-                <span class="text-muted text-xs">New items</span>
-                <div class="top text-right w-full">
-                  <i class="fa fa-caret-down text-warning m-r-sm"></i>
-                </div>
-              </li>
-            </ul>
+            <span class="col-xs-6" ng-repeat="root in roots">
+              <div class="panel padder-v item">
+                <div class="h1 text-info font-thin h1">{{ root.name }}</div>
+                <div>{{ root.due_date }}</div>
+                <span  ng-repeat="user in root.assignedUsers">
+                  <img ng-src="{{user.pic}}" width="30px" height="30px"  display="inline"/>
+                    <!-- 프로젝트 페이지 - css 확정하고 정리하기!! -->
+                </span>
+              </div>
+            </span>
           </div>
         </div>
       </div>
