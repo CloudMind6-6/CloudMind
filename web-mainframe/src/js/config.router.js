@@ -27,75 +27,40 @@ angular.module('app')
                   templateUrl: layout
               })
 
+              //project list
               .state('app.list', {
                   url: '/list',
-                  templateUrl: 'tpl/app_dashboard_v1.html',
+                  templateUrl: 'tpl/app_projectlist.html',
                   resolve: load(['js/controllers/chart.js'])
               })
-
-              //project
 
               // table
               .state('app.table', {
                   url: '/table',
                   template: '<div ui-view></div>'
               })
-              .state('app.table.static', {
-                  url: '/static',
-                  templateUrl: 'tpl/table_static.html'
-              })
               .state('app.table.datatable', {
                   url: '/datatable',
                   templateUrl: 'tpl/table_datatable.html'
               })
-              .state('app.table.footable', {
-                  url: '/footable',
-                  templateUrl: 'tpl/table_footable.html'
+
+              // fullCalendar
+              .state('app.calendar', {
+                  url: '/calendar',
+                  templateUrl: 'tpl/app_calendar.html',
+                  // use resolve to load other dependences
+                  resolve: load(['moment','fullcalendar','ui.calendar','js/app/calendar/calendar.js'])
               })
-              .state('app.table.grid', {
-                  url: '/grid',
-                  templateUrl: 'tpl/table_grid.html',
-                  resolve: load(['ngGrid','js/controllers/grid.js'])
+
+              // Mindmap
+              .state('app.mindmap', {
+                  url: '/mindmap',
+                  templateUrl: 'tpl/app_mindmap.html',
+                  // use resolve to load other dependences
+                  resolve: load(['js/app/mindmap/mindmap.js'])
               })
-              .state('app.table.uigrid', {
-                  url: '/uigrid',
-                  templateUrl: 'tpl/table_uigrid.html',
-                  resolve: load(['ui.grid','js/controllers/uigrid.js'])
-              })
-              .state('app.table.editable', {
-                  url: '/editable',
-                  templateUrl: 'tpl/table_editable.html',
-                  controller: 'XeditableCtrl',
-                  resolve: load(['xeditable','js/controllers/xeditable.js'])
-              })
-              .state('app.table.smart', {
-                  url: '/smart',
-                  templateUrl: 'tpl/table_smart.html',
-                  resolve: load(['smart-table','js/controllers/table.js'])
-              })
-              // form
-              .state('app.form', {
-                  url: '/form',
-                  template: '<div ui-view class="fade-in"></div>',
-                  resolve: load('js/controllers/form.js')
-              })
-              .state('app.form.components', {
-                  url: '/components',
-                  templateUrl: 'tpl/form_components.html',
-                  resolve: load(['ngBootstrap','daterangepicker','js/controllers/form.components.js'])
-              })
-              .state('app.form.elements', {
-                  url: '/elements',
-                  templateUrl: 'tpl/form_elements.html'
-              })
-              .state('app.form.validation', {
-                  url: '/validation',
-                  templateUrl: 'tpl/form_validation.html'
-              })
-              .state('app.form.wizard', {
-                  url: '/wizard',
-                  templateUrl: 'tpl/form_wizard.html'
-              })
+
+
               .state('app.form.fileupload', {
                   url: '/fileupload',
                   templateUrl: 'tpl/form_fileupload.html',
@@ -118,52 +83,7 @@ angular.module('app')
                   controller: 'SliderCtrl',
                   resolve: load(['vr.directives.slider','js/controllers/slider.js'])
               })
-              .state('app.form.editor', {
-                  url: '/editor',
-                  templateUrl: 'tpl/form_editor.html',
-                  controller: 'EditorCtrl',
-                  resolve: load(['textAngular','js/controllers/editor.js'])
-              })
-              .state('app.form.xeditable', {
-                  url: '/xeditable',
-                  templateUrl: 'tpl/form_xeditable.html',
-                  controller: 'XeditableCtrl',
-                  resolve: load(['xeditable','js/controllers/xeditable.js'])
-              })
-              // pages
-              .state('app.page', {
-                  url: '/page',
-                  template: '<div ui-view class="fade-in-down"></div>'
-              })
-              .state('app.page.profile', {
-                  url: '/profile',
-                  templateUrl: 'tpl/page_profile.html'
-              })
-              .state('app.page.post', {
-                  url: '/post',
-                  templateUrl: 'tpl/page_post.html'
-              })
-              .state('app.page.search', {
-                  url: '/search',
-                  templateUrl: 'tpl/page_search.html'
-              })
-              .state('app.page.invoice', {
-                  url: '/invoice',
-                  templateUrl: 'tpl/page_invoice.html'
-              })
-              .state('app.page.price', {
-                  url: '/price',
-                  templateUrl: 'tpl/page_price.html'
-              })
-              .state('app.docs', {
-                  url: '/docs',
-                  templateUrl: 'tpl/docs.html'
-              })
               // others
-              .state('lockme', {
-                  url: '/lockme',
-                  templateUrl: 'tpl/page_lockme.html'
-              })
               .state('access', {
                   url: '/access',
                   template: '<div ui-view class="fade-in-right-big smooth"></div>'
@@ -187,21 +107,6 @@ angular.module('app')
                   templateUrl: 'tpl/page_404.html'
               })
 
-              // fullCalendar
-              .state('app.calendar', {
-                  url: '/calendar',
-                  templateUrl: 'tpl/app_calendar.html',
-                  // use resolve to load other dependences
-                  resolve: load(['moment','fullcalendar','ui.calendar','js/app/calendar/calendar.js'])
-              })
-
-              // Mindmap
-              .state('app.mindmap', {
-                  url: '/mindmap',
-                  templateUrl: 'tpl/app_mindmap.html',
-                  // use resolve to load other dependences
-                  resolve: load(['js/app/mindmap/mindmap.js'])
-              })
 
               .state('layout', {
                   abstract: true,
@@ -247,63 +152,7 @@ angular.module('app')
                   abstract: true,
                   url: '/apps',
                   templateUrl: 'tpl/layout.html'
-              })
-              .state('apps.note', {
-                  url: '/note',
-                  templateUrl: 'tpl/apps_note.html',
-                  resolve: load( ['js/app/note/note.js','moment'] )
-              })
-              .state('apps.contact', {
-                  url: '/contact',
-                  templateUrl: 'tpl/apps_contact.html',
-                  resolve: load( ['js/app/contact/contact.js'] )
-              })
-              .state('app.weather', {
-                  url: '/weather',
-                  templateUrl: 'tpl/apps_weather.html',
-                  resolve: load(['js/app/weather/skycons.js','angular-skycons','js/app/weather/ctrl.js','moment'])
-              })
-              .state('app.todo', {
-                  url: '/todo',
-                  templateUrl: 'tpl/apps_todo.html',
-                  resolve: load(['js/app/todo/todo.js', 'moment'])
-              })
-              .state('app.todo.list', {
-                  url: '/{fold}'
-              })
-              .state('app.material', {
-                  url: '/material',
-                  template: '<div ui-view class="wrapper-md"></div>',
-                  resolve: load(['js/controllers/material.js'])
-                })
-                .state('app.material.button', {
-                  url: '/button',
-                  templateUrl: 'tpl/material/button.html'
-                })
-                .state('app.material.color', {
-                  url: '/color',
-                  templateUrl: 'tpl/material/color.html'
-                })
-                .state('app.material.icon', {
-                  url: '/icon',
-                  templateUrl: 'tpl/material/icon.html'
-                })
-                .state('app.material.card', {
-                  url: '/card',
-                  templateUrl: 'tpl/material/card.html'
-                })
-                .state('app.material.form', {
-                  url: '/form',
-                  templateUrl: 'tpl/material/form.html'
-                })
-                .state('app.material.list', {
-                  url: '/list',
-                  templateUrl: 'tpl/material/list.html'
-                })
-                .state('app.material.ngmaterial', {
-                  url: '/ngmaterial',
-                  templateUrl: 'tpl/material/ngmaterial.html'
-                });
+              });
 
           function load(srcs, callback) {
             return {

@@ -3,7 +3,7 @@
 /* Controllers */
 
 app
-  // Flot Chart controller 
+  // Project list controller
   .controller('FlotChartDemoCtrl', ['$scope', function($scope) {
     $scope.d = [ [1,6.5],[2,6.5],[3,7],[4,8],[5,7.5],[6,7],[7,6.8],[8,7],[9,7.2],[10,7],[11,6.8],[12,7] ];
 
