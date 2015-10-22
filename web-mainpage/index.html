@@ -25,7 +25,37 @@
 			}
 		</style>
 
+		<script src="js/jquery.min.js"></script>
+		<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+		<!-- 로컬에서는 OAuth 처리가 안됨. gapi 에러가 발생하니 참고하세요. -->
+		<script>			
+		  	function signInCallback(authResult) {
+			  if (authResult['code']) {
+			  	console.log(authResult["code"]);
+			    // Hide the sign-in button now that the user is authorized, for example:
+			    $('#signinButton').attr('style', 'display: none');
 
+			    // Google Redirection URI
+			    $.get("/oauth2callback", {"code" : authResult["code"]} , function(data) {
+			    	console.log(data);
+			    })
+			  } else {
+			    // Login 오류
+			  }
+			}
+		    function start() {
+		      gapi.load('auth2', function() {
+		        auth2 = gapi.auth2.init({
+		          client_id: '863887952859-ol5bukmc38lkmfa82usslterdrrol4lc.apps.googleusercontent.com',
+		          scope : 'profile',
+		          // Scopes to request in addition to 'profile' and 'email'
+		          //scope: 'additional_scope'
+		        });
+		      });
+		    }
+		    // Google API Console 에서 client_id 확인 가능
+  </script>
+  </script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -49,9 +79,9 @@
 
 							<div class="hero-txt" style="color : #FFF; ">
 								<img src="http://dummyimage.com/200x200">
-								<h3 style="font-size: 30px">CloudMind</h3>
+								<h3 style="font-size: 30px; color : #FFF; ">CloudMind</h3>
 								<p>마인드맵과 캘린더, 테이블뷰를 통한 일정 관리 서비스</p>
-								<a href="#" class="btn btn-main btn-lg">로그인</a>
+								<a href="#" id="signinButton" class="btn btn-main btn-lg">로그인</a>
 							</div>
 						</div>
 					</div>
@@ -64,7 +94,12 @@
 
 		
 		
-
+		<style>
+			.service .block {
+				background-color : #525450 ; color :#FFF	
+			}
+			
+		</style>
 		<section class="service" id="service">
 			<div class="container">
 				<div class="row">
@@ -74,34 +109,28 @@
 							<p>다양한 뷰 옵션 제공</p>
 						</div>
 						<div class="block">
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class="st-feature">
 									<div class="st-feature-icon"><i class="fa fa-cog"></i></div>
 									<strong class="st-feature-title">Calendar</strong>
 									<p>캘린더뷰를 통해 해당되는 모든 일정들을 볼 수 있는 뷰를 제공합니다.</p>
 								</div>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class="st-feature">
 									<div class="st-feature-icon"><i class="fa fa-university"></i></div>
 									<strong class="st-feature-title">Mindmap</strong>
 									<p>자기와 해당 되는 업무를 마인드맵 형태로 쉽게 보여줍니다.</p>
 								</div>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class="st-feature">
 									<div class="st-feature-icon"><i class="fa fa-comments-o"></i></div>
-									<strong class="st-feature-title">Chart-View</strong>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue.</p>
+									<strong class="st-feature-title">List-View</strong>
+									<p>모든 일정을 표 형식으로 보여주는 뷰 입니다.</p>
 								</div>
 							</div>
-							<div class="col-md-3">
-								<div class="st-feature">
-									<div class="st-feature-icon"><i class="fa fa-life-ring"></i></div>
-									<strong class="st-feature-title">Creative Design</strong>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue.</p>
-								</div>
-							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -128,7 +157,7 @@
 						<div class="block">
 					
 					<div class="col-md-7">
-						<h3 style="color: #000">Chart-View Details</h3>
+						<h3 style="color: #000">Mindmap View Details</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla. Donec a neque libero. Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa.</p>
 						<a href="#" class="btn btn-main btn-lg">Read more</a>
 					</div>
@@ -141,16 +170,16 @@
 		
 		<section class="features-desc">
 			<div class="container">
-						<div class="block">
+				<div class="block">
 					<div class="col-md-5">
 						<img src="photos/feature.jpg" alt="" class="img-responsive">
 					</div>
 					<div class="col-md-7">
-						<h3 style="color: #000">Table-View Details</h3>
+						<h3 style="color: #000">List View Details</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla. Donec a neque libero. Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa.</p>
 						<a href="#" class="btn btn-main btn-lg">Read more</a>
 					</div>
-								</div>
+				</div>
 			</div>
 		</section>
 
@@ -168,9 +197,15 @@
 				</div>
 			</div>
 		</footer>
+		<script>
+			$('#signinButton').click(function() {
+		    // signInCallback defined in step 6.
+		    auth2.grantOfflineAccess({'redirect_uri': 'postmessage'}).then(signInCallback);
+		  });
+		</script>
 
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="js/jquery.min.js"></script>
+		
+		
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/jquery.easing.min.js"></script>
@@ -182,5 +217,7 @@
 		<script src="js/owl.carousel.js"></script>
 		<script src="js/jquery.ajaxchimp.min.js"></script>
 		<script src="js/script.js"></script>
+
+
 	</body>
 </html>
