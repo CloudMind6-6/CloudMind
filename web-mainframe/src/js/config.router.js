@@ -31,17 +31,13 @@ angular.module('app')
               .state('app.list', {
                   url: '/list',
                   templateUrl: 'tpl/app_projectlist.html',
-                  resolve: load(['js/controllers/chart.js'])
+                  resolve: load(['js/controllers/list.js'])
               })
 
               // table
               .state('app.table', {
                   url: '/table',
-                  template: '<div ui-view></div>'
-              })
-              .state('app.table.datatable', {
-                  url: '/datatable',
-                  templateUrl: 'tpl/table_datatable.html'
+                  templateUrl: 'tpl/app_table.html'
               })
 
               // fullCalendar
@@ -60,98 +56,16 @@ angular.module('app')
                   resolve: load(['js/app/mindmap/mindmap.js'])
               })
 
-
               .state('app.form.fileupload', {
                   url: '/fileupload',
                   templateUrl: 'tpl/form_fileupload.html',
                   resolve: load(['angularFileUpload','js/controllers/file-upload.js'])
               })
-              .state('app.form.imagecrop', {
-                  url: '/imagecrop',
-                  templateUrl: 'tpl/form_imagecrop.html',
-                  resolve: load(['ngImgCrop','js/controllers/imgcrop.js'])
-              })
-              .state('app.form.select', {
-                  url: '/select',
-                  templateUrl: 'tpl/form_select.html',
-                  controller: 'SelectCtrl',
-                  resolve: load(['ui.select','js/controllers/select.js'])
-              })
-              .state('app.form.slider', {
-                  url: '/slider',
-                  templateUrl: 'tpl/form_slider.html',
-                  controller: 'SliderCtrl',
-                  resolve: load(['vr.directives.slider','js/controllers/slider.js'])
-              })
+
               // others
-              .state('access', {
-                  url: '/access',
-                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
-              })
-              .state('access.signin', {
-                  url: '/signin',
-                  templateUrl: 'tpl/page_signin.html',
-                  resolve: load( ['js/controllers/signin.js'] )
-              })
-              .state('access.signup', {
-                  url: '/signup',
-                  templateUrl: 'tpl/page_signup.html',
-                  resolve: load( ['js/controllers/signup.js'] )
-              })
-              .state('access.forgotpwd', {
-                  url: '/forgotpwd',
-                  templateUrl: 'tpl/page_forgotpwd.html'
-              })
               .state('access.404', {
                   url: '/404',
                   templateUrl: 'tpl/page_404.html'
-              })
-
-
-              .state('layout', {
-                  abstract: true,
-                  url: '/layout',
-                  templateUrl: 'tpl/layout.html'
-              })
-              .state('layout.fullwidth', {
-                  url: '/fullwidth',
-                  views: {
-                      '': {
-                          templateUrl: 'tpl/layout_fullwidth.html'
-                      },
-                      'footer': {
-                          templateUrl: 'tpl/layout_footer_fullwidth.html'
-                      }
-                  },
-                  resolve: load( ['js/controllers/vectormap.js'] )
-              })
-              .state('layout.mobile', {
-                  url: '/mobile',
-                  views: {
-                      '': {
-                          templateUrl: 'tpl/layout_mobile.html'
-                      },
-                      'footer': {
-                          templateUrl: 'tpl/layout_footer_mobile.html'
-                      }
-                  }
-              })
-              .state('layout.app', {
-                  url: '/app',
-                  views: {
-                      '': {
-                          templateUrl: 'tpl/layout_app.html'
-                      },
-                      'footer': {
-                          templateUrl: 'tpl/layout_footer_fullwidth.html'
-                      }
-                  },
-                  resolve: load( ['js/controllers/tab.js'] )
-              })
-              .state('apps', {
-                  abstract: true,
-                  url: '/apps',
-                  templateUrl: 'tpl/layout.html'
               });
 
           function load(srcs, callback) {

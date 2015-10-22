@@ -4,7 +4,7 @@
 
 app
   // Project list controller
-  .controller('FlotChartDemoCtrl', ['$scope', function($scope) {
+  .controller('RootListCtrl', ['$scope', function($scope) {
     $scope.roots = [{
       name : 'ROOT NODE',
       due_date : '2015-12-12',
