@@ -10,20 +10,18 @@
       <table ui-jq="dataTable" ui-options="{
           sAjaxSource: 'api/datatable.json',
           aoColumns: [
-            { mData: 'engine' },
-            { mData: 'browser' },
-            { mData: 'platform' },
-            { mData: 'version' },
-            { mData: 'grade' }
+            { mData: 'Name' },
+            { mData: 'Status' },
+            { mData: 'Duedate' },
+            { mData: 'People' },
           ]
         }" class="table table-striped b-t b-b">
         <thead>
           <tr>
-            <th  style="width:20%">Rendering engine</th>
-            <th  style="width:25%">Browser</th>
-            <th  style="width:25%">Platform(s)</th>
-            <th  style="width:15%">Engine version</th>
-            <th  style="width:15%">CSS grade</th>
+            <th  style="width:20%">노드 이름</th>
+            <th  style="width:25%">라벨 상태</th>
+            <th  style="width:25%">마감 날짜</th>
+            <th  style="width:15%">인원</th>
           </tr>
         </thead>
         <tbody>
