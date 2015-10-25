@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask.ext.script import Command, Manager
-from flask.ext.migrate import Migrate, MigrateCommand
-from cloudmind import app, db
+from flask.ext.script import Command
+from flask.ext.script import Manager
+
+from flask.ext.migrate import Migrate
+from flask.ext.migrate import MigrateCommand
+
+from cloudmind import app
+from cloudmind import db
 
 migrate = Migrate(app, db)
 manager = Manager(app)
