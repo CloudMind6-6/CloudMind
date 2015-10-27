@@ -1,10 +1,10 @@
 <div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3">Scroll</h1>
+  <h1 class="m-n font-thin h3">Projects</h1>
 </div>
 <div class="wrapper-md" ng-controller="RootListCtrl">
   <div ui-scroll-viewport class="row" style="height:400px;overflow-y: auto;" >
     <div ng-repeat="root in roots" class="col-sm-3">
-      <div class="panel wrapper-md">
+      <div class="panel wrapper-md" ng-click="selectRootNode('{{root.idx}}')">
         <div>{{ root.name }}</div>
         <div>{{ root.due_date }}</div>
         <span  ng-repeat="user in root.assignedUsers"> <!-- 프로젝트 페이지 - css 확정하고 정리하기!! -->
@@ -15,3 +15,5 @@
     </div>
   </div>
 </div>
+
+

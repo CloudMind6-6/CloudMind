@@ -44,6 +44,7 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
           });
       }
       $scope.lastClickTime = time;
+
     };
     /* alert on Drop */
     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
@@ -63,14 +64,14 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
       var left = wrap.offset().left - cal.offset().left;
       var right = cal.width() - (wrap.offset().left - cal.offset().left + wrap.width());
       var top = cal.height() - (wrap.offset().top - cal.offset().top + wrap.height());
-      if( right > $scope.overlay.width() ) { 
+      if( right > $scope.overlay.width() ) {
         $scope.overlay.addClass('left').find('.arrow').addClass('left pull-up')
       }else if ( left > $scope.overlay.width() ) {
         $scope.overlay.addClass('right').find('.arrow').addClass('right pull-up');
       }else{
         $scope.overlay.find('.arrow').addClass('top');
       }
-      if( top < $scope.overlay.height() ) { 
+      if( top < $scope.overlay.height() ) {
         $scope.overlay.addClass('top').find('.arrow').removeClass('pull-up').addClass('pull-down')
       }
       (wrap.find('.fc-overlay').length == 0) && wrap.append( $scope.overlay );
@@ -100,12 +101,10 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
         start: new Date(y, m, d),
         className: ['b-l b-2x b-info']
       });
+
+        console.log('asd');
     };
     /* Select event - 임의 작성 */
-    $scope.select = function(index) {
-      console.log(index);
-    }
-
 
     /* Change View */
     $scope.changeView = function(view, calendar) {
