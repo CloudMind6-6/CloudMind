@@ -9,35 +9,48 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
     var m = date.getMonth();
     var y = date.getFullYear();
 
-    /* event source that pulls from google.com */
-    $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-            className: 'gcal-event',           // an option!
-            currentTimezone: 'America/Chicago' // an option!
-    };
+    var select_idx;
 
     /* event source that contains custom events on the scope */
+    /* 칼럼 형식 : idx, title, start, info */
+    /* 노드의 Description = info 를 사용*/
     $scope.events = [
-      {idx: "1", title:'All Day Event', start: new Date(y, m, 1), className: ['b-l b-2x b-info'], location:'New York', info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'},
-      {idx: "2", title:'Dance class', start: new Date(y, m, 3), end: new Date(y, m, 4, 9, 30), allDay: false, className: ['b-l b-2x b-danger'], location:'London', info:'Two days dance training class.'},
-      {idx: "3", title:'Game racing', start: new Date(y, m, 6, 16, 0), className: ['b-l b-2x b-info'], location:'Hongkong', info:'The most big racing of this year.'},
-      {idx: "4", title:'Soccer', start: new Date(y, m, 8, 15, 0), className: ['b-l b-2x b-info'], location:'Rio', info:'Do not forget to watch.'},
-      {idx: "5", title:'Family', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Family party'},
-      {idx: "6", title:'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2), className: ['bg-success bg'], location:'HD City', info:'It is a long long event'},
-      {idx: "7", title:'Play game', start: new Date(y, m, d - 1, 16, 0), className: ['b-l b-2x b-info'], location:'Tokyo', info:'Tokyo Game Racing'},
-      {idx: "8", title:'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false, className: ['b-l b-2x b-primary'], location:'New York', info:'Party all day'},
-      {idx: "9", title:'Repeating Event', start: new Date(y, m, d + 4, 16, 0), alDay: false, className: ['b-l b-2x b-warning'], location:'Home Town', info:'Repeat every day'},      
-      {idx: "10", title:'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/', className: ['b-l b-2x b-primary']},
-      {idx: "11", title:'Feed cat', start: new Date(y, m+1, 6, 18, 0), className: ['b-l b-2x b-info']}
+      // {idx: "1", title:'All Day Event', start: new Date(y, m, 1), className: ['b-l b-2x b-info'], location:'New York', info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'},
+      // {idx: "2", title:'Dance class', start: new Date(y, m, 3), end: new Date(y, m, 4, 9, 30), allDay: false, className: ['b-l b-2x b-danger'], location:'London', info:'Two days dance training class.'},
+      // {idx: "3", title:'Game racing', start: new Date(y, m, 6, 16, 0), className: ['b-l b-2x b-info'], location:'Hongkong', info:'The most big racing of this year.'},
+      // {idx: "4", title:'Soccer', start: new Date(y, m, 8, 15, 0), className: ['b-l b-2x b-info'], location:'Rio', info:'Do not forget to watch.'},
+      // {idx: "5", title:'Family', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Family party'},
+      // {idx: "6", title:'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2), className: ['bg-success bg'], location:'HD City', info:'It is a long long event'},
+      // {idx: "7", title:'Play game', start: new Date(y, m, d - 1, 16, 0), className: ['b-l b-2x b-info'], location:'Tokyo', info:'Tokyo Game Racing'},
+      // {idx: "8", title:'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false, className: ['b-l b-2x b-primary'], location:'New York', info:'Party all day'},
+      // {idx: "9", title:'Repeating Event', start: new Date(y, m, d + 4, 16, 0), alDay: false, className: ['b-l b-2x b-warning'], location:'Home Town', info:'Repeat every day'},      
+      // {idx: "10", title:'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/', className: ['b-l b-2x b-primary']},
+      // {idx: "11", title:'Feed cat', start: new Date(y, m+1, 6, 18, 0), className: ['b-l b-2x b-info']}
+      {"idx" : "1" , title: "Node1" , start : "2015-10-10" , info: "Node1 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "2" , title: "Node2" , start : "2015-10-01" , info: "Node2 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "3" , title: "Node3" , start : "2015-10-02" , info: "Node3 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "4" , title: "Node4" , start : "2015-10-03", info: "Node4 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "5" , title: "Node5" , start : "2015-10-04" , info: "Node5 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "6" , title: "Node6" , start : "2015-10-05" , info: "Node6 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "7" , title: "Node7" , start : "2015-10-06" , info: "Node7 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "8" , title: "Node8" , start : "2015-10-07" , info: "Node8 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "9" , title: "Node1" , start : "2015-10-08" , info: "Node9 's Description" ,className: ['b-1 b-2x b-info']},
+      {"idx" : "10" , title: "Node1" , start : "2015-10-09" , info: "Node10 's Description" ,className: ['b-1 b-2x b-info']},
     ];
 
     /* alert on dayClick */
     $scope.precision = 400;
     $scope.lastClickTime = 0;
     $scope.alertOnEventClick = function( date, jsEvent, view ){
+      var count = 0;
+      for (var k in $scope.events) {
+         ++count;
+      }
+
       var time = new Date().getTime();
       if(time - $scope.lastClickTime <= $scope.precision){
           $scope.events.push({
+            idx : count, 
             title: 'New Event',
             start: date,
             className: ['b-l b-2x b-info']
@@ -56,6 +69,7 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
 
     $scope.overlay = $('.fc-overlay');
     $scope.alertOnMouseOver = function( event, jsEvent, view ){
+      
       $scope.event = event;
       $scope.overlay.removeClass('left right top').find('.arrow').removeClass('left right top pull-up');
       var wrap = $(jsEvent.target).closest('.fc-event');
@@ -89,23 +103,49 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
         dayClick: $scope.alertOnEventClick,
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize,
-        eventMouseover: $scope.alertOnMouseOver
+        eventMouseover: $scope.alertOnMouseOver,
+        eventMouseout: $scope.alertOnMouseOut,
+        eventDrop: function(event, delta, revertFunc) {
+          var event_idx = event.idx; // 노드의 idx
+          var event_start = event.start.format(); // 드롭시 변경 될 날짜
+
+          // POST Request (노드의 날짜 변경 api 호출 부분) 이 필요
+
+          
+          // alert(event.title + " was dropped on " + event.start.format());
+          // if (!confirm("Are you sure about this change?")) {
+          //   revertFunc(); // 변경사항을 취소하는 함수
+          // }
+        },
+
+        eventRender: function(event, element, view) {
+          /* Add Remove Button with style */
+          element.append("<span class='closeon fa fa-trash' style='position: absolute; right : 6px; margin-top : -13px'></span>");
+          element.find(".closeon").click(function() {
+            var event_idx = event.idx;
+            // POST Request (노드의 삭제 api 호출 부분) 이 필요
+
+            $('.calendar').fullCalendar('removeEvents',event.idx);
+          });
+        }
       }
     };
-    
     /* add custom event*/
     $scope.addEvent = function() {
+      // 노드를 추가하는 화면 호출을 구현해야 함
+      var count = 0;
+      for (var k in $scope.events) {
+         ++count;
+      }
+
       $scope.events.push({
-        title: 'New Event',
+        idx : count, 
+        title: 'New Event' ,
         start: new Date(y, m, d),
-        className: ['b-l b-2x b-info']
+        className: ['b-l b-2x b-info'],location:'New York', 
+        // info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'
       });
     };
-    /* Select event - 임의 작성 */
-    $scope.select = function(index) {
-      console.log(index);
-    }
-
 
     /* Change View */
     $scope.changeView = function(view, calendar) {
