@@ -9,23 +9,10 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
     var m = date.getMonth();
     var y = date.getFullYear();
 
-    var select_idx;
-
     /* event source that contains custom events on the scope */
     /* 칼럼 형식 : idx, title, start, info */
     /* 노드의 Description = info 를 사용*/
     $scope.events = [
-      // {idx: "1", title:'All Day Event', start: new Date(y, m, 1), className: ['b-l b-2x b-info'], location:'New York', info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'},
-      // {idx: "2", title:'Dance class', start: new Date(y, m, 3), end: new Date(y, m, 4, 9, 30), allDay: false, className: ['b-l b-2x b-danger'], location:'London', info:'Two days dance training class.'},
-      // {idx: "3", title:'Game racing', start: new Date(y, m, 6, 16, 0), className: ['b-l b-2x b-info'], location:'Hongkong', info:'The most big racing of this year.'},
-      // {idx: "4", title:'Soccer', start: new Date(y, m, 8, 15, 0), className: ['b-l b-2x b-info'], location:'Rio', info:'Do not forget to watch.'},
-      // {idx: "5", title:'Family', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Family party'},
-      // {idx: "6", title:'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2), className: ['bg-success bg'], location:'HD City', info:'It is a long long event'},
-      // {idx: "7", title:'Play game', start: new Date(y, m, d - 1, 16, 0), className: ['b-l b-2x b-info'], location:'Tokyo', info:'Tokyo Game Racing'},
-      // {idx: "8", title:'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false, className: ['b-l b-2x b-primary'], location:'New York', info:'Party all day'},
-      // {idx: "9", title:'Repeating Event', start: new Date(y, m, d + 4, 16, 0), alDay: false, className: ['b-l b-2x b-warning'], location:'Home Town', info:'Repeat every day'},      
-      // {idx: "10", title:'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/', className: ['b-l b-2x b-primary']},
-      // {idx: "11", title:'Feed cat', start: new Date(y, m+1, 6, 18, 0), className: ['b-l b-2x b-info']}
       {"idx" : "1" , title: "Node1" , start : "2015-10-10" , info: "Node1 's Description" ,className: ['b-1 b-2x b-info']},
       {"idx" : "2" , title: "Node2" , start : "2015-10-01" , info: "Node2 's Description" ,className: ['b-1 b-2x b-info']},
       {"idx" : "3" , title: "Node3" , start : "2015-10-02" , info: "Node3 's Description" ,className: ['b-1 b-2x b-info']},
