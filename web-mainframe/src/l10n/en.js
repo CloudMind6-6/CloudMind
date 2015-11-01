@@ -18,7 +18,6 @@
   }
 },
 
-
   "main" :{
     "navbar" :{
       "NEWNode" : "NewNode"
