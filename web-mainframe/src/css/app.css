@@ -884,7 +884,7 @@ body {
   display: inline-block;
   float: none;
   height: auto;
-  margin-left: 15%;
+  margin-left: 13%;
   padding: 0 20px;
   font-size: 20px;
   font-weight: 700;
@@ -893,7 +893,7 @@ body {
 
 .navbar-brand:hover {
   text-decoration: none;
-  margin-left: 15%;
+  margin-left: 13%;
 }
 
 .navbar-brand img {
