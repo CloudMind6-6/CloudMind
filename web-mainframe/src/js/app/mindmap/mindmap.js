@@ -28,6 +28,23 @@ nodes = [
     {idx:11, parent_idx:4, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
     {idx:12, parent_idx:4, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
     {idx:13, parent_idx:4, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+
+    {idx:14, parent_idx:7, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:15, parent_idx:7, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:16, parent_idx:7, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+
+    {idx:17, parent_idx:16, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+
+    {idx:20, parent_idx:6, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:21, parent_idx:6, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:22, parent_idx:6, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+
+    {idx:24, parent_idx:8, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+
+    {idx:30, parent_idx:24, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:31, parent_idx:24, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:32, parent_idx:24, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:33, parent_idx:24, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
 ];
 
 
@@ -35,7 +52,17 @@ nodes = [
 
 var node_scene_graph_form =
 {
-    format:"horizontal",
+
+    width:100,
+    height:50,
+    half_width:50,
+    half_height:25,
+    stride_x:150,
+    stride_y:75,
+    margin_x:20,
+    margin_y:20,
+
+/*
     width:200,
     height:100,
     half_width:100,
@@ -44,7 +71,9 @@ var node_scene_graph_form =
     stride_y:150,
     margin_x:20,
     margin_y:20,
+    */
 };
+
 
 
 // Scene Graph Node Class

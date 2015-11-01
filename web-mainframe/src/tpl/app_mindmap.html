@@ -3,9 +3,6 @@
     {
         display:inline-block;
         position:absolute;
-        width:200px;
-        height:100px;
-        border-radius:10px;
         background-color: #49a9ff;
     }
 
@@ -33,9 +30,16 @@
                 .source({x:link.src_x + 860, y:link.src_y + 380})
                 .target({x:link.dst_x + 860, y:link.dst_y + 380})
                 */
-                .source({x:link.src_y + 380, y:link.src_x + 860})
-                .target({x:link.dst_y + 380, y:link.dst_x + 860})
+                /*
+                .source({x:link.src_y + screen.height/ 2 - node_scene_graph_form.height*2, y:link.src_x + screen.width/2 - node_scene_graph_form.half_width})
+                .target({x:link.dst_y + screen.height/ 2 - node_scene_graph_form.height*2, y:link.dst_x + screen.width/2 - node_scene_graph_form.half_width})
+                */
+
+                .source({x:link.src_y + screen.height/ 2 - 120 - 60, y:link.src_x + screen.width/2})
+                .target({x:link.dst_y + screen.height/ 2 - 120 - 60, y:link.dst_x + screen.width/2})
+
                 .projection(function(d) { return [d.y, d.x]; });
+
 
         canvas.append("path")
                 .attr("class", link)
@@ -50,8 +54,11 @@
             .enter()
             .append('div')
             .attr("class", "node")
-            .style("left", function(d){ return 960 - node_scene_graph_form.width  + d.x + "px"; })
-            .style("top",  function(d){ return 540 - node_scene_graph_form.height + d.y + "px"; })
+            .style("left", function(d){ return screen.width / 2 - node_scene_graph_form.half_width  + d.x + "px"; })
+            .style("top",  function(d){ return screen.height/ 2 - node_scene_graph_form.half_height + d.y - 60 + "px"; })
+            .style("width", node_scene_graph_form.width + "px")
+            .style("height", node_scene_graph_form.height + "px")
+            .style("border-radius", node_scene_graph_form.height / 10 + "px")
 
             /*
             .append("ul")
@@ -84,7 +91,7 @@
           </div>
       -->
 
-  <svg width="100%" height="700">
+  <svg width="100%" height="2000">
 
   </svg>
 
