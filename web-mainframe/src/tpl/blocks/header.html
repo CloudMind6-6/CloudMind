@@ -1,13 +1,19 @@
       <!-- navbar header -->
       <div class="navbar-header {{app.settings.navbarHeaderColor}}"> </div>
       <!-- / navbar header -->
+      <div class="collapse pos-abt navbar-collapse bg-z-index">
+        <a ui-sref="app.list" class="navbar-brand">
+          <i class="fa fa-lg fa-cloud"></i>
+          <img src="img/logo.png" alt="." class="hide">
+          <span class="hidden-folded m-l-xs">{{app.name}}</span>
+        </a>
+      </div>
 
       <!-- navbar collapse -->
       <div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}" >
 
         <!-- maps memu -->
         <ul class="nav navbar-nav hidden-sm" ng-controller="NavBarCtrl">
-
           <li ui-sref-active="active">
             <a ui-sref="app.list">
               <i class="glyphicon glyphicon-th"></i>
@@ -15,20 +21,20 @@
             </a>
           </li>
 
-          <li ui-sref-active="active"  >
-            <a ui-sref="app.mindmap">
+          <li ui-sref-active="active">
+            <a ui-sref="app.mindmap" ng-show=state>
               <i class="fa fa-lg fa-share-alt-square"></i>
               <span class="font-bold"  translate="header.navbar.MINDMAP">MindMap</span>
             </a>
           </li>
-          <li ui-sref-active="active" >
-            <a ui-sref="app.calendar">
+          <li ui-sref-active="active">
+            <a ui-sref="app.calendar" ng-show=state>
               <i class="glyphicon glyphicon-calendar icon"></i>
               <span class="font-bold" translate="header.navbar.CALENDAR">Calendar</span>
             </a>
           </li>
-          <li ui-sref-active="active"  >
-            <a ui-sref="app.table">
+          <li ui-sref-active="active">
+            <a ui-sref="app.table" ng-show=state>
               <i class="glyphicon glyphicon-list"></i>
               <span class="font-bold"  translate="header.navbar.LIST">List</span>
             </a>
@@ -36,11 +42,7 @@
         </ul>
         <!-- / maps menu -->
 
-        <a ui-sref="app.list" class="navbar-brand">
-          <i class="fa fa-lg fa-cloud"></i>
-          <img src="img/logo.png" alt="." class="hide">
-          <span class="hidden-folded m-l-xs">{{app.name}}</span>
-        </a>
+
 
         <!-- na right -->
         <ul class="nav navbar-nav navbar-right">

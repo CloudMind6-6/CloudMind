@@ -685,6 +685,7 @@ body {
 }
 
 .app-header-fixed .app-header {
+  text-align: center;
   position: fixed;
   top: 0;
   width: 100%;
@@ -884,7 +885,7 @@ body {
   display: inline-block;
   float: none;
   height: auto;
-  margin-left: 13%;
+  margin-left: -100%;
   padding: 0 20px;
   font-size: 20px;
   font-weight: 700;
@@ -893,7 +894,6 @@ body {
 
 .navbar-brand:hover {
   text-decoration: none;
-  margin-left: 13%;
 }
 
 .navbar-brand img {
@@ -3765,6 +3765,11 @@ a.text-#000000:hover {
 
 .bg {
   background-color: #f0f3f4;
+}
+
+.bg-z-index{
+  z-index: 1;
+  left: 50%;
 }
 
 .pos-rlt {

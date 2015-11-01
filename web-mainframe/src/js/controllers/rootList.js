@@ -4,12 +4,9 @@ app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore',function($scope,
   var url = 'img/a1.jpg';
   initRootList();
 
-
-
   function initRootList(){
-    $scope.isRootSelected = false;
 
-    console.log('init');
+    NodeStore.setNavbarState(false);
     /*
     HttpSvc.getRoots()
         .success(function (res){
@@ -103,18 +100,11 @@ app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore',function($scope,
             pic : url
           }]
       }]
-
   }
 
-
-  $scope.isRootSelected = function(){
-    return true;
-  }
   $scope.selectRoot = function(_idx) {
-
     NodeStore.setNodeList(_idx, function() {
       $state.go('app.mindmap');
-
     });
   };
 

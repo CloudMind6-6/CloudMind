@@ -1,6 +1,7 @@
 
 app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
+    var navbarCallback = null;
     var url = 'img/a1.jpg';
     var nodeList =
         [{
@@ -82,17 +83,26 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         }];
 
     return {
+        registerNavbarCallback : function(callback){
+            navbarCallback = callback;
+        },
+
+        setNavbarState : function(_state) {
+
+            if(navbarCallback) navbarCallback(_state)
+        },
 
         setNodeList : function (_idx, callback) {
 
-
+            this.setNavbarState(true);
             callback();
 
-            /*
+
              HttpSvc.getNodes(_idx)
              .success(function (res){
                      if(res.success) {
                          nodeList = res.node_list;
+                         rootSelected = true;
                          callback();
                      }
                      else throw new Error;
@@ -100,7 +110,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
              .error(function (err){
                      console.log('err');
                      // 다이얼로그(에러모듈) 처리
-                 });*/
+                 });
         },
 
         syncNodeList : function () {
@@ -168,7 +178,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         if(nodeList[0].rootidx == _idx) nodeList = {};
 
         for(var i in nodeList){
-
             if( nodeList[i].parentidx == _idx || nodeList[i].idx == _idx) {
                 console.log(nodeList[i]);
                 delete nodeList[i];
@@ -179,13 +188,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     }
 
     function updateNodeInList(_idx, _assignedUser, _dueDate, _nodename, callback){
-
-        var newNode = {
-            node_idx: _idx,
-            AssignedUser: _assignedUser,
-            DueDate: _dueDate,
-            Nodename: _nodename
-        };
 
         for(var i in nodeList){
 
