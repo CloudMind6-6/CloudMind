@@ -20,8 +20,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             {
                 pic : url
             }]
-
-    },
+        },
         {
             idx : '22',
             name : 'ROOT NODE3',

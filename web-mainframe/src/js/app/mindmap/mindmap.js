@@ -16,38 +16,163 @@ label_palette = [
 ];
 
 nodes = [
-    {x:0, y:0, idx:1, parent_idx:1, root_idx:1, name:"node1", desc:"asdfasdfasdf", assigned_user:[1001, 1002, 1003], labels:[0,1], due_date:"2015-11-19"},
-    {x:0, y:0, idx:2, parent_idx:1, root_idx:1, name:"node2", desc:"zxcv", assigned_user:[1001, 1002, 1003], labels:[1,2], due_date:"2015-11-19"},
-    {x:0, y:0, idx:3, parent_idx:2, root_idx:1, name:"node3", desc:"afawefeff", assigned_user:[1001, 1002, 1003], labels:[0,2], due_date:"2015-11-19"},
-    {x:0, y:0, idx:4, parent_idx:1, root_idx:1, name:"node4", desc:"AWEFAWVSZDF", assigned_user:[1001, 1002, 1003], labels:[5,6], due_date:"2015-11-19"},
-    {x:0, y:0, idx:5, parent_idx:4, root_idx:1, name:"node5", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:1, parent_idx:1, root_idx:1, name:"node1", desc:"asdfasdfasdf", assigned_user:[1001, 1002, 1003], labels:[0,1], due_date:"2015-11-19"},
+    {idx:2, parent_idx:1, root_idx:1, name:"node2", desc:"zxcv", assigned_user:[1001, 1002, 1003], labels:[1,2], due_date:"2015-11-19"},
+    {idx:3, parent_idx:2, root_idx:1, name:"node3", desc:"afawefeff", assigned_user:[1001, 1002, 1003], labels:[0,2], due_date:"2015-11-19"},
+    {idx:4, parent_idx:1, root_idx:1, name:"node4", desc:"AWEFAWVSZDF", assigned_user:[1001, 1002, 1003], labels:[5,6], due_date:"2015-11-19"},
+    {idx:5, parent_idx:4, root_idx:1, name:"node5", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:6, parent_idx:1, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:7, parent_idx:1, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:8, parent_idx:1, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+
+    {idx:11, parent_idx:4, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:12, parent_idx:4, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
+    {idx:13, parent_idx:4, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
 ];
 
 
+// Scene Graph Form
 
-var bLeft = true;
-
-for(node in nodes)
+var node_scene_graph_form =
 {
-    node.x = 960;
-    node.y = 540;
+    format:"horizontal",
+    width:200,
+    height:100,
+    half_width:this.width/2,
+    half_height:this.height/2,
+    stride_x:300,
+    stride_y:150,
+    margin_x:20,
+    margin_y:20,
+};
 
-    if(node.idx == node.root_idx)
+
+// Scene Graph Node Class
+
+NodeSceneGraph = function()
+{
+    this.parent = null;
+    this.children = new Array();
+    this.spanning_odd = true;
+    this.x = 0;
+    this.y = 0;
+    this.width  = node_scene_graph_form.width  + node_scene_graph_form.margin_x;
+    this.height = node_scene_graph_form.height + node_scene_graph_form.margin_y;
+};
+
+NodeSceneGraph.prototype =
+{
+    attachChild : function(child)
     {
-        node.x = 960;
-        node.y = 540;
+        child.parent = this;
+        child.spanning_odd = this.spanning_odd;
+
+        this.children.push(child);
+
+        this.updateUpward();
+    },
+
+    updateUpward : function()
+    {
+        this.width = 0;
+        this.height = 0;
+
+        for(var i = 0; i < this.children.length; ++i)
+        {
+            var child = this.children[i];
+
+            this.width  += child.width;
+            this.height += child.height;
+        }
+
+        if(this.parent)
+            this.parent.updateUpward();
+    },
+
+    arrangeHorizontal : function()
+    {
+        var child_current_pos = 0;
+
+        for(var i = 0; i < this.children.length; ++i)
+        {
+            var child = this.children[i];
+
+            if(this.spanning_odd)
+                child.x = this.x - node_scene_graph_form.stride_x;
+            else
+                child.x = this.x + node_scene_graph_form.stride_x;
+
+            child.y = this.y - (this.height/2) + child_current_pos + (child.height/2);
+
+            child_current_pos += child.height;
+
+            child.arrangeHorizontal();
+        }
+    },
+}
+
+
+// Construct Scene Graph
+
+var node_scene_graph_map    = new Object();
+var node_scene_graph_root   = null;
+var node_scene_graph_odd    = null;
+var node_scene_graph_even   = null;
+var spanning_odd = true;
+
+nodes.forEach(function(node)
+{
+    var node_scene_graph = new NodeSceneGraph();
+    var node_scene_graph_parent = node_scene_graph_map[node.parent_idx];
+
+    node_scene_graph_map[node.idx] = node_scene_graph;
+
+    if (node.idx == node.root_idx)
+    {
+        node_scene_graph_root = node_scene_graph;
+
+        node_scene_graph_odd  = new NodeSceneGraph();
+        node_scene_graph_even = new NodeSceneGraph();
+
+        node_scene_graph_root.attachChild(node_scene_graph_odd);
+        node_scene_graph_root.attachChild(node_scene_graph_even);
+
+        node_scene_graph_odd.spanning_odd = true;
+        node_scene_graph_even.spanning_odd = false;
     }
-    /*
     else
     {
-        var node_parent = node_map[node.parent_idx];
+        if(node.parent_idx == node.root_idx)
+        {
+            if(spanning_odd)
+                node_scene_graph_odd.attachChild(node_scene_graph);
+            else
+                node_scene_graph_even.attachChild(node_scene_graph);
 
-        if(bLeft)
-            node.x = node_parent.x - 300;
+            node_scene_graph.spanning_odd = spanning_odd;
+            spanning_odd = !spanning_odd;
+        }
         else
-            node.x = node_parent.x + 300;
+        {
+            node_scene_graph_parent.attachChild(node_scene_graph);
+            node_scene_graph.spanning_odd = node_scene_graph_parent.spanning_odd;
+        }
     }
-    */
+});
 
-    bLeft = !bLeft;
-}
+
+// Arrange Scene Graph Horizontal
+
+node_scene_graph_odd.arrangeHorizontal();
+node_scene_graph_even.arrangeHorizontal();
+
+
+// Node Transform
+
+nodes.forEach(function(node)
+{
+    var node_scene_graph = node_scene_graph_map[node.idx];
+
+    node.x = node_scene_graph.x;
+    node.y = node_scene_graph.y;
+});
