@@ -1,5 +1,6 @@
 
 app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
+
     var url = 'img/a1.jpg';
     var nodeList =
         [{
@@ -81,7 +82,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         }];
 
     return {
+
         setNodeList : function (_idx, callback) {
+
 
             callback();
 

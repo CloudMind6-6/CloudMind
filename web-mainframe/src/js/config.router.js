@@ -18,7 +18,7 @@ angular.module('app')
           var layout = "tpl/app.html";
 
           $urlRouterProvider
-              .otherwise('/app/list');
+              .otherwise('/access/signin');
 
           $stateProvider
               .state('app', {
@@ -26,12 +26,22 @@ angular.module('app')
                   url: '/app',
                   templateUrl: layout
               })
-
               //project list
               .state('app.list', {
                   url: '/list',
                   templateUrl: 'tpl/app_projectlist.html',
-                  resolve: load(['js/controllers/list.js'])
+                  resolve: load(['js/controllers/rootList.js'])
+              })
+
+              .state('access', {
+                  url: '/access',
+                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
+              })
+
+              .state('access.signin', {
+                  url: '/signin',
+                  templateUrl: 'tpl/page_signin.html',
+                  resolve: load( ['js/controllers/signin.js'] )
               })
 
               // table

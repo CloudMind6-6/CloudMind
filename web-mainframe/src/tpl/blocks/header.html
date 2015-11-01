@@ -3,10 +3,10 @@
       <!-- / navbar header -->
 
       <!-- navbar collapse -->
-      <div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
+      <div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}" >
 
         <!-- maps memu -->
-        <ul class="nav navbar-nav hidden-sm">
+        <ul class="nav navbar-nav hidden-sm" ng-controller="NavBarCtrl">
 
           <li ui-sref-active="active">
             <a ui-sref="app.list">
@@ -36,13 +36,13 @@
         </ul>
         <!-- / maps menu -->
 
-        <a ui-sref="app.list" class="navbar-brand text-lt">
+        <a ui-sref="app.list" class="navbar-brand">
           <i class="fa fa-lg fa-cloud"></i>
           <img src="img/logo.png" alt="." class="hide">
           <span class="hidden-folded m-l-xs">{{app.name}}</span>
         </a>
 
-        <!-- nabar right -->
+        <!-- na right -->
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown" dropdown>
             <a href class="dropdown-toggle" dropdown-toggle>
