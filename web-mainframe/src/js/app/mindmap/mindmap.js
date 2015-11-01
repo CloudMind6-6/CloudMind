@@ -38,8 +38,8 @@ var node_scene_graph_form =
     format:"horizontal",
     width:200,
     height:100,
-    half_width:this.width/2,
-    half_height:this.height/2,
+    half_width:100,
+    half_height:50,
     stride_x:300,
     stride_y:150,
     margin_x:20,
@@ -89,24 +89,41 @@ NodeSceneGraph.prototype =
             this.parent.updateUpward();
     },
 
-    arrangeHorizontal : function()
+    arrangeHorizontal : function(link_array)
     {
         var child_current_pos = 0;
 
         for(var i = 0; i < this.children.length; ++i)
         {
             var child = this.children[i];
-
-            if(this.spanning_odd)
-                child.x = this.x - node_scene_graph_form.stride_x;
-            else
-                child.x = this.x + node_scene_graph_form.stride_x;
+            var link = new Object();
 
             child.y = this.y - (this.height/2) + child_current_pos + (child.height/2);
 
+            if(this.spanning_odd)
+            {
+                child.x = this.x - node_scene_graph_form.stride_x;
+
+                link.src_x = this.x - node_scene_graph_form.half_width;
+                link.src_y = this.y;
+                link.dst_x = child.x + node_scene_graph_form.half_width;
+                link.dst_y = child.y;
+            }
+            else
+            {
+                child.x = this.x + node_scene_graph_form.stride_x;
+
+                link.src_x = this.x + node_scene_graph_form.half_width;
+                link.src_y = this.y;
+                link.dst_x = child.x - node_scene_graph_form.half_width;
+                link.dst_y = child.y;
+            }
+
             child_current_pos += child.height;
 
-            child.arrangeHorizontal();
+            link_array.push(link);
+
+            child.arrangeHorizontal(link_array);
         }
     },
 }
@@ -163,8 +180,10 @@ nodes.forEach(function(node)
 
 // Arrange Scene Graph Horizontal
 
-node_scene_graph_odd.arrangeHorizontal();
-node_scene_graph_even.arrangeHorizontal();
+var node_link = new Array();
+
+node_scene_graph_odd.arrangeHorizontal(node_link);
+node_scene_graph_even.arrangeHorizontal(node_link);
 
 
 // Node Transform

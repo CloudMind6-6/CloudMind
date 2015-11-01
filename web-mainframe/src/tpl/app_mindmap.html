@@ -24,14 +24,25 @@
     var body        = d3.select("body");
     var canvas      = body.select("svg");
 
-    var diagonal    = d3.svg.diagonal()
-            .source({x:860, y:490})
-            .target({x:0, y:0});
+    for(var i = 0; i < node_link.length; ++i)
+    {
+        var link = node_link[i];
 
-    canvas.append("path")
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("d", diagonal);
+        var diagonal = d3.svg.diagonal()
+                /*
+                .source({x:link.src_x + 860, y:link.src_y + 380})
+                .target({x:link.dst_x + 860, y:link.dst_y + 380})
+                */
+                .source({x:link.src_y + 380, y:link.src_x + 860})
+                .target({x:link.dst_y + 380, y:link.dst_x + 860})
+                .projection(function(d) { return [d.y, d.x]; });
+
+        canvas.append("path")
+                .attr("class", link)
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("d", diagonal);
+    }
 
     var controller  = body.select("div[ng-controller='MindmapCtrl']");
     controller.selectAll('div')
