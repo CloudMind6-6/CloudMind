@@ -75,6 +75,7 @@
 
 <div ng-controller="MindmapCtrl">
 
+<<<<<<< HEAD
     <!--
           <div ng-repeat="node in nodes" class="node">
               <div>
@@ -87,9 +88,20 @@
               <div>{{node.desc}}</div>
           </div>
       -->
+=======
+  <!-- �ӽ� ��Ÿ�� CSS ���� �ʿ� -->
+  <div ng-repeat="node in nodes" class="panel" style="width:200px; height:100px; border-radius:10px">
+
+    <div>
+      <ul class="nav navbar-nav">
+        <li ng-repeat="label in node.labels" class="panel" style="margin-left:3px; margin-top:3px; width:30px; height:10px; border-radius:2px; background-color:{{label_palette[label].color}}"></li>
+      </ul>
+    </div>
+>>>>>>> 4d73bc08d633ada51e596486d8f1e1f565d3f07b
 
   <svg width="100%" height="700">
 
   </svg>
+
 
 </div>

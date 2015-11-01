@@ -44,6 +44,7 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
           });
       }
       $scope.lastClickTime = time;
+
     };
     /* alert on Drop */
     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
@@ -64,14 +65,14 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
       var left = wrap.offset().left - cal.offset().left;
       var right = cal.width() - (wrap.offset().left - cal.offset().left + wrap.width());
       var top = cal.height() - (wrap.offset().top - cal.offset().top + wrap.height());
-      if( right > $scope.overlay.width() ) { 
+      if( right > $scope.overlay.width() ) {
         $scope.overlay.addClass('left').find('.arrow').addClass('left pull-up')
       }else if ( left > $scope.overlay.width() ) {
         $scope.overlay.addClass('right').find('.arrow').addClass('right pull-up');
       }else{
         $scope.overlay.find('.arrow').addClass('top');
       }
-      if( top < $scope.overlay.height() ) { 
+      if( top < $scope.overlay.height() ) {
         $scope.overlay.addClass('top').find('.arrow').removeClass('pull-up').addClass('pull-down')
       }
       (wrap.find('.fc-overlay').length == 0) && wrap.append( $scope.overlay );
@@ -132,6 +133,8 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
         className: ['b-l b-2x b-info'],location:'New York', 
         // info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'
       });
+
+        console.log('asd');
     };
 
     /* Change View */

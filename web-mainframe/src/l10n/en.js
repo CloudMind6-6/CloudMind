@@ -17,6 +17,13 @@
     "NOTIFICATIONS" : "Notifications"
   }
 },
+
+  "main" :{
+    "navbar" :{
+      "NEWNode" : "NewNode"
+  }
+},
+
 "aside" : {
   "nav" : {
     "HEADER" : "Navigation",
