@@ -1,21 +1,95 @@
+<style>
+    .node
+    {
+        display:inline-block;
+        position:absolute;
+        width:200px;
+        height:100px;
+        border-radius:10px;
+        background-color:white;
+    }
+
+    .label
+    {
+        display:inline-block;
+        margin-left:3px;
+        margin-top:3px;
+        width:30px;
+        height:10px;
+        border-radius:2px;
+    }
+</style>
+
+<script>
+    var body        = d3.select("body");
+    var canvas      = body.select("svg");
+
+    var diagonal    = d3.svg.diagonal()
+            .source({x:860, y:490})
+            .target({x:0, y:0});
+
+    canvas.append("path")
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("d", diagonal);
+
+    nodes.forEach(function(e){e.x = })
+
+    for(var node in nodes)
+    {
+        node.x = 960;
+        node.y = 540;
+    }
+
+/*
+    for(var node in node_map)
+    {
+        node.x = 960;
+        node.y = 540;
+    }
+*/
+    var controller  = body.select("div[ng-controller='MindmapCtrl']");
+    controller.selectAll('div')
+            .data(nodes)
+            .enter()
+            .append('div')
+            .attr("class", "node")
+            .style("left", function(d){ return d.x + "px"; })
+            .style("top",  function(d){ return d.y + "px"; })
+
+            /*
+            .append("ul")
+            .attr("class", "nav navbar-nav")
+            .selectAll('li')
+            .data(node.labels)
+            .enter()
+            .append("li")
+            .attr("class", "label");
+            */
+
+</script>
+
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3">Mindmap</h1>
 </div>
 
 <div ng-controller="MindmapCtrl">
 
-  <!-- 임시 스타일 CSS 정립 필요 -->
-  <div ng-repeat="node in nodes" class="panel" style="width:200px; height:100px; border-radius:10px">
+    <!--
+          <div ng-repeat="node in nodes" class="node">
+              <div>
+                  <ul class="nav navbar-nav">
+                      <li ng-repeat="label in node.labels" style="display:inline-block; margin-left:3px; margin-top:3px; width:30px; height:10px; border-radius:2px; background-color:{{label_palette[label].color}}"></li>
+                  </ul>
+                  <br>
+              </div>
+              <div>{{node.name}}</div>
+              <div>{{node.desc}}</div>
+          </div>
+      -->
 
-    <div>
-      <ul class="nav navbar-nav">
-        <li ng-repeat="label in node.labels" class="panel" style="margin-left:3px; margin-top:3px; width:30px; height:10px; border-radius:2px; background-color:{{label_palette[label].color}}"></li>
-      </ul>
-    </div>
+  <svg width="100%" height="700">
 
-    <div>{{node.name}}</div>
-    <div>{{node.desc}}</div>
-
-  </div>
+  </svg>
 
 </div>
