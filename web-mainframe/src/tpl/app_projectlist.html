@@ -1,19 +1,40 @@
+
+
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3">Projects</h1>
 </div>
 <div class="wrapper-md" ng-controller="RootListCtrl">
   <div ui-scroll-viewport class="row" style="height:400px;overflow-y: auto;" >
     <div ng-repeat="root in roots" class="col-sm-3">
-      <div class="panel wrapper-md" ng-click="selectRootNode('{{root.idx}}')">
+      <div class="panel wrapper-md" ng-click="selectRoot('{{root.idx}}')">
         <div>{{ root.name }}</div>
-        <div>{{ root.due_date }}</div>
-        <span  ng-repeat="user in root.assignedUsers"> <!-- 프로젝트 페이지 - css 확정하고 정리하기!! -->
+        <div align="right">{{ root.due_date }}</div>
+        <div align="right">
+        <span ng-repeat="user in root.assignedUsers">
           <img ng-src="{{user.pic}}" width="30px" height="30px"  display="inline"/>
         </span>
+        </div>
       </div>
     </div>
+    <div class="col-sm-3" >
+      <div  class=" panel wrapper-md dropdown" dropdown>
+        <a href class="dropdown-toggle" dropdown-toggle>
+          <H1 align="center">  +  </H1>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <div class="panel-body">
+            <form role="form">
+              <div class="form-group">
+                <label>Root Node Name</label>
+                <input type="text" class="form-control" ng-model="rootName">
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary" ng-click="addRoot()">Creat</button>
+            </form>
+          </div>
+        </ul>
+      </div>
     </div>
   </div>
+  </div>
 </div>
-
-
+</div>
