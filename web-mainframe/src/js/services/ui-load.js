@@ -1,13 +1,5 @@
 'use strict';
 
-/**
- * 0.1.1
- * Deferred load js/css file, used for ui-jq.js and Lazy Loading.
- * 
- * @ flatfull.com All Rights Reserved.
- * Author url: http://themeforest.net/user/flatfull
- */
-
 angular.module('ui.load', [])
 	.service('uiLoad', ['$document', '$q', '$timeout', function ($document, $q, $timeout) {
 

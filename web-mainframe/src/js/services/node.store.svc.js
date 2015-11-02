@@ -4,83 +4,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     var navbarCallback = null;
     var url = 'img/a1.jpg';
     var nodeList =
-        [{
-        idx: '22',
-        name: 'ROOT NODE2',
-        due_date: '2015-12-12',
-        parentidx: '11',
-        rootidx:'0',
-        description : 'des',
-        assignedUsers :[{
-            idx : '1',
-            pic : url
-        },
-            {
-                idx : '1',
-                pic : url
-            },
-            {
-                pic : url
-            }]
-
-    },
-        {
-            idx : '22',
-            name : 'ROOT NODE3',
-            due_date : '2015-12-12',
-            parentidx: '11',
-            rootidx:'0',
-            description : 'des',
-            assignedUsers :[{
-                idx : '1',
-                pic : url
-            },
-                {
-                    idx : '1',
-                    pic : url
-                },
-                {
-                    pic : url
-                }]
-        },
-        {
-            idx : '22',
-            name : 'ROOT NODE',
-            due_date : '2015-12-12',
-            parentidx: '11',
-            rootidx:'0',
-            description : 'des',
-            assignedUsers :[{
-                idx : '1',
-                pic : url
-            },
-                {
-                    idx : '1',
-                    pic : url
-                },
-                {
-                    pic : url
-                }]
-        },
-        {
-            idx : '33',
-            name : 'ROOT NODE',
-            due_date : '2015-12-12',
-            parentidx: '22',
-            rootidx:'0',
-            description : 'des',
-            assignedUsers :[{
-                idx : '1',
-                pic : url
-            },
-                {
-                    idx : '1',
-                    pic : url
-                },
-                {
-                    pic : url
-                }]
-        }];
+        [];
 
     return {
         registerNavbarCallback : function(callback){
@@ -96,7 +20,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
             this.setNavbarState(true);
             callback();
-
 
              HttpSvc.getNodes(_idx)
              .success(function (res){
