@@ -2,11 +2,13 @@
 app.service('UserStore', ['HttpSvc', function(HttpSvc){
 
     var selectedIdx;
+    var selectedRootIdx;
     var userList;
 
     return{
-        setSelectedIdx : function(_idx){
+        setSelectedIdx : function(_idx, _selectedRootIdx){
             selectedIdx = _idx;
+            selectedRootIdx = _selectedRootIdx;
         },
 
         setUserList : function(_userList){
@@ -30,10 +32,8 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
 
         addUserToRoot : function() {
             //유저가 수락한 경우 웹소켓 받으면 처리하는 함수
-        },
-
-
-
+            // userList에만 추가하면 됨
+        }
     }
 
 }]);

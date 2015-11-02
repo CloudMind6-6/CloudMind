@@ -29,8 +29,8 @@ app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore', 'UserStore',
 
         $scope.selectRoot = function (_nodeidx, _idx) {
             $state.go('app.mindmap');
-            UserStore.setSelectedIdx(_idx);
-            NodeStore.setNodeList(_nodeidx, function () {
+            UserStore.setSelectedIdx(_idx, _nodeidx);
+            NodeStore.setNodeStore(_nodeidx, function () {
                 $state.go('app.mindmap');
             });
         };

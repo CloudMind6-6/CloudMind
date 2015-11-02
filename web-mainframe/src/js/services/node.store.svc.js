@@ -37,7 +37,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         {idx:33, parent_idx:24, root_idx:1, name:"node6", desc:"FAWEFAWEFAWG", assigned_user:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
     ];
     var labelPalette = [];
-    var paletteList = [];
 
     return {
         registerNavbarCallback : function(callback){
@@ -52,6 +51,23 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             nodeStoreCallbacks.push(callback)
         },
 
+        setNodeStore : function(_idx, callback){
+
+            var isSet = {setNodeList : false, setPalette : false};
+
+            this.setNodeList(_idx, function(_value){
+                isSet[_value] = true;
+                this.setNavbarState(true);
+                if(isSet.setNodeList && isSet.setPalette) callback();
+            });
+
+            this.setLabelPalette(_idx, function(_value){
+                isSet[_value] = true;
+                this.setNavbarState(true);
+                if(isSet.setNodeList && isSet.setPalette) callback();
+            });
+        },
+
         setNodeList : function (_idx, callback) {
 
             this.setNavbarState(true);
@@ -62,8 +78,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                      if(res.success) {
                          nodeList = res.node_list;
                          rootSelected = true;
-                         this.setNavbarState(true);
-                         if(callback) callback();
                      }
                      else throw new Error;
                  })
@@ -73,16 +87,28 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                  });*/
         },
 
+        setLabelPalette : function(_idx, callback){
+            HttpSvc.getLabelpalettes(_idx)
+                .success(function (res){
+                    if(res.success) {
+                        nodeList = res.node_list;
+                        rootSelected = true;
+                        this.setNavbarState(true);
+                    }
+                    else throw new Error;
+                })
+                .error(function (err){
+                    console.log('err');
+                    // 다이얼로그(에러모듈) 처리
+                });
+        },
+
         getNodeList : function () {
             return nodeList;
         },
 
-        getNodePallete : function(){
+        getLabelPalette : function(){
             return labelPalette;
-        },
-
-        getPalleteList : function(){
-            return paletteList;
         },
 
         addNode : function(_nodename,_node_parent_idx){
@@ -148,7 +174,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 delete nodeList[i];
             }
         }
-
         notifyNodeStoreChange();
     }
 
