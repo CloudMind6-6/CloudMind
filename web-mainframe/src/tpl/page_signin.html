@@ -15,20 +15,23 @@
       <div class="list-group list-group-sm">
         
       </div>
-      <button id="signinButton" type="submit" class="btn btn-lg btn-primary btn-block">Login with Google</button>
+      <button id="signInButton" type="submit" class="btn btn-lg btn-primary btn-block">Login with Google</button>
       <!-- <span id="googleSignIn">
           <span id="signInButton">
           </span>
       </span> -->
       <script>// <![CDATA[      
         function signInCallback(authResult) {
+          
         if (authResult['code']) {
+
           console.log(authResult["code"]);
           // Hide the sign-in button now that the user is authorized, for example:
           $('#signinButton').attr('style', 'display: none');
-
+          $state.go('app.list');
           // Google Redirection URI
           $.get("/oauth2callback", {"code" : authResult["code"]} , function(data) {
+            
             console.log(data);
           })
         } else {
@@ -39,7 +42,7 @@
           gapi.load('auth2', function() {
             auth2 = gapi.auth2.init({
               client_id: '863887952859-ol5bukmc38lkmfa82usslterdrrol4lc.apps.googleusercontent.com',
-              scope : 'profile',
+              scope : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
               // Scopes to request in addition to 'profile' and 'email'
               //scope: 'additional_scope'
             });
