@@ -1,5 +1,4 @@
-
-app.service('HttpSvc',[ '$http', function($http) { /* resource api 수정해야함 */
+app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야함 */
 
         var urlBase = '/rest/1.0';
 
@@ -168,6 +167,5 @@ app.service('HttpSvc',[ '$http', function($http) { /* resource api 수정해야�
         }
     }]
 
-        /* RESOURCE REST API */
-
+    /* RESOURCE REST API */
 );
