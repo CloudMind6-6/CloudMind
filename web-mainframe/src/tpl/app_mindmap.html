@@ -20,26 +20,19 @@
 <script>
     var body        = d3.select("body");
     var canvas      = body.select("svg");
+    var controller  = body.select("div[ng-controller='MindmapCtrl']");
 
     for(var i = 0; i < node_link.length; ++i)
     {
         var link = node_link[i];
 
         var diagonal = d3.svg.diagonal()
-                /*
-                .source({x:link.src_x + 860, y:link.src_y + 380})
-                .target({x:link.dst_x + 860, y:link.dst_y + 380})
-                */
-                /*
-                .source({x:link.src_y + screen.height/ 2 - node_scene_graph_form.height*2, y:link.src_x + screen.width/2 - node_scene_graph_form.half_width})
-                .target({x:link.dst_y + screen.height/ 2 - node_scene_graph_form.height*2, y:link.dst_x + screen.width/2 - node_scene_graph_form.half_width})
-                */
-
+                //.source({x:link.src_y + screen.height/ 2 - node_scene_graph_form.height*2, y:link.src_x + screen.width/2 - node_scene_graph_form.half_width})
+                //.target({x:link.dst_y + screen.height/ 2 - node_scene_graph_form.height*2, y:link.dst_x + screen.width/2 - node_scene_graph_form.half_width})
                 .source({x:link.src_y + screen.height/ 2 - 120 - 60, y:link.src_x + screen.width/2})
                 .target({x:link.dst_y + screen.height/ 2 - 120 - 60, y:link.dst_x + screen.width/2})
 
                 .projection(function(d) { return [d.y, d.x]; });
-
 
         canvas.append("path")
                 .attr("class", link)
@@ -47,8 +40,21 @@
                 .attr("stroke", "black")
                 .attr("d", diagonal);
     }
+/*
+    for(var i = 0; i < nodes.length; ++i)
+    {
+        var node = nodes[i];
 
-    var controller  = body.select("div[ng-controller='MindmapCtrl']");
+        var controller  = body.select("div[ng-controller='MindmapCtrl']");
+        controller.select('div[idx=' + node.idx + ']')
+                .attr("class", "node")
+                .style("left", function(d){ return screen.width / 2 - node_scene_graph_form.half_width  + d.x + "px"; })
+                .style("top",  function(d){ return screen.height/ 2 - node_scene_graph_form.half_height + d.y - 60 + "px"; })
+                .style("width", node_scene_graph_form.width + "px")
+                .style("height", node_scene_graph_form.height + "px")
+                .style("border-radius", node_scene_graph_form.height / 10 + "px")
+    }
+*/
     controller.selectAll('div')
             .data(nodes)
             .enter()
@@ -59,7 +65,8 @@
             .style("width", node_scene_graph_form.width + "px")
             .style("height", node_scene_graph_form.height + "px")
             .style("border-radius", node_scene_graph_form.height / 10 + "px")
-
+            .append('div')
+            .text(function(d){return d.name})
             /*
             .append("ul")
             .attr("class", "nav navbar-nav")
@@ -77,23 +84,20 @@
 </div>
 
 <div ng-controller="MindmapCtrl">
-
+    <svg width="100%" height="2000">
+    </svg>
     <!--
-          <div ng-repeat="node in nodes" class="node">
-              <div>
-                  <ul class="nav navbar-nav">
-                      <li ng-repeat="label in node.labels" style="display:inline-block; margin-left:3px; margin-top:3px; width:30px; height:10px; border-radius:2px; background-color:{{label_palette[label].color}}"></li>
-                  </ul>
-                  <br>
-              </div>
-              <div>{{node.name}}</div>
-              <div>{{node.desc}}</div>
-          </div>
-      -->
 
-  <svg width="100%" height="2000">
-
-  </svg>
-
+  <div ng-repeat="node in nodes" class="panel" style="width:200px; height:100px; left:960px; top:540px;">
+      <div>
+          <ul class="nav navbar-nav">
+              <li ng-repeat="label in node.labels" style="display:inline-block; margin-left:3px; margin-top:3px; width:30px; height:10px; border-radius:2px; background-color:{{label_palette[label].color}}"></li>
+          </ul>
+          <br>
+      </div>
+      <div>{{node.name}}</div>
+      <div>{{node.desc}}</div>
+  </div>
+-->
 
 </div>
