@@ -8,8 +8,9 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     login_method = db.Column(db.Integer)
+    # 고유ID
     oauth_id = db.Column(db.Integer)
-    name = db.Column(db.Integer)
+    name = db.Column(db.String(10))
     email = db.Column(db.String(70), unique=True)
     picture = db.Column(db.String(150))
     creation_date = db.Column(db.Date, default=datetime.date.today())
@@ -23,3 +24,12 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+    @property
+    def serialize(self):
+        return {
+            'account_id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'profile_url': self.picture
+        }
