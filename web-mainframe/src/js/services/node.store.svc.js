@@ -3,8 +3,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
     var navbarCallback = null;
     var url = 'img/a1.jpg';
-    var nodeList =
-        [];
+    var nodeList = [];
 
     return {
         registerNavbarCallback : function(callback){

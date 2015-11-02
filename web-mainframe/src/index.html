@@ -13,6 +13,8 @@
 <body ng-controller="AppCtrl">
   <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'container':app.settings.container}" ui-view></div>
 
+  <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+
   <!-- jQuery -->
   <script src="../libs/jquery/jquery/dist/jquery.js"></script>
   <!-- Bootstrap -->
@@ -34,6 +36,9 @@
   <script src="../libs/angular/angular-ui-router/release/angular-ui-router.js"></script> 
   <script src="../libs/angular/ngstorage/ngStorage.js"></script>
   <script src="../libs/angular/angular-ui-utils/ui-utils.js"></script>
+
+  <!-- d3 -->
+  <script src="../libs/d3/d3.v3.js"></script>
 
   <!-- bootstrap -->
   <script src="../libs/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>

@@ -13,15 +13,41 @@
           {{authError}}
       </div>
       <div class="list-group list-group-sm">
-        <div class="list-group-item">
-          <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" >
-        </div>
-        <div class="list-group-item">
-           <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" >
-        </div>
+        
       </div>
-      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()">Log in</button>
-      <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">Forgot password?</a></div>
+      <button id="signinButton" type="submit" class="btn btn-lg btn-primary btn-block">Login with Google</button>
+      <!-- <span id="googleSignIn">
+          <span id="signInButton">
+          </span>
+      </span> -->
+      <script>// <![CDATA[      
+        function signInCallback(authResult) {
+        if (authResult['code']) {
+          console.log(authResult["code"]);
+          // Hide the sign-in button now that the user is authorized, for example:
+          $('#signinButton').attr('style', 'display: none');
+
+          // Google Redirection URI
+          $.get("/oauth2callback", {"code" : authResult["code"]} , function(data) {
+            console.log(data);
+          })
+        } else {
+          // Login 오류
+        }
+      }
+        function start() {
+          gapi.load('auth2', function() {
+            auth2 = gapi.auth2.init({
+              client_id: '863887952859-ol5bukmc38lkmfa82usslterdrrol4lc.apps.googleusercontent.com',
+              scope : 'profile',
+              // Scopes to request in addition to 'profile' and 'email'
+              //scope: 'additional_scope'
+            });
+          });
+        }
+        // Google API Console 에서 client_id 확인 가능
+  // ]]></script>
+
       <div class="line line-dashed"></div>
       <p class="text-center"><small>Do not have an account?</small></p>
       <a ui-sref="access.signup" class="btn btn-lg btn-default btn-block">Create an account</a>
