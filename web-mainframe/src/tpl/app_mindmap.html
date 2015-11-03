@@ -40,42 +40,31 @@
                 .attr("stroke", "black")
                 .attr("d", diagonal);
     }
-/*
+
     for(var i = 0; i < nodes.length; ++i)
     {
         var node = nodes[i];
 
-        var controller  = body.select("div[ng-controller='MindmapCtrl']");
-        controller.select('div[idx=' + node.idx + ']')
+        controller.append('div')
                 .attr("class", "node")
-                .style("left", function(d){ return screen.width / 2 - node_scene_graph_form.half_width  + d.x + "px"; })
-                .style("top",  function(d){ return screen.height/ 2 - node_scene_graph_form.half_height + d.y - 60 + "px"; })
+                .style("left", screen.width / 2 - node_scene_graph_form.half_width  + node.x + "px")
+                .style("top",  screen.height/ 2 - node_scene_graph_form.half_height + node.y - 60 + "px")
                 .style("width", node_scene_graph_form.width + "px")
                 .style("height", node_scene_graph_form.height + "px")
                 .style("border-radius", node_scene_graph_form.height / 10 + "px")
+                .append('div')
+                .text(node.name)
+
+        /*
+         .append("ul")
+         .attr("class", "nav navbar-nav")
+         .selectAll('li')
+         .data(node.labels)
+         .enter()
+         .append("li")
+         .attr("class", "label");
+         */
     }
-*/
-    controller.selectAll('div')
-            .data(nodes)
-            .enter()
-            .append('div')
-            .attr("class", "node")
-            .style("left", function(d){ return screen.width / 2 - node_scene_graph_form.half_width  + d.x + "px"; })
-            .style("top",  function(d){ return screen.height/ 2 - node_scene_graph_form.half_height + d.y - 60 + "px"; })
-            .style("width", node_scene_graph_form.width + "px")
-            .style("height", node_scene_graph_form.height + "px")
-            .style("border-radius", node_scene_graph_form.height / 10 + "px")
-            .append('div')
-            .text(function(d){return d.name})
-            /*
-            .append("ul")
-            .attr("class", "nav navbar-nav")
-            .selectAll('li')
-            .data(node.labels)
-            .enter()
-            .append("li")
-            .attr("class", "label");
-            */
 
 </script>
 
