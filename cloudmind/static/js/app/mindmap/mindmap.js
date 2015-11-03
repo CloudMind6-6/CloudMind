@@ -75,7 +75,7 @@ var node_scene_graph_form =
 
 // Scene Graph Node Class
 
-NodeSceneGraph = function()
+SceneGraphNode = function()
 {
     this.parent = null;
     this.children = new Array();
@@ -86,7 +86,7 @@ NodeSceneGraph = function()
     this.height = node_scene_graph_form.height + node_scene_graph_form.margin_y;
 };
 
-NodeSceneGraph.prototype =
+SceneGraphNode.prototype =
 {
     attachChild : function(child)
     {
@@ -157,40 +157,40 @@ NodeSceneGraph.prototype =
 
 // Construct Scene Graph
 
-var node_scene_graph_map    = new Object();
-var node_scene_graph_root   = null;
-var node_scene_graph_odd    = null;
-var node_scene_graph_even   = null;
+var scene_graph_node_map    = new Object();
+var scene_graph_node_root   = null;
+var scene_graph_node_odd    = null;
+var scene_graph_node_even   = null;
 var spanning_odd = true;
 
 nodes.forEach(function(node)
 {
-    var node_scene_graph = new NodeSceneGraph();
-    var node_scene_graph_parent = node_scene_graph_map[node.parent_idx];
+    var node_scene_graph = new SceneGraphNode();
+    var node_scene_graph_parent = scene_graph_node_map[node.parent_idx];
 
-    node_scene_graph_map[node.idx] = node_scene_graph;
+    scene_graph_node_map[node.idx] = node_scene_graph;
 
     if (node.idx == node.root_idx)
     {
-        node_scene_graph_root = node_scene_graph;
+        scene_graph_node_root = node_scene_graph;
 
-        node_scene_graph_odd  = new NodeSceneGraph();
-        node_scene_graph_even = new NodeSceneGraph();
+        scene_graph_node_odd  = new SceneGraphNode();
+        scene_graph_node_even = new SceneGraphNode();
 
-        node_scene_graph_root.attachChild(node_scene_graph_odd);
-        node_scene_graph_root.attachChild(node_scene_graph_even);
+        scene_graph_node_root.attachChild(scene_graph_node_odd);
+        scene_graph_node_root.attachChild(scene_graph_node_even);
 
-        node_scene_graph_odd.spanning_odd = true;
-        node_scene_graph_even.spanning_odd = false;
+        scene_graph_node_odd.spanning_odd = true;
+        scene_graph_node_even.spanning_odd = false;
     }
     else
     {
         if(node.parent_idx == node.root_idx)
         {
             if(spanning_odd)
-                node_scene_graph_odd.attachChild(node_scene_graph);
+                scene_graph_node_odd.attachChild(node_scene_graph);
             else
-                node_scene_graph_even.attachChild(node_scene_graph);
+                scene_graph_node_even.attachChild(node_scene_graph);
 
             node_scene_graph.spanning_odd = spanning_odd;
             spanning_odd = !spanning_odd;
@@ -206,10 +206,10 @@ nodes.forEach(function(node)
 
 // Arrange Scene Graph Horizontal
 
-var node_link = new Array();
+var scene_graph_node_link = new Array();
 
-node_scene_graph_odd.arrangeHorizontal(node_link);
-node_scene_graph_even.arrangeHorizontal(node_link);
+scene_graph_node_odd.arrangeHorizontal(scene_graph_node_link);
+scene_graph_node_even.arrangeHorizontal(scene_graph_node_link);
 
 
 // Angular JS Link
