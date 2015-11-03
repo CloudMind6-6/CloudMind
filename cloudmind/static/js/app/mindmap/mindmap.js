@@ -50,7 +50,6 @@ nodes = [
 
 var node_scene_graph_form =
 {
-
     width:100,
     height:50,
     half_width:50,
@@ -213,18 +212,7 @@ node_scene_graph_odd.arrangeHorizontal(node_link);
 node_scene_graph_even.arrangeHorizontal(node_link);
 
 
-// Node Transform
-
-nodes.forEach(function(node)
-{
-    var node_scene_graph = node_scene_graph_map[node.idx];
-
-    node.x = node_scene_graph.x;
-    node.y = node_scene_graph.y;
-});
-
-
-
+// Angular JS Link
 
 app.controller('MindmapCtrl', ['$scope', function($scope) {
     $scope.label_palette = label_palette;
