@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+		* { font-family: 'NanumGothic', '나눔고딕','NanumGothicWeb'}
+		html {
+			margin: 0;
+			background-color: #f0f3f4;
+			font-size : 10px;
+			font-family: "NanumGothic"
+		}
+		#logindiv_top a {
+			text-decoration: none;
+			color : #58666e;
+		}
+		#signinButton {
+			width : 330px;
+			height : 40px;
+			border-radius: 2px;
+			background-color: #7266ba;
+    		border-color: #7266ba;
+    		color: #ffffff !important;
+    		outline: 0!important;
+    		font-size: 18px;
+		}
+		#Regist {
+
+			width : 330px;
+			height : 40px;
+			border-radius: 2px;
+			background-color:#fcfdfd;
+    		border-color: #dee5e7;
+    		color: #000 !important;
+    		outline: 0!important;
+    		font-size: 18px;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="./libs/assets/font-awesome/css/font-awesome.min.css" type="text/css">
+	<link rel="stylesheet" href="./libs/assets/simple-line-icons/css/simple-line-icons.css" type="text/css">
+	<link rel="stylesheet" href="css/font.css" type="text/css">
+  <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
+  </script>
+	<title>CloudMind Login</title>
+	<script>
+
+  	function signInCallback(authResult) {
+	  if (authResult['code']) {
+	  	console.log(authResult);
+	    // Hide the sign-in button now that the user is authorized, for example:
+	    $('#signinButton').attr('style', 'display: none');
+
+	    
+	    $.get("http://test.cloud-mind.net/oauth2callback", {"code" : authResult["code"]} , function(data) {
+	    	// 아마 저게 500 뜨는 이유가 Redirect_url 이 달라서 뜨는 듯
+	    	console.log(data);
+
+	    })
+	   
+	  } else {
+	  
+	  }
+	}
+    function start() {
+      gapi.load('auth2', function() {
+        auth2 = gapi.auth2.init({
+          client_id: '863887952859-ol5bukmc38lkmfa82usslterdrrol4lc.apps.googleusercontent.com',
+          scope: 'profile'
+          // Scopes to request in addition to 'profile' and 'email'
+          //scope: 'additional_scope'
+        });
+      });
+    }
+    start();
+  
+	</script>
+</head>
+<body>
+	<div id="logindiv" style="margin-top : 50px; margin-left: auto; margin-right : auto; width : 800px;">
+		<div id="logindiv_top" style="text-align : center; font-size : 20px; ">
+			<a href="#" class="fa fa-lg fa-cloud"> CloudMind</a>
+		</div>
+		<div id="sign" style="text-align : center; margin-top : 100px; ">
+			<button id="signinButton">Signin with Google</button>
+		</div>
+		<div id="regist" style="text-align: center; margin-top: 30px;">
+			<button id="Regist">Create an account</button>
+		</div>
+	</div>
+	<script src="./libs/jquery/jquery/dist/jquery.js"></script>
+	<script>
+	  $('#signinButton').click(function() {
+	    // signInCallback defined in step 6.
+	    auth2.grantOfflineAccess({'redirect_uri': 'postmessage'}).then(signInCallback);
+	  });
+	</script>
+
+</body>
+</html>
