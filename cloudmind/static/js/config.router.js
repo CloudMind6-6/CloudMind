@@ -18,7 +18,7 @@ angular.module('app')
           var layout = "tpl/app.html";
 
           $urlRouterProvider
-              .otherwise('/access/signin');
+              .otherwise('/app/list');
 
           $stateProvider
               .state('app', {
