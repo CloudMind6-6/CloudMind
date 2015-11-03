@@ -1,0 +1,64 @@
+<div class="container w-xxl w-auto-xs" ng-controller="SigninFormController" ng-init="app.settings.container = false;">
+  <a href class="navbar-brand block m-t">
+    <i class="fa fa-lg fa-cloud"></i>
+    <img src="img/logo.png" alt="." class="hide">
+    <span class="hidden-folded m-l-xs">{{app.name}}</span>
+  </a>
+  <div class="m-b-lg">
+    <div class="wrapper text-center">
+      <strong>Sign in to get in touch</strong>
+    </div>
+    <form name="form" class="form-validation">
+      <div class="text-danger wrapper text-center" ng-show="authError">
+          {{authError}}
+      </div>
+      <div class="list-group list-group-sm">
+        
+      </div>
+      <button id="signInButton" type="submit" class="btn btn-lg btn-primary btn-block">Login with Google</button>
+      <!-- <span id="googleSignIn">
+          <span id="signInButton">
+          </span>
+      </span> -->
+      <script>// <![CDATA[      
+        function signInCallback(authResult) {
+          
+        if (authResult['code']) {
+
+          console.log(authResult["code"]);
+          // Hide the sign-in button now that the user is authorized, for example:
+          $('#signinButton').attr('style', 'display: none');
+          $state.go('app.list');
+          // Google Redirection URI
+          $.get("/oauth2callback", {"code" : authResult["code"]} , function(data) {
+            
+            console.log(data);
+          })
+        } else {
+          // Login 오류
+        }
+      }
+        function start() {
+          gapi.load('auth2', function() {
+            auth2 = gapi.auth2.init({
+              client_id: '863887952859-ol5bukmc38lkmfa82usslterdrrol4lc.apps.googleusercontent.com',
+              scope : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+              // Scopes to request in addition to 'profile' and 'email'
+              //scope: 'additional_scope'
+            });
+          });
+        }
+        // Google API Console 에서 client_id 확인 가능
+  // ]]></script>
+
+      <div class="line line-dashed"></div>
+      <p class="text-center"><small>Do not have an account?</small></p>
+      <!-- <a ui-sref="access.signup" class="btn btn-lg btn-default btn-block">Create an account</a> -->
+      <a ui-sref="app.list" class="btn btn-lg btn-default btn-block">Test link</a>
+      
+    </form>
+  </div>
+  <div class="text-center" ng-include="'tpl/blocks/page_footer.html'">
+    {% include 'blocks/page_footer.html' %}
+  </div>
+</div>

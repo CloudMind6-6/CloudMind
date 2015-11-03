@@ -2,15 +2,15 @@
 from cloudmind.blueprint import apiv1
 from cloudmind.config.config import Config
 from flask import Flask
-from flask import jsonify
 from flask import redirect
 from flask import request
 from flask import session
 from flask import url_for
+from flask import render_template
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 app.secret_key = 'development'
 app.config.from_object(Config)
 
@@ -54,8 +54,8 @@ def index():
         from cloudmind.model.user import User
         user = db.session.query(User).filter(User.oauth_id == userinfo['id']).first()
         session['user_id'] = user.id
-        return jsonify({"data": user.serialize})
-    return redirect(url_for('login'))
+        return render_template('app.html')
+    return render_template('login.html')
 
 
 @app.route('/login')
@@ -96,7 +96,7 @@ def authorized():
         db.session.add(user)
         db.session.commit()
     session['user_id'] = user.id
-    return jsonify({"data": user.serialize})
+    return redirect(url_for('index'))
 
 
 @google.tokengetter
