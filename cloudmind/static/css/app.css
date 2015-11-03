@@ -134,7 +134,7 @@ a:hover .caret-white {
 .progress,
 .progress-bar {
   -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
 }
 
 .progress-bar-primary {
@@ -190,7 +190,7 @@ a:hover .caret-white {
 .form-control,
 .form-control:focus {
   -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
 }
 
 .form-control:focus {
@@ -523,7 +523,7 @@ pre {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 2px;
   -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-menu.pull-left {
@@ -625,14 +625,19 @@ pre {
   padding-right: 10px;
   padding-left: 10px;
 }
+.modal-header {
+  position: absolute;
+  min-height: 16.42857143px;
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
 
 .modal-backdrop {
-  background-color: #3a3f51;
+  opacity: 0;
 }
 
 .modal-backdrop.in {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+  opacity: 0;
 }
 
 .modal-over {
@@ -918,7 +923,7 @@ html.bg {
   .app.container {
     width: 750px;
     -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   }
   .app.container .app-aside {
     overflow-x: hidden;
@@ -994,7 +999,7 @@ html.bg {
   overflow: hidden;
   opacity: 0;
   -webkit-transition: all 0.2s ease-in-out 0s;
-          transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
 }
 
 .active > .nav-sub,
@@ -1039,7 +1044,7 @@ html.bg {
   font-weight: normal;
   text-transform: none;
   -webkit-transition: background-color 0.2s ease-in-out 0s;
-          transition: background-color 0.2s ease-in-out 0s;
+  transition: background-color 0.2s ease-in-out 0s;
 }
 
 .navi ul.nav li a .badge,
@@ -1112,7 +1117,7 @@ html.bg {
     width: 200px;
     height: 0 !important;
     -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
   .app-aside-folded .navi li li a {
     padding-left: 20px !important;
@@ -1153,9 +1158,9 @@ html.bg {
   }
   .app-content {
     -webkit-transition: -webkit-transform 0.2s ease;
-       -moz-transition: -moz-transform 0.2s ease;
-         -o-transition: -o-transform 0.2s ease;
-            transition: transform 0.2s ease;
+    -moz-transition: -moz-transform 0.2s ease;
+    -o-transition: -o-transform 0.2s ease;
+    transition: transform 0.2s ease;
   }
   .off-screen {
     position: absolute;
@@ -1181,14 +1186,14 @@ html.bg {
     overflow: hidden;
     background-color: #f0f3f4;
     -webkit-transform: translate3d(75%, 0, 0px);
-            transform: translate3d(75%, 0, 0px);
+    transform: translate3d(75%, 0, 0px);
     -webkit-transition: -webkit-transform 0.2s ease;
-       -moz-transition: -moz-transform 0.2s ease;
-         -o-transition: -o-transform 0.2s ease;
-            transition: transform 0.2s ease;
+    -moz-transition: -moz-transform 0.2s ease;
+    -o-transition: -o-transform 0.2s ease;
+    transition: transform 0.2s ease;
     -webkit-backface-visibility: hidden;
-       -moz-backface-visibility: hidden;
-            backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
   .off-screen + * .off-screen-toggle {
     position: absolute;
@@ -1204,7 +1209,7 @@ html.bg {
   }
   .off-screen.pull-right + * {
     -webkit-transform: translate3d(-75%, 0, 0px);
-            transform: translate3d(-75%, 0, 0px);
+    transform: translate3d(-75%, 0, 0px);
   }
 }
 
@@ -1299,8 +1304,8 @@ html.bg {
   .app-aside-dock .app-aside .navi > ul > li > a > span.pull-right i.text {
     line-height: 14px;
     -webkit-transform: rotate(90deg);
-        -ms-transform: rotate(90deg);
-            transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
   }
   .app-aside-dock .app-aside .navi > ul > li > a > span {
     display: block;
@@ -1315,7 +1320,7 @@ html.bg {
     width: 200px;
     height: auto !important;
     -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
   .app-aside-dock .app-aside .navi > ul > li .nav-sub-header {
     display: none !important;
@@ -1582,7 +1587,7 @@ html.bg {
   border-color: #dee5e7;
   border-bottom-color: #d8e1e3;
   -webkit-box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
-          box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
+  box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
 }
 
 .btn-default:hover,
@@ -2033,7 +2038,7 @@ fieldset[disabled] .btn-black.active {
   text-align: center;
   vertical-align: middle;
   -webkit-transition: font-size 0.2s;
-          transition: font-size 0.2s;
+  transition: font-size 0.2s;
 }
 
 .list-icon div {
@@ -2052,7 +2057,7 @@ fieldset[disabled] .btn-black.active {
   z-index: 1050;
   width: 240px;
   -webkit-transition: right 0.2s;
-          transition: right 0.2s;
+  transition: right 0.2s;
 }
 
 .settings.active {
@@ -2311,7 +2316,7 @@ fieldset[disabled] .btn-black.active {
   border-radius: 30px;
   content: "";
   -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .i-switch i:after {
@@ -2323,9 +2328,9 @@ fieldset[disabled] .btn-black.active {
   border-radius: 50%;
   content: "";
   -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
-          box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
   -webkit-transition: margin-left 0.3s;
-          transition: margin-left 0.3s;
+  transition: margin-left 0.3s;
 }
 
 .i-switch-md {
@@ -2419,7 +2424,7 @@ fieldset[disabled] .i-checks input + i:before {
   background-color: transparent;
   content: "";
   -webkit-transition: all 0.2s;
-          transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 .i-checks > span {
@@ -2481,11 +2486,11 @@ fieldset[disabled] .i-checks input + i:before {
   background-color: rgba(0, 0, 0, 0.8) !important;
   border: solid 1px #000 !important;
   -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-sizing: content-box;
-     -moz-box-sizing: content-box;
-          box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 
 .easyPieChart {
@@ -2525,8 +2530,8 @@ fieldset[disabled] .i-checks input + i:before {
   background-color: rgba(0, 0, 0, 0.8);
   border: solid 1px #000 !important;
   -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .legendColorBox > div {
@@ -2649,92 +2654,92 @@ fieldset[disabled] .i-checks input + i:before {
 
 .fade-in-right-big.ng-enter {
   -webkit-animation: fadeInRightBig 0.5s;
-          animation: fadeInRightBig 0.5s;
+  animation: fadeInRightBig 0.5s;
 }
 
 .fade-in-right-big.ng-leave {
   -webkit-animation: fadeOutLeftBig 0.5s;
-          animation: fadeOutLeftBig 0.5s;
+  animation: fadeOutLeftBig 0.5s;
 }
 
 .fade-in-left-big.ng-enter {
   -webkit-animation: fadeInLeftBig 0.5s;
-          animation: fadeInLeftBig 0.5s;
+  animation: fadeInLeftBig 0.5s;
 }
 
 .fade-in-left-big.ng-leave {
   -webkit-animation: fadeOutRightBig 0.5s;
-          animation: fadeOutRightBig 0.5s;
+  animation: fadeOutRightBig 0.5s;
 }
 
 .fade-in-up-big.ng-enter {
   -webkit-animation: fadeInUpBig 0.5s;
-          animation: fadeInUpBig 0.5s;
+  animation: fadeInUpBig 0.5s;
 }
 
 .fade-in-up-big.ng-leave {
   -webkit-animation: fadeOutUpBig 0.5s;
-          animation: fadeOutUpBig 0.5s;
+  animation: fadeOutUpBig 0.5s;
 }
 
 .fade-in-down-big.ng-enter {
   -webkit-animation: fadeInDownBig 0.5s;
-          animation: fadeInDownBig 0.5s;
+  animation: fadeInDownBig 0.5s;
 }
 
 .fade-in-down-big.ng-leave {
   -webkit-animation: fadeOutDownBig 0.5s;
-          animation: fadeOutDownBig 0.5s;
+  animation: fadeOutDownBig 0.5s;
 }
 
 .fade-in.ng-enter {
   -webkit-animation: fadeIn 0.5s;
-          animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
 }
 
 .fade-in.ng-leave {
   -webkit-animation: fadeOut 0.5s;
-          animation: fadeOut 0.5s;
+  animation: fadeOut 0.5s;
 }
 
 .fade-in-right.ng-enter {
   -webkit-animation: fadeInRight 0.5s;
-          animation: fadeInRight 0.5s;
+  animation: fadeInRight 0.5s;
 }
 
 .fade-in-right.ng-leave {
   -webkit-animation: fadeOutLeft 0.5s;
-          animation: fadeOutLeft 0.5s;
+  animation: fadeOutLeft 0.5s;
 }
 
 .fade-in-left.ng-enter {
   -webkit-animation: fadeInLeft 0.5s;
-          animation: fadeInLeft 0.5s;
+  animation: fadeInLeft 0.5s;
 }
 
 .fade-in-left.ng-leave {
   -webkit-animation: fadeOutRight 0.5s;
-          animation: fadeOutRight 0.5s;
+  animation: fadeOutRight 0.5s;
 }
 
 .fade-in-up.ng-enter {
   -webkit-animation: fadeInUp 0.5s;
-          animation: fadeInUp 0.5s;
+  animation: fadeInUp 0.5s;
 }
 
 .fade-in-up.ng-leave {
   -webkit-animation: fadeOutUp 0.5s;
-          animation: fadeOutUp 0.5s;
+  animation: fadeOutUp 0.5s;
 }
 
 .fade-in-down.ng-enter {
   -webkit-animation: fadeInDown 0.5s;
-          animation: fadeInDown 0.5s;
+  animation: fadeInDown 0.5s;
 }
 
 .fade-in-down.ng-leave {
   -webkit-animation: fadeOutDown 0.5s;
-          animation: fadeOutDown 0.5s;
+  animation: fadeOutDown 0.5s;
 }
 
 .bg-gd {
@@ -3865,10 +3870,10 @@ a.text-#000000:hover {
 
 .no-select {
   -webkit-user-select: none;
-   -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   -webkit-touch-callout: none;
 }
 
@@ -3989,7 +3994,7 @@ a.text-#000000:hover {
 
 .no-shadow {
   -webkit-box-shadow: none !important;
-          box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .wrapper-xs {
@@ -4516,19 +4521,53 @@ a.text-#000000:hover {
   border-radius: 500px;
 }
 
+.avatar span {
+  width: 70px;
+  height: 70px;
+}
+
+.avatar div {
+  font-size: 15px;
+  text-align: center;
+}
+
+.img-hover-bgcolor{
+  width: 100px;
+  height: 100px;
+  opacity:1.0;
+  background-image: url("../img/edit.png");
+  border-radius: 300px;
+  display: block;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .avatar img {
   width: 100%;
   border-radius: 500px;
 }
 
+.dropdown-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 300px;
+  display: block;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dropdown-img:hover {
+  opacity:0.4;
+}
+
 .avatar i {
-  position: absolute;
   top: 0;
   left: 0;
   width: 10px;
   height: 10px;
   margin: 2px;
-  border-style: solid;
   border-width: 2px;
   border-radius: 100%;
 }
@@ -4647,7 +4686,7 @@ a.text-#000000:hover {
 
 .thumb-lg {
   display: inline-block;
-  width: 96px;
+  width: 140px;
 }
 
 .thumb-md {
@@ -4738,7 +4777,7 @@ a.text-#000000:hover {
 
 .hover-rotate {
   -webkit-transition: all 0.2s ease-in-out 0.1s;
-          transition: all 0.2s ease-in-out 0.1s;
+  transition: all 0.2s ease-in-out 0.1s;
 }
 
 .hover-anchor:hover > .hover-action,
@@ -4751,8 +4790,8 @@ a.text-#000000:hover {
 .hover-anchor:focus > .hover-rotate,
 .hover-anchor:active > .hover-rotate {
   -webkit-transform: rotate(90deg);
-      -ms-transform: rotate(90deg);
-          transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .backdrop {
@@ -4881,20 +4920,20 @@ a.text-#000000:hover {
 
 .butterbar.active {
   -webkit-animation: changebar 2.25s infinite 0.75s;
-     -moz-animation: changebar 2.25s infinite 0.75s;
-          animation: changebar 2.25s infinite 0.75s;
+  -moz-animation: changebar 2.25s infinite 0.75s;
+  animation: changebar 2.25s infinite 0.75s;
 }
 
 .butterbar.active .bar {
   -webkit-animation: changebar 2.25s infinite;
-     -moz-animation: changebar 2.25s infinite;
-          animation: changebar 2.25s infinite;
+  -moz-animation: changebar 2.25s infinite;
+  animation: changebar 2.25s infinite;
 }
 
 .butterbar.active .bar:before {
   -webkit-animation: movingbar 0.75s infinite;
-     -moz-animation: movingbar 0.75s infinite;
-          animation: movingbar 0.75s infinite;
+  -moz-animation: movingbar 0.75s infinite;
+  animation: movingbar 0.75s infinite;
 }
 
 /* Moving bar */
