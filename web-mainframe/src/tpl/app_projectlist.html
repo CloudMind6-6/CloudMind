@@ -14,23 +14,25 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
-            <div class=" panel wrapper-md dropdown" dropdown>
-                <a href class="dropdown-toggle" dropdown-toggle>
-                    <H1 align="center"> + </H1>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                    <div class="panel-body">
-                        <form role="form">
-                            <div class="form-group">
-                                <label>Root Node Name</label>
-                                <input type="text" class="form-control" ng-model="rootName">
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-primary" ng-click="addRoot()">Creat</button>
-                        </form>
-                    </div>
-                </ul>
+        <div class="col-sm-3" ng-controller="ModalCtrl">
+            <div class="panel wrapper-md" ng-click="open($event)">
+                <script type="text/ng-template" id="myModalContent.html">
+                  <div ng-include="'tpl/modal.html'"></div>
+                </script>
+                <H1 align="center"> + </H1>
             </div>
         </div>
+    </div>
+</div>
+
+<div ng-controller="ModalCtrl" class="panel b-a">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div ng-include="'tpl/modal.html'"></div>
+    </script>
+    <div class="panel-heading b-b b-light">Modal</div>
+    <div class="panel-body">
+        <button class="btn btn-success" ng-click="open()">Open me!</button>
+        <button class="btn btn-default" ng-click="open('lg')">Large modal</button>
+        <button class="btn btn-default" ng-click="open('sm')">Small modal</button>
     </div>
 </div>

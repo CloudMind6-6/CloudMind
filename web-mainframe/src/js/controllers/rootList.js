@@ -29,6 +29,7 @@ app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore', 'UserStore',
 
         $scope.selectRoot = function (_nodeidx, _idx) {
             $state.go('app.mindmap');
+
             UserStore.setSelectedIdx(_idx, _nodeidx);
             NodeStore.setNodeStore(_nodeidx, function () {
                 $state.go('app.mindmap');
@@ -38,6 +39,7 @@ app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore', 'UserStore',
         $scope.addRoot = function () {
 
             if (!$scope.rootName) return;
+            $scope.selectRoot('test');
 
             NodeStore.addNode($scope.rootName, null, function (_idx) {
                 $scope.rootName = "";

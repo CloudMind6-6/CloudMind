@@ -625,14 +625,19 @@ pre {
   padding-right: 10px;
   padding-left: 10px;
 }
+.modal-header {
+  position: absolute;
+  min-height: 16.42857143px;
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
 
 .modal-backdrop {
-  background-color: #3a3f51;
+
 }
 
 .modal-backdrop.in {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+  opacity: 0;
 }
 
 .modal-over {
@@ -4516,19 +4521,53 @@ a.text-#000000:hover {
   border-radius: 500px;
 }
 
+.avatar span {
+  width: 70px;
+  height: 70px;
+}
+
+.avatar div {
+  font-size: 15px;
+  text-align: center;
+}
+
+.img-hover-bgcolor{
+  width: 100px;
+  height: 100px;
+  opacity:1.0;
+  background-color: black;
+  border-radius: 300px;
+  display: block;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .avatar img {
   width: 100%;
   border-radius: 500px;
 }
 
+.dropdown-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 300px;
+  display: block;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dropdown-img:hover {
+  opacity:0.9;
+}
+
 .avatar i {
-  position: absolute;
   top: 0;
   left: 0;
   width: 10px;
   height: 10px;
   margin: 2px;
-  border-style: solid;
   border-width: 2px;
   border-radius: 100%;
 }
@@ -4647,7 +4686,7 @@ a.text-#000000:hover {
 
 .thumb-lg {
   display: inline-block;
-  width: 96px;
+  width: 140px;
 }
 
 .thumb-md {

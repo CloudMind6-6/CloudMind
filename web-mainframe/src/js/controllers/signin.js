@@ -24,7 +24,7 @@ app.controller('SigninFormController', ['$scope', '$http', '$state', function($s
         } else if(authResult['error']) {
             // Error while signing in.
             $scope.signedIn = false;
-            $state.go('.access.signin');
+            $state.go('access.signin');
             // Report error.
         }
     };
