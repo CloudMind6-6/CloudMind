@@ -50,11 +50,12 @@ from cloudmind.oauth import google
 @app.route('/')
 def index():
     if 'google_token' in session:
-        userinfo = google.get('userinfo').data
-        from cloudmind.model.user import User
-        user = db.session.query(User).filter(User.oauth_id == userinfo['id']).first()
-        session['user_id'] = user.id
-        return render_template('app.html')
+        user_id = google.get('userinfo').data.get('id', None)
+        if user_id is not None:
+            from cloudmind.model.user import User
+            user = db.session.query(User).filter(User.oauth_id == user_id).first()
+            session['user_id'] = user.id
+            return render_template('app.html')
     return render_template('login.html')
 
 
