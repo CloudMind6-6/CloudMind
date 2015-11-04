@@ -13,7 +13,17 @@
         position:absolute;
         color:white;
         background-color: black;
-        opacity:0;
+        opacity:7;
+        visibility:hidden;
+    }
+
+    .mindmap_node_edit
+    {
+        display:inline-block;
+        position:absolute;
+        color:white;
+        background-color: #49a9ff;
+        visibility:hidden;
     }
 
     .mindmap_label
@@ -34,6 +44,8 @@
 
     var node_info_div_map = new Object();
     var node_menu_div_map = new Object();
+    var node_edit_div_map = new Object();
+
     var node_link_map = new Object();
 
     var center_x    = screen.width  / 2;
@@ -46,9 +58,11 @@
 
         var node_info_div = controller.append('div');
         var node_menu_div = controller.append('div');
+        var node_edit_div = controller.append('div');
 
         node_info_div_map[node.idx] = node_info_div;
         node_menu_div_map[node.idx] = node_menu_div;
+        node_edit_div_map[node.idx] = node_edit_div;
 
         node_info_div.attr("class", "mindmap_node_info")
                 .style("left", center_x - node_scene_graph_form.half_width  + scene_graph_node.x + "px")
@@ -56,22 +70,6 @@
                 .style("width", node_scene_graph_form.width + "px")
                 .style("height", node_scene_graph_form.height + "px")
                 .style("border-radius", node_scene_graph_form.height / 10 + "px")
-
-        node_menu_div.attr("class", "mindmap_node_menu")
-                .style("left", center_x - node_scene_graph_form.half_width  + scene_graph_node.x + "px")
-                .style("top",  center_y - node_scene_graph_form.half_height + scene_graph_node.y + "px")
-                .style("width", node_scene_graph_form.width + "px")
-                .style("height", node_scene_graph_form.height + "px")
-                .style("border-radius", node_scene_graph_form.height / 10 + "px")
-                .on("mouseover", function(){d3.select(this).style("opacity", 0.7);})
-                .on("mouseout", function(){d3.select(this).style("opacity", 0);})
-
-        var node_menu_add_remove_div = node_menu_div.append('div').style("float", "left");
-
-        node_menu_add_remove_div.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
-        node_menu_add_remove_div.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
-
-        node_menu_div.append('div').style("float", "right").append('i').attr("class", "fa fa-2x fa-file-text");
 
         var node_div_label_container = node_info_div.append('ul').attr("class", "nav navbar-nav");
 
@@ -100,6 +98,36 @@
                     .attr('width', "10px")
                     .attr("height", "10px")
         }
+
+
+
+
+        node_menu_div.attr("class", "mindmap_node_menu")
+                .style("left", center_x - node_scene_graph_form.half_width  + scene_graph_node.x + "px")
+                .style("top",  center_y - node_scene_graph_form.half_height + scene_graph_node.y + "px")
+                .style("width", node_scene_graph_form.width + "px")
+                .style("height", node_scene_graph_form.height + "px")
+                .style("border-radius", node_scene_graph_form.height / 10 + "px")
+                .on("mouseover", function(){d3.select(this).style("visibility", "visible");})
+                .on("mouseout", function(){d3.select(this).style("visibility", "hidden");})
+
+        var node_menu_div_left = node_menu_div.append('div').style("float", "left");
+
+        node_menu_div_left.append('div').append('i').attr("class", "fa fa-lg fa-plus-square"  );
+        node_menu_div_left.append('div').append('i').attr("class", "fa fa-lg fa-trash-o"      );
+
+        node_menu_div.append('div').style("float", "right").append('i').attr("class", "fa fa-2x fa-file-text")
+
+
+
+
+        node_edit_div.attr("class", "mindmap_node_edit")
+                .style("left", center_x - node_scene_graph_form.half_width * 3  + scene_graph_node.x + "px")
+                .style("top",  center_y - node_scene_graph_form.half_height * 3 + scene_graph_node.y + "px")
+                .style("width", node_scene_graph_form.width * 3 + "px")
+                .style("height", node_scene_graph_form.height * 3 + "px")
+                .style("border-radius", node_scene_graph_form.height * 3 / 10 + "px")
+
     }
 
     for(var i = 0; i < scene_graph_node_link.length; ++i)
