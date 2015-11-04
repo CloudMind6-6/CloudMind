@@ -1,9 +1,8 @@
-from flask_restful import Resource
-from flask_restful import abort
-from flask import session
 from cloudmind import db
 from cloudmind.model.participant import Participant
-
+from flask import session
+from flask_restful import abort
+from flask_restful import Resource
 
 class RootList(Resource):
     def get(self):
