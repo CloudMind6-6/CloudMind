@@ -1,6 +1,6 @@
 app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야함 */
 
-        var urlBase = '/rest/1.0';
+        var urlBase = '/api/v1';
 
         return {
 
