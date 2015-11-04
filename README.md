@@ -1,4 +1,7 @@
 # CloudMind
+## Demo
+ http://cloud-mind.net/
+ 
 ## Installation
  * Download
  
