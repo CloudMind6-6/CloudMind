@@ -46,7 +46,7 @@ class Node(db.Model):
             'node_idx': self.id,
             'name': self.name,
             'creation_date': self.creation_date.isoformat(),
-            'due_date': self.due_date.isoformat(),
+            'due_date': self.due_date.isoformat() if self.due_date is not None else None,
             'description': self.description,
             'creator_id': self.creator_id,
             'rootidx': self.root_node_id,
@@ -63,19 +63,19 @@ class Node(db.Model):
     def serialize_member(self):
         members = db.session.query(Participant).\
             filter(Participant.own_node_id == self.id).\
-            first()
+            all()
         return [item.user_id for item in members]
 
     @property
     def serialize_member_detail(self):
         members = db.session.query(Participant).\
             filter(Participant.own_node_id == self.id).\
-            first()
+            all()
         return [db.session.query(User).filter(User.id == item.user_id).first().serialize for item in members]
 
     @property
     def serialize_root(self):
         return {
             'node': self.serialize,
-            'user': self.name
+            'user': self.serialize_member_detail
         }
