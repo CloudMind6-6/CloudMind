@@ -82,11 +82,11 @@
               </div>
             </div>
           </li>
-          <li class="dropdown" dropdown>
+          <li class="dropdown" dropdown ng-controller="GetUserCtrl">
             <a href class="dropdown-toggle clear" dropdown-toggle>
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img src="img/a1.jpg" alt="...">
-              </span><span class="hidden-sm hidden-md">John.Smith</span> <b class="caret"></b>
+                <img src="{{ profile_url }}" alt="...">
+              </span><span class="hidden-sm hidden-md">{{ username }}</span> <b class="caret"></b>
             </a>
             <!-- dropdown -->
             <div class="dropdown-menu w">
@@ -95,18 +95,19 @@
                 <div class="text-center m-b clearfix m-b">
                   <div class="thumb-lg avatar m-t-n-xxl">
                     <div class="img-hover-bgcolor">
-                      <img src="img/a5.jpg" alt="..." class="dropdown-img b b-3x b-white">
+                      <img src="{{ profile_url }}" alt="..." class="dropdown-img b b-3x b-white">
                     </div>
                     <div>
-                      <span>John.Smith</span>
+                      <span>{{ username }}</span>
                       <i class="fa fa-pencil"></i>
                     </div>
-                    <div class="m-b-sm">test@cloudmind.net</div>
+                    <p></p>
+                    <div class="m-b-sm">{{ useremail }}</div>
                   </div>
                 </div>
               </div>
               <div class="text-center">
-                <button ui-sref="access.signin" class="btn m-b-xs w-xs btn-dark">
+                <button ng-click="logout();" class="btn m-b-xs w-xs btn-dark">
                   Logout
                 </button>
               </div>

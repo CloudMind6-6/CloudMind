@@ -6,6 +6,21 @@
         color:white;
         background-color: #49a9ff;
     }
+    .mindmap_node_info > .nav
+    {
+      width: 100%;
+    }
+    .mindmap_node_info > .description
+    {
+      width: 100%;
+      text-align: center;
+    }
+    .mindmap_node_info > .assigned
+    {
+      position: absolute;
+      bottom: 3px;
+      right: 5px;
+    }
 
     .mindmap_node_menu
     {
@@ -13,17 +28,33 @@
         position:absolute;
         color:white;
         background-color: black;
-        opacity:7;
-        visibility:hidden;
+        transition: opacity 0.2s;
+        opacity:0;
+    }
+    .mindmap_node_menu.over
+    {
+        opacity:0.7;
+    }
+    .mindmap_node_menu > .left
+    {
+        float: left;
+        margin-left: 5px;
+        margin-top: 5px;
+    }
+    .mindmap_node_menu > .right
+    {
+        float: right;
+        margin-right: 5px;
+        margin-top: 10px;
     }
 
     .mindmap_node_edit
     {
-        display:inline-block;
-        position:absolute;
-        color:white;
+        display: inline-block;
+        position: absolute;
+        color: white;
         background-color: #49a9ff;
-        visibility:hidden;
+        visibility: hidden;
     }
 
     .mindmap_label
@@ -82,12 +113,11 @@
                     .style("background-color", label_palette[label].color);
         }
 
-        node_info_div.append('div')
+        node_info_div.append('div').attr("class", "description")
                 .text(node.name);
 
         var node_div_assigned_container = node_info_div.append('div')
-                .style("float", "right")
-                .style("margin-right", "5px");
+                .attr("class", "assigned");
 
         for(var j = 0; j < node.assigned_users.length; ++j)
         {
@@ -108,18 +138,23 @@
                 .style("width", node_scene_graph_form.width + "px")
                 .style("height", node_scene_graph_form.height + "px")
                 .style("border-radius", node_scene_graph_form.height / 10 + "px")
+                /*
                 .on("mouseover", function(){d3.select(this).style("visibility", "visible");})
                 .on("mouseout", function(){d3.select(this).style("visibility", "hidden");})
-
-        var node_menu_div_left = node_menu_div.append('div').style("float", "left");
-
-        node_menu_div_left.append('div').append('i').attr("class", "fa fa-lg fa-plus-square"  );
-        node_menu_div_left.append('div').append('i').attr("class", "fa fa-lg fa-trash-o"      );
-
-        node_menu_div.append('div').style("float", "right").append('i').attr("class", "fa fa-2x fa-file-text")
+                */
+                .on("mouseover", function(){d3.select(this).classed("over", true);})
+                .on("mouseout", function(){d3.select(this).classed("over", false);})
 
 
+        var node_menu_side_div = node_menu_div.append('div').attr("class", "left");
 
+        node_menu_side_div.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
+        node_menu_side_div.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
+
+        node_menu_div.append('div')
+                .attr("class", "right")
+                .append('i')
+                .attr("class", "fa fa-2x fa-file-text");
 
         node_edit_div.attr("class", "mindmap_node_edit")
                 .style("left", center_x - node_scene_graph_form.half_width * 3  + scene_graph_node.x + "px")
@@ -152,8 +187,7 @@
 </script>
 
 <div ng-controller="MindmapCtrl">
-    <svg width="100%" height="6000">
-    </svg>
+    <svg width="100%" height="6000"></svg>
 
     <div ng-repeat="node in nodes" class="mindmap_node_info" style="width:100px; height:50px; left:100px; top:300px; border-radius:5px;">
         <div>

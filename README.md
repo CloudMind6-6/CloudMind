@@ -1,8 +1,18 @@
 # CloudMind
+## Demo
+ http://cloud-mind.net/
+ 
 ## Installation
+ * Download
+ 
+ ```
+ $ git clone https://github.com/6-6/CloudMind.git
+ ```
+ 
  * Installation of dependent packages
  
  ```
+ $ cd CloudMind
  $ pip install -r requirements.txt 
  ```
  
@@ -12,6 +22,7 @@
  $ cd cloudmind/config
  $ cp default_config.py config.py 
  $ vim config.py 
+ $ cd ../../
  ```
  
  * Database initialization
