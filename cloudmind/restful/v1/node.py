@@ -71,7 +71,7 @@ class NodeAdd(Resource):
         db.session.add(participant)
         db.session.commit()
 
-        return {"success": True}
+        return {"success": True, "node_idx": node.id}
 
 
 class NodeRemove(Resource):
