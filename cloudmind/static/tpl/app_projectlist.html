@@ -15,21 +15,10 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class=" panel wrapper-md dropdown" dropdown>
-                <a href class="dropdown-toggle" dropdown-toggle>
+            <div class=" panel wrapper-md dropdown">
+                <a ng-click="open()" data-toggle="modal" href="#myModal" >
                     <H1 align="center"> + </H1>
                 </a>
-                <ul class="dropdown-menu" role="menu">
-                    <div class="panel-body">
-                        <form role="form">
-                            <div class="form-group">
-                                <label>Root Node Name</label>
-                                <input type="text" class="form-control" ng-model="rootName">
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-primary" ng-click="addRoot()">Creat</button>
-                        </form>
-                    </div>
-                </ul>
             </div>
         </div>
     </div>

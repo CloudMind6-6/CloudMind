@@ -1,5 +1,5 @@
-app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore', 'UserStore',
-    function ($scope, $state, NodeStore, UserStore) {
+app.controller('RootListCtrl', ['$modal','$scope', '$state', 'NodeStore', 'UserStore',
+    function ($modal, $scope, $state, NodeStore, UserStore) {
 
         var url = 'img/a1.jpg';
 
@@ -26,6 +26,14 @@ app.controller('RootListCtrl', ['$scope', '$state', 'NodeStore', 'UserStore',
                     {account_id : '2',name : 'rong', email : "cloud@test.com", profile_url : url}]}];
 
         initRootList();
+
+        $scope.open = function() {
+            $modal.open({
+                templateUrl: 'tpl/modal_projectList.html',
+                controller: 'modal-rootlist',
+                scope: $scope
+            });
+        };
 
         $scope.selectRoot = function (_nodeidx, _idx) {
             $state.go('app.mindmap');
