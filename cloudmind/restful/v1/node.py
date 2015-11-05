@@ -1,7 +1,7 @@
 from cloudmind import db
 from cloudmind.model.node import Node
-from cloudmind.model.user import User
 from cloudmind.model.participant import Participant
+from cloudmind.model.user import User
 from flask import request
 from flask import session
 from flask_restful import abort
@@ -71,7 +71,7 @@ class NodeAdd(Resource):
         db.session.add(participant)
         db.session.commit()
 
-        return {"success": True}
+        return {"success": True, "node_idx": node.id}
 
 
 class NodeRemove(Resource):

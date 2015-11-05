@@ -112,9 +112,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         },
 
         addNode : function(_nodename,_node_parent_idx){
-            /*
             HttpSvc.addNode(_nodename,_node_parent_idx)
                 .success(function (res){
+                    console.log(res);
                     if(res.success) {
                         if(_node_parent_idx){ // 해당 노드 idx 받아와야함
                             nodeList.push(res.node);
@@ -126,7 +126,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .error(function (err){
                     console.log('err');
                     // 다이얼로그(에러모듈) 처리
-                });*/
+                });
         },
 
 

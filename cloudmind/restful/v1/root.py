@@ -1,8 +1,8 @@
-from flask_restful import Resource
-from flask_restful import abort
-from flask import session
 from cloudmind import db
 from cloudmind.model.participant import Participant
+from flask import session
+from flask_restful import abort
+from flask_restful import Resource
 
 
 class RootList(Resource):
@@ -12,7 +12,9 @@ class RootList(Resource):
         participants = db.session.query(Participant).filter(Participant.user_id == session['user_id']).all()
         node_list = []
         for item in participants:
-            node_list.append(item.own_node.serialize_root)
+            # if is root node
+            if item.own_node.parent_node is None:
+                node_list.append(item.own_node.serialize_root)
         return {
             'success':  True,
             "node_list": node_list
