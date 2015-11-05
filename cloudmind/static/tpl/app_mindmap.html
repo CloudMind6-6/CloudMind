@@ -95,6 +95,10 @@
         node_menu_div_map[node.idx] = node_menu_div;
         node_edit_div_map[node.idx] = node_edit_div;
 
+
+
+
+
         node_info_div.attr("class", "mindmap_node_info")
                 .style("left", center_x - node_scene_graph_form.half_width  + scene_graph_node.x + "px")
                 .style("top",  center_y - node_scene_graph_form.half_height + scene_graph_node.y + "px")
@@ -113,7 +117,8 @@
                     .style("background-color", label_palette[label].color);
         }
 
-        node_info_div.append('div').attr("class", "description")
+        node_info_div.append('div')
+                .attr("class", "description")
                 .text(node.name);
 
         var node_div_assigned_container = node_info_div.append('div')
@@ -138,10 +143,6 @@
                 .style("width", node_scene_graph_form.width + "px")
                 .style("height", node_scene_graph_form.height + "px")
                 .style("border-radius", node_scene_graph_form.height / 10 + "px")
-                /*
-                .on("mouseover", function(){d3.select(this).style("visibility", "visible");})
-                .on("mouseout", function(){d3.select(this).style("visibility", "hidden");})
-                */
                 .on("mouseover", function(){d3.select(this).classed("over", true);})
                 .on("mouseout", function(){d3.select(this).classed("over", false);})
 
@@ -151,10 +152,11 @@
         node_menu_side_div.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
         node_menu_side_div.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
 
-        node_menu_div.append('div')
-                .attr("class", "right")
-                .append('i')
-                .attr("class", "fa fa-2x fa-file-text");
+        node_menu_div.append('div').attr("class", "right").append('i').attr("class", "fa fa-2x fa-file-text");
+
+
+
+
 
         node_edit_div.attr("class", "mindmap_node_edit")
                 .style("left", center_x - node_scene_graph_form.half_width * 3  + scene_graph_node.x + "px")
@@ -162,8 +164,11 @@
                 .style("width", node_scene_graph_form.width * 3 + "px")
                 .style("height", node_scene_graph_form.height * 3 + "px")
                 .style("border-radius", node_scene_graph_form.height * 3 / 10 + "px")
-
     }
+
+
+
+
 
     for(var i = 0; i < scene_graph_node_link.length; ++i)
     {
