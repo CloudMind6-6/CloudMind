@@ -637,7 +637,7 @@ pre {
 }
 
 .modal-backdrop.in {
-  opacity: 0;
+  opacity: 0.5;
 }
 
 .modal-over {
