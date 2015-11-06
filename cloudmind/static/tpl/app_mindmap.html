@@ -69,31 +69,18 @@
 </style>
 
 <script>
-    var body        = d3.select("body");
-    var controller  = body.select("div[ng-controller='MindmapCtrl']");
-    var canvas      = controller.select("svg");
+    var scene_graph = new SceneGraph();
+    var scene_graph_view = new SceneGraphView();
 
-    var node_info_div_map = new Object();
-    var node_menu_div_map = new Object();
-    var node_edit_div_map = new Object();
-
-    var node_link_map = new Object();
-
-    var center_x    = screen.width  / 2;
-    var center_y    = screen.height / 2 - 40;
+    scene_graph.construct(nodes);
+    scene_graph.arrangeHorizontal();
 
     for(var i = 0; i < nodes.length; ++i)
     {
         var node = nodes[i];
+        var scene_graph_node = scene_graph.node_map[node.idx];
 
-        AppendViewNode(controller, node);
-    }
-
-    for(var i = 0; i < scene_graph_node_link.length; ++i)
-    {
-        var link = scene_graph_node_link[i];
-
-        AppendViewLink(canvas, link);
+        scene_graph_view.appendNode(scene_graph_node);
     }
 
 </script>

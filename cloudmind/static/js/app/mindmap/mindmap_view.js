@@ -1,98 +1,221 @@
-AppendViewNode = function(controller, node)
+
+// Scene Graph Form
+
+var scene_graph_form =
 {
-    var scene_graph_node = scene_graph_node_map[node.idx];
+    width:100,
+    height:50,
+    half_width:50,
+    half_height:25,
+    stride_x:150,
+    stride_y:75,
+    margin_x:20,
+    margin_y:20,
 
-    var node_info_div = controller.append('div');
-    var node_menu_div = controller.append('div');
-    var node_edit_div = controller.append('div');
+    /*
+     width:200,
+     height:100,
+     half_width:100,
+     half_height:50,
+     stride_x:300,
+     stride_y:150,
+     margin_x:20,
+     margin_y:20,
+     */
+};
 
-    node_info_div_map[node.idx] = node_info_div;
-    node_menu_div_map[node.idx] = node_menu_div;
-    node_edit_div_map[node.idx] = node_edit_div;
 
-    node_info_div.attr("class", "mindmap_node_info")
-        .style("left", center_x - node_scene_graph_form.half_width  + scene_graph_node.x + "px")
-        .style("top",  center_y - node_scene_graph_form.half_height + scene_graph_node.y + "px")
-        .style("width", node_scene_graph_form.width + "px")
-        .style("height", node_scene_graph_form.height + "px")
-        .style("border-radius", node_scene_graph_form.height / 10 + "px")
 
-    var node_div_label_container = node_info_div.append('ul').attr("class", "nav navbar-nav");
 
-    for(var j = 0; j < node.labels.length; ++j)
+// Scene Graph Node Class
+
+SceneGraphNode = function(model)
+{
+    this.parent = null;
+    this.children = new Array();
+    this.node_spanning_odd = true;
+    this.x = 0;
+    this.y = 0;
+    this.width  = scene_graph_form.width  + scene_graph_form.margin_x;
+    this.height = scene_graph_form.height + scene_graph_form.margin_y;
+    this.link_src_x = 0;
+    this.link_src_y = 0;
+    this.link_dst_x = 0;
+    this.link_dst_y = 0;
+
+    this.model = model;
+};
+
+SceneGraphNode.prototype =
+{
+    attachChild : function(child)
     {
-        var label = node.labels[j];
+        child.parent = this;
+        child.node_spanning_odd = this.node_spanning_odd;
 
-        node_div_label_container.append('li')
-            .attr("class", "mindmap_label")
-            .style("background-color", label_palette[label].color);
-    }
+        this.children.push(child);
 
-    node_info_div.append('div')
-        .attr("class", "description")
-        .text(node.name);
+        this.updateUpward();
+    },
 
-    var node_div_assigned_container = node_info_div.append('div')
-        .attr("class", "assigned");
-
-    for(var j = 0; j < node.assigned_users.length; ++j)
+    updateUpward : function()
     {
-        var label = node.assigned_users[j];
+        this.width = 0;
+        this.height = 0;
 
-        node_div_assigned_container.append('img')
-            .attr("ng-src", "img/a1.jpg")
-            .attr("width", "10px")
-            .attr("height", "10px")
-            .style("margin-left", "1px")
-    }
+        for(var i = 0; i < this.children.length; ++i)
+        {
+            var child = this.children[i];
 
+            this.width  += child.width;
+            this.height += child.height;
+        }
 
-    node_menu_div.attr("class", "mindmap_node_menu")
-        .style("left", center_x - node_scene_graph_form.half_width  + scene_graph_node.x + "px")
-        .style("top",  center_y - node_scene_graph_form.half_height + scene_graph_node.y + "px")
-        .style("width", node_scene_graph_form.width + "px")
-        .style("height", node_scene_graph_form.height + "px")
-        .style("border-radius", node_scene_graph_form.height / 10 + "px")
-        /*
-         .on("mouseover", function(){d3.select(this).style("visibility", "visible");})
-         .on("mouseout", function(){d3.select(this).style("visibility", "hidden");})
-         */
-        .on("mouseover", function(){d3.select(this).classed("over", true);})
-        .on("mouseout", function(){d3.select(this).classed("over", false);})
+        if(this.parent)
+            this.parent.updateUpward();
+    },
 
+    arrangeHorizontal : function()
+    {
+        var child_current_pos = 0;
 
-    var node_menu_side_div = node_menu_div.append('div').attr("class", "left");
+        for(var i = 0; i < this.children.length; ++i)
+        {
+            var child = this.children[i];
 
-    node_menu_side_div.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
-    node_menu_side_div.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
+            child.y = this.y - (this.height/2) + child_current_pos + (child.height/2);
 
-    node_menu_div.append('div')
-        .attr("class", "right")
-        .append('i')
-        .attr("class", "fa fa-2x fa-file-text");
+            if(this.node_spanning_odd)
+            {
+                child.x = this.x - scene_graph_form.stride_x;
 
-    node_edit_div.attr("class", "mindmap_node_edit")
-        .style("left", center_x - node_scene_graph_form.half_width * 3  + scene_graph_node.x + "px")
-        .style("top",  center_y - node_scene_graph_form.half_height * 3 + scene_graph_node.y + "px")
-        .style("width", node_scene_graph_form.width * 3 + "px")
-        .style("height", node_scene_graph_form.height * 3 + "px")
-        .style("border-radius", node_scene_graph_form.height * 3 / 10 + "px")
+                child.link_src_x = this.x - scene_graph_form.half_width;
+                child.link_src_y = this.y;
+                child.link_dst_x = child.x + scene_graph_form.half_width;
+                child.link_dst_y = child.y;
+            }
+            else
+            {
+                child.x = this.x + scene_graph_form.stride_x;
+
+                child.link_src_x = this.x + scene_graph_form.half_width;
+                child.link_src_y = this.y;
+                child.link_dst_x = child.x - scene_graph_form.half_width;
+                child.link_dst_y = child.y;
+            }
+
+            child_current_pos += child.height;
+
+            child.arrangeHorizontal();
+        }
+    },
 }
 
-AppendViewLink = function(container, link)
+
+
+
+
+// Scene Graph View Class
+
+SceneGraphView = function()
 {
-    var canvas_absolute_y = 50;
+    this.body        = d3.select("body");
+    this.canvas_node = this.body.select("div[ng-controller='MindmapCtrl']");
+    this.canvas_link = this.canvas_node.select("svg");
+    this.center_x    = screen.width  / 2;
+    this.center_y    = screen.height / 2 - 40;
+}
 
-    var diagonal = d3.svg.diagonal()
-        .source({x:link.src_y + center_y - canvas_absolute_y, y:link.src_x + center_x})
-        .target({x:link.dst_y + center_y - canvas_absolute_y, y:link.dst_x + center_x})
-        .projection(function(d) { return [d.y, d.x]; });
+SceneGraphView.prototype =
+{
+    appendNode : function(node)
+    {
+        var model = node.model;
 
-    //node_link_map[]
+        var div_node_info = this.canvas_node.append('div');
+        var div_node_menu = this.canvas_node.append('div');
+        var div_node_edit = this.canvas_node.append('div');
 
-    container.append("path")
-        .attr("class", link)
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("d", diagonal);
+        div_node_info.attr("class", "mindmap_node_info")
+            .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
+            .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
+            .style("width", scene_graph_form.width + "px")
+            .style("height", scene_graph_form.height + "px")
+            .style("border-radius", scene_graph_form.height / 10 + "px")
+
+        var ul_node_label_container = div_node_info.append('ul').attr("class", "nav navbar-nav");
+
+        for(var j = 0; j < model.labels.length; ++j)
+        {
+            var label = model.labels[j];
+
+            ul_node_label_container.append('li')
+                .attr("class", "mindmap_label")
+                .style("background-color", label_palette[label].color);
+        }
+
+        div_node_info.append('div')
+            .attr("class", "description")
+            .text(model.name);
+
+        var div_node_assigned_container = div_node_info.append('div')
+            .attr("class", "assigned");
+
+        for(var j = 0; j < model.assigned_users.length; ++j)
+        {
+            var assigned_user = model.assigned_users[j];
+
+            div_node_assigned_container.append('img')
+                .attr("ng-src", "img/a1.jpg")
+                .attr("width", "10px")
+                .attr("height", "10px")
+                .style("margin-left", "1px")
+        }
+
+
+        div_node_menu.attr("class", "mindmap_node_menu")
+            .style("left", this.center_x - scene_graph_form.half_width  + scene_graph_node.x + "px")
+            .style("top",  this.center_y - scene_graph_form.half_height + scene_graph_node.y + "px")
+            .style("width", scene_graph_form.width + "px")
+            .style("height", scene_graph_form.height + "px")
+            .style("border-radius", scene_graph_form.height / 10 + "px")
+            /*
+             .on("mouseover", function(){d3.select(this).style("visibility", "visible");})
+             .on("mouseout", function(){d3.select(this).style("visibility", "hidden");})
+             */
+            .on("mouseover", function(){d3.select(this).classed("over", true);})
+            .on("mouseout", function(){d3.select(this).classed("over", false);})
+
+
+        var div_node_menu_side = div_node_menu.append('div').attr("class", "left");
+
+        div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
+        div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
+
+        div_node_menu.append('div')
+            .attr("class", "right")
+            .append('i')
+            .attr("class", "fa fa-2x fa-file-text");
+
+
+
+        div_node_edit.attr("class", "mindmap_node_edit")
+            .style("left", this.center_x - scene_graph_form.half_width * 3  + scene_graph_node.x + "px")
+            .style("top",  this.center_y - scene_graph_form.half_height * 3 + scene_graph_node.y + "px")
+            .style("width", scene_graph_form.width * 3 + "px")
+            .style("height", scene_graph_form.height * 3 + "px")
+            .style("border-radius", scene_graph_form.height * 3 / 10 + "px")
+
+
+
+        var diagonal = d3.svg.diagonal()
+            .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
+            .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
+            .projection(function(d) { return [d.y, d.x]; });
+
+        this.canvas_link.append("path")
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("d", diagonal);
+    },
 }
