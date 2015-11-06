@@ -413,7 +413,7 @@ a.list-group-item.hover {
 }
 
 .panel {
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .panel .accordion-toggle {
@@ -3941,7 +3941,9 @@ a.text-#000000:hover {
 .text-2x {
   font-size: 2em;
 }
-
+.text-xlg {
+  font-size: 20px;
+}
 .text-lg {
   font-size: 18px;
 }
@@ -4259,12 +4261,22 @@ a.text-#000000:hover {
   margin: 50px;
 }
 
+.m-n-lg{
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding-bottom: -30px;
+}
+
 .m-n {
   margin: 0 !important;
 }
 
 .m-l-none {
   margin-left: 0 !important;
+}
+
+.m-l-xxs{
+  margin-left: 4px;
 }
 
 .m-l-xs {
@@ -4567,6 +4579,13 @@ a.text-#000000:hover {
   border-radius: 500px;
 }
 
+.avatar-pl img {
+  width: 100%;
+  position: relative;
+  white-space: nowrap;
+  border-radius: 3px;
+}
+
 .dropdown-img {
   width: 100px;
   height: 100px;
@@ -4736,6 +4755,11 @@ a.text-#000000:hover {
 .thumb-xxs {
   display: inline-block;
   width: 30px;
+}
+
+.thumb-xxxs {
+  display: inline-block;
+  width: 27px;
 }
 
 .thumb-wrapper {
@@ -4958,6 +4982,11 @@ a.text-#000000:hover {
   -webkit-animation: movingbar 0.75s infinite;
   -moz-animation: movingbar 0.75s infinite;
   animation: movingbar 0.75s infinite;
+}
+
+.bg-pl-card{
+  background-color: #92c1e5;
+  color: ghostwhite;
 }
 
 /* Moving bar */

@@ -1,20 +1,35 @@
 
 <div class="wrapper-md" ng-controller="RootListCtrl">
+
+    <button ng-click="updateNode()"></button>
+
     <div ui-scroll-viewport class="row" style="height:400px;overflow-y: auto;">
         <div ng-repeat="root in roots track by $index" class="col-sm-3">
-            <div class="panel wrapper-md" ng-click="selectRoot('{{root.node}}', '{{$index}}')">
-                <div>{{ root.node.name }}</div>
-                <div align="right">{{ root.node.due_date }}</div>
-                <div align="right">
+            <div class="panel wrapper-md bg-pl-card" ng-click="selectRoot('{{root.node}}', '{{$index}}')">
+                <div class="text-xlg font-bold m-t-n-sm m-l-n-xs">{{ root.node.name }}</div>
+                <div class="text-base" align="right">{{ root.node.due_date }}</div>
+                <div align="right" class="m-r-n-xs panel wrapper-xs">
                     <span ng-repeat="user in root.user">
-                        <img ng-src="{{user.profile_url}}" width="30px" height="30px" display="inline"/>
+                        <span class="thumb-xxxs avatar-pl  ">
+                            <img ng-src="{{user.profile_url}}"/>
+                        </span>
+                    </span>
+                    <span ng-repeat="user in root.user">
+                        <span class="thumb-xxxs avatar-pl  ">
+                            <img ng-src="{{user.profile_url}}"/>
+                        </span>
+                    </span>
+                    <span ng-repeat="user in root.user">
+                        <span class="thumb-xxxs avatar-pl  ">
+                            <img  ng-src="{{user.profile_url}}"/>
+                        </span>
                     </span>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" ng-click="open()" >
             <div class=" panel wrapper-md dropdown">
-                <a ng-click="open()" data-toggle="modal" href="#myModal" >
+                <a data-toggle="modal" href="#myModal" >
                     <H1 align="center"> + </H1>
                 </a>
             </div>
