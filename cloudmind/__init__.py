@@ -54,8 +54,9 @@ def index():
         if user_id is not None:
             from cloudmind.model.user import User
             user = db.session.query(User).filter(User.oauth_id == user_id).first()
-            session['user_id'] = user.id
-            return render_template('app.html')
+            if user is not None:
+                session['user_id'] = user.id
+                return render_template('app.html')
     return render_template('login.html')
 
 
