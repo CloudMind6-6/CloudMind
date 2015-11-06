@@ -8,7 +8,6 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
         setUserList : function(_userList, _selectedRootIdx){
             userList = _userList;
             selectedRootIdx = _selectedRootIdx;
-            console.log(userList);
         },
 
         syncUserList : function(){

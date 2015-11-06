@@ -56,7 +56,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.getLabelpalettes(_idx)
                 .success(function (res){
                     if(res.success) {
-                        nodeList = res.node_list;
+                        labelPalette = res.label_palette_list;
                         callback('setPalette');
                     }
                     else throw new Error;
