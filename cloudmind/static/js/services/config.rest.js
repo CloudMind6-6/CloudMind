@@ -13,7 +13,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
 
             updateName: function (_name) {
                 return $http({
-                    url: urlBase + '/profile/update_name',
+                    url: urlBase + '/profile',
                     method: "POST",
                     data: {name: _name}
                 });

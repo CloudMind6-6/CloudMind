@@ -21,14 +21,40 @@ app.controller('DropdownCtrl', ['$scope', function ($scope) {
 
 app.controller('UserCtrl', ['$scope', 'HttpSvc', function($scope, HttpSvc) {
 
+    $scope.isEditmode = false;
+
     initUser();
 
-    $scope.updateName = function(){
-        console.log('test');
+    $scope.clickEditName = function(){
+        $scope.isEditmode = true;
+        $scope.newName = $scope.username;
     };
 
-    $scope.updatePicture = function(){
-        console.log('test');
+    $scope.updateName = function(){
+        $scope.isEditmode = false;
+        if(!$scope.newName)
+            return;
+
+        HttpSvc.updateName($scope.newName)
+            .success(function (res) {
+                if (res.success) {
+                    $scope.username = $scope.newName;
+                }
+                else throw new Error;
+            })
+            .error(function (err) {
+                console.log(err);
+            });
+    };
+
+    $scope.clickCancelBtn = function(){
+        $scope.isEditmode = false;
+    };
+
+    $scope.updatePicture = function($event){
+        angular.element('#fileBtn').trigger('click');
+
+
     };
 
     $scope.logout = function() {
@@ -47,7 +73,6 @@ app.controller('UserCtrl', ['$scope', 'HttpSvc', function($scope, HttpSvc) {
             })
             .error(function (err) {
                 console.log(err);
-                // 다이얼로그(에러모듈) 처리
             });
     }
 

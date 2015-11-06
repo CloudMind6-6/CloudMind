@@ -94,13 +94,23 @@
                 <div class="panel-heading bg-info dk wrapper-lg"></div>
                 <div class="text-center m-b clearfix m-b">
                   <div class="thumb-lg avatar m-t-n-xxl">
-                    <div class="img-hover-bgcolor" ng-click="updatePicture()">
-                      <img src="{{ profile_url }}" alt="..." class="dropdown-img b b-3x b-white">
+                    <div class="img-hover-bgcolor" ng-click="updatePicture($event)">
+                        <img src="{{ profile_url }}" alt="..." class="dropdown-img b b-3x b-white">
+                        <input type=file name='file1' style='display: none;' id="fileBtn">
                     </div>
-                    <div>
-                      <span>{{ username }}</span>
-                      <i class="fa fa-pencil" ng-click="updateName()"></i>
-                    </div>
+                      <div ng-show=!(isEditmode)>
+                        <span>{{ username }}</span>
+                        <i class="fa fa-pencil" ng-show=!(isEditmode) ng-click="clickEditName()"></i>
+                      </div>
+                      <div ng-show=isEditmode>
+                          <input type="text" class="form-control thumb-lgm" ng-model="newName">
+                          <button type="submit" class="btn btn-primary btn-sm-input" ng-click="updateName('{{ newName }}')">
+                              <span class="icon-sm-input-check"><i class="fa fa-check"></i></span>
+                          </button>
+                          <button type="button" class="btn btn-default btn-sm-input" ng-click="clickCancelBtn()">
+                              <span class="icon-sm-input-time"><i class="fa fa-times"></i></span>
+                          </button>
+                      </div>
                     <p></p>
                     <div class="m-b-sm">{{ useremail }}</div>
                   </div>
@@ -111,6 +121,7 @@
                   Logout
                 </button>
               </div>
+
             </div>
             <!-- / dropdown -->
           </li>

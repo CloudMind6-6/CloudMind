@@ -1,6 +1,5 @@
 
 /* FIX rest API error module */
-/* nodelist callback :: function(nodelist) / palette callback :: function(false, palette) */
 
 app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
