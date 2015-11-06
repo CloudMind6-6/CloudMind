@@ -74,7 +74,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                     method: "POST",
                     data: {
                         node_name: _node_name,
-                        node_parent_idx: _node_parent_idx,
+                        parent_node_idx: _node_parent_idx,
                         root_idx: _root_idx
                     }
                 });

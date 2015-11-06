@@ -45,7 +45,7 @@
 
 
         <!-- na right -->
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" ng-controller="DropdownCtrl" >
           <li class="dropdown" dropdown>
             <a href class="dropdown-toggle" dropdown-toggle>
               <i class="fa fa-lg fa-comments-o"></i>
@@ -82,24 +82,24 @@
               </div>
             </div>
           </li>
-          <li class="dropdown" dropdown ng-controller="GetUserCtrl">
+          <li class="dropdown" dropdown ng-controller="UserCtrl">
             <a href class="dropdown-toggle clear" dropdown-toggle>
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                 <img src="{{ profile_url }}" alt="...">
               </span><span class="hidden-sm hidden-md">{{ username }}</span> <b class="caret"></b>
             </a>
             <!-- dropdown -->
-            <div class="dropdown-menu w">
+            <div class="dropdown-menu w" ng-click="toggleDropdown($event)">
               <div class="panel b-a">
                 <div class="panel-heading bg-info dk wrapper-lg"></div>
                 <div class="text-center m-b clearfix m-b">
                   <div class="thumb-lg avatar m-t-n-xxl">
-                    <div class="img-hover-bgcolor">
+                    <div class="img-hover-bgcolor" ng-click="updatePicture()">
                       <img src="{{ profile_url }}" alt="..." class="dropdown-img b b-3x b-white">
                     </div>
                     <div>
                       <span>{{ username }}</span>
-                      <i class="fa fa-pencil"></i>
+                      <i class="fa fa-pencil" ng-click="updateName()"></i>
                     </div>
                     <p></p>
                     <div class="m-b-sm">{{ useremail }}</div>
@@ -118,3 +118,6 @@
         <!-- / navbar right -->
       </div>
       <!-- / navbar collapse -->
+
+
+
