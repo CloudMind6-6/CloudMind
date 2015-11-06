@@ -57,9 +57,9 @@ class NodeAdd(Resource):
 
         node = Node(name=node_name, description=description)
         if root_id is not None:
-            node.root_node_id = root_node.id
+            node.root_node = root_node
         else:
-            node.root_node_id = node.id
+            node.root_node = node
 
         if parent_node_id is not None:
             node.parent_node = parent_node
@@ -91,7 +91,7 @@ class NodeRemove(Resource):
 
         root_node = node.root_node
         if root_node is None:
-            abort(404, message="Not found {}".format("Node"))
+            abort(404, message="Not found {}".format("root_node"))
         if root_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 
