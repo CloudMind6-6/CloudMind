@@ -90,7 +90,8 @@ class Node(db.Model):
             'user': self.serialize_member_detail
         }
 
-    def remove_childs(self):
+    def remove_all(self):
         for item in self.child_nodes:
-            item.remove_childs()
-            db.session.delete(item)
+            item.remove_all()
+        db.session.query(Participant).filter(Participant.own_node_id == self.id).delete()
+        db.session.delete(self)
