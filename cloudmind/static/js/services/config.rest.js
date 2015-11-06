@@ -37,7 +37,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 return $http({
                     url: urlBase + '/profile/search',
                     method: "GET",
-                    data: {email: _email}
+                    params: {email: _email}
                 });
             },
 
@@ -52,7 +52,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 return $http({
                     url: urlBase + '/root/invite',
                     method: "GET",
-                    data: {
+                    params: {
                         root_idx: _root_idx,
                         email: _email
                     }
@@ -60,21 +60,22 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             },
 
             /* NODE REST API */
-            getNodes: function (_root_idx) {
+            getNodes: function (_root_id) {
                 return $http({
                     url: urlBase + '/node/list',
                     method: "GET",
-                    data: {root_idx: _root_idx}
+                    params: {root_id: _root_id}
                 });
             },
 
-            addNode: function (_nodename, _node_parent_idx) {
+            addNode: function (_node_name, _node_parent_idx, _root_idx) {
                 return $http({
                     url: urlBase + '/node/add',
                     method: "POST",
                     data: {
-                        nodename: _nodename,
-                        node_parent_idx: _node_parent_idx
+                        node_name: _node_name,
+                        node_parent_idx: _node_parent_idx,
+                        root_idx: _root_idx
                     }
                 });
             },
@@ -87,46 +88,46 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            updateNode: function (_node_idx, _assignedUser, _dueDate, _nodename) {
+            updateNode: function (_idx, _node_name, _dueDate, _description) {
                 return $http({
                     url: urlBase + '/node/update',
                     method: "POST",
                     data: {
-                        node_idx: _node_idx,
-                        AssignedUser: _assignedUser,
-                        DueDate: _dueDate,
-                        Nodename: _nodename
+                        id: _idx,
+                        node_name: _node_name,
+                        description: _description,
+                        due_date: _dueDate
                     }
                 });
             },
 
             /* LABEL PALETTE REST API */
 
-            getLabelpalettes: function (_root_idx) {
+            getLabelpalettes: function (_root_id) {
                 return $http({
                     url: urlBase + '/label_palette/list',
                     method: "GET",
-                    data: {root_idx: _root_idx}
+                    params: {root_id: _root_id}
                 });
             },
 
-            addLabelpalette: function (_root_idx, _name, _color) {
+            addLabelpalette: function (_root_id, _name, _color) {
                 return $http({
                     url: urlBase + '/label_palette/add',
                     method: "POST",
                     data: {
-                        root_idx: _root_idx,
+                        root_id: _root_id,
                         name: _name,
                         color: _color
                     }
                 });
             },
 
-            removeLabelpalette: function (_palette_number) {
+            removeLabelpalette: function (_palette_id) {
                 return $http({
                     url: urlBase + '/label_palette/remove',
                     method: "POST",
-                    data: {palette_number: _palette_number}
+                    data: {id: _palette_id}
                 });
             },
 
@@ -143,24 +144,24 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             },
 
             /* LABEL REST API */
-            addLabel: function (_node_idx, _palette_number) {
+            addLabel: function (_node_idx, _palette_idx) {
                 return $http({
                     url: urlBase + '/label/add',
                     method: "POST",
                     data: {
                         node_idx: _node_idx,
-                        palette_number: _palette_number
+                        palette_idx: _palette_idx
                     }
                 });
             },
 
-            removeLabel: function (_node_idx, _palette_number) {
+            removeLabel: function (_node_idx, _palette_idx) {
                 return $http({
                     url: urlBase + '/label/remove',
                     method: "POST",
                     data: {
                         node_idx: _node_idx,
-                        palette_number: _palette_number
+                        palette_idx: _palette_idx
                     }
                 });
             }

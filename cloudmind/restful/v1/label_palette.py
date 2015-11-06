@@ -10,7 +10,7 @@ import json
 
 class PaletteList(Resource):
     def get(self):
-        root_id = request.args.get('root_id')
+        root_id = request.args.get('root_idx')
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -31,7 +31,7 @@ class PaletteList(Resource):
 class PaletteAdd(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        root_id = args['root_id']
+        root_id = args['root_idx']
         name = args['name']
         color = args['color']
 

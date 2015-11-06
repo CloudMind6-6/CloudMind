@@ -4536,6 +4536,8 @@ a.text-#000000:hover {
   height: 100px;
   opacity:1.0;
   background-image: url("../img/edit.png");
+  background-color: whitesmoke;
+  background-size: 100px;
   border-radius: 300px;
   display: block;
   margin-bottom: 10px;
@@ -4559,7 +4561,7 @@ a.text-#000000:hover {
 }
 
 .dropdown-img:hover {
-  opacity:0.4;
+  opacity:0.5;
 }
 
 .avatar i {

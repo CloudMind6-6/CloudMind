@@ -1,22 +1,18 @@
 
 app.service('UserStore', ['HttpSvc', function(HttpSvc){
 
-    var selectedIdx;
     var selectedRootIdx;
     var userList;
 
     return{
-        setSelectedIdx : function(_idx, _selectedRootIdx){
-            selectedIdx = _idx;
-            selectedRootIdx = _selectedRootIdx;
-        },
-
-        setUserList : function(_userList){
+        setUserList : function(_userList, _selectedRootIdx){
             userList = _userList;
+            selectedRootIdx = _selectedRootIdx;
+            console.log(userList);
         },
 
         syncUserList : function(){
-            return userList[selectedIdx];
+            return userList;
         },
 
         inviteUserToRoot : function(_rootIdx, _email){
@@ -25,8 +21,7 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
                     if(! res.success) throw new Error;
                 })
                 .error(function (err){
-                    console.log('err');
-                    // 다이얼로그(에러모듈) 처리
+                    console.log(err);
                 });
         },
 

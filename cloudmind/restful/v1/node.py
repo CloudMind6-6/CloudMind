@@ -34,7 +34,7 @@ class NodeAdd(Resource):
         args = json.loads(request.data.decode('utf-8'))
         root_id = args.get('root_idx', None)
         parent_node_id = args.get('parent_node_idx', None)
-        node_name = args.get('nodename', None)
+        node_name = args.get('node_name', None)
         description = args.get('description', None)
 
         if 'user_id' not in session:
@@ -58,6 +58,9 @@ class NodeAdd(Resource):
         node = Node(name=node_name, description=description)
         if root_id is not None:
             node.root_node = root_node
+        else:
+            node.root_node = node
+
         if parent_node_id is not None:
             node.parent_node = parent_node
         node.creator = creator
@@ -71,7 +74,7 @@ class NodeAdd(Resource):
         db.session.add(participant)
         db.session.commit()
 
-        return {"success": True, "node_idx": node.id}
+        return {"success": True, "node": node.serialize, "user": node.serialize_member_detail}
 
 
 class NodeRemove(Resource):
@@ -91,6 +94,8 @@ class NodeRemove(Resource):
             abort(404, message="Not found {}".format("Node"))
         if root_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
+
+        node.remove_childs()
 
         db.session.delete(node)
         db.session.commit()
