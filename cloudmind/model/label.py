@@ -15,7 +15,4 @@ class Label(db.Model):
 
     @property
     def serialize(self):
-        return {
-            'label_idx': self.id,
-            'palette_idx': self.palette_id
-        }
+        return self.palette_id
