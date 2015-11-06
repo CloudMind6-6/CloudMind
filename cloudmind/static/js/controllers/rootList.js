@@ -12,39 +12,36 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
             });
         };
 
-        $scope.selectRoot = function (_nodeidx, _idx, _user) {
+        $scope.selectRoot = function (_node, _idx, _user) {
 
             var userList;
 
-            if(_idx) userList = $scope.roots[_idx].user;
+            if(_idx) {
+                userList = $scope.roots[_idx].user;
+                _node = $scope.roots[_idx].node;
+            }
             else userList = _user;
-
-            console.log(userList);
-
-            UserStore.setUserList(userList, _nodeidx);
-            NodeStore.setNodeStore(_nodeidx, function () {
-                console.log(_nodeidx);
+            console.log(_node);
+            UserStore.setUserList(userList, _node.node_idx);
+            NodeStore.setNodeStore(_node.node_idx, _node, function () {
+                console.log(_node.node_idx);
                 $state.go('app.mindmap');
                 NodeStore.setNavbarState(true);
             });
         };
 
-        $scope.addRoot = function () {
+        $scope.addRoot = function (_rootName) {
 
-            if (!$scope.rootName) return;
-            NodeStore.addNode($scope.rootName, null);
+            if (!_rootName) return;
+            NodeStore.addNode(_rootName, null, null, function(_node, _user){
+                $scope.rootName = "";
+                $scope.selectRoot(_node, false, _user);
+            });
         };
 
         function initRootList() {
 
-            $scope.addRootCallback = function (_node, _user) {
-                $state.go('app.mindmap');
-                $scope.rootName = "";
-                $scope.selectRoot(_node.node_idx, false, _user);
-            };
-
             NodeStore.setNavbarState(false);
-            NodeStore.registerNodeStoreCallback($scope.addRootCallback);
 
             HttpSvc.getRoots()
                 .success(function (res) {
@@ -59,11 +56,18 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
         }
 
     /* REST API TEST CODE */
-
+/*
         $scope.updateNode = function(){
-            NodeStore.updateNode(10, 'updatedNOde',null, 'Node updated!!!');
-            //NodeStore.removeNode(1);
-        }
+
+            //NodeStore.updateNode(1, 'ㅇㅁㄴ',null, 'Node updated!!!', function(){console.log('수정했당!');});
+           // NodeStore.removeNode(1, function(){ console.log('지워졌당!');});
+            //NodeStore.addLabelPalette(1,'palette',111111,function(){console.log('add palette')});
+            //NodeStore.removeLabelPalette(1, function(res){console.log(res);})
+            //NodeStore.updateLabelPalette(2,'ㅏㅣㅇㄴㅁㅁㄴ아ㅣ;','222222', function(res){console.log(res);})
+           // NodeStore.addLabel(1,2,function(n,p){console.log(n+'    '+p)});
+            //NodeStore.removeLabel(1,2,function(n,p){console.log(n+'    '+p)})
+
+        }*/
 
     }]);
 

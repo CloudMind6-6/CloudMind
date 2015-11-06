@@ -103,4 +103,4 @@ class PaletteUpdate(Resource):
         palette.name = name
         palette.color = color
         db.session.commit()
-        return {"success": True}
+        return {"success": True, 'palette': palette.serialize}

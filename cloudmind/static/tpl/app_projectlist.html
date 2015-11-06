@@ -1,11 +1,8 @@
 
 <div class="wrapper-md" ng-controller="RootListCtrl">
-
-    <button ng-click="updateNode()"></button>
-
     <div ui-scroll-viewport class="row" style="height:400px;overflow-y: auto;">
         <div ng-repeat="root in roots track by $index" class="col-sm-3">
-            <div class="panel wrapper-md" ng-click="selectRoot('{{root.node.node_idx}}', '{{$index}}')">
+            <div class="panel wrapper-md" ng-click="selectRoot('{{root.node}}', '{{$index}}')">
                 <div>{{ root.node.name }}</div>
                 <div align="right">{{ root.node.due_date }}</div>
                 <div align="right">

@@ -99,7 +99,13 @@ class NodeRemove(Resource):
 
         db.session.delete(node)
         db.session.commit()
-        return {"success": True}
+
+        nodes = db.session.query(Node).all()
+        return {
+            'success': True,
+            'node_list': [i.serialize for i in nodes]
+            }
+
 
 
 class NodeUpdate(Resource):

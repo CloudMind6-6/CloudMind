@@ -3,9 +3,6 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
         var urlBase = '/api/v1';
 
         return {
-
-            /* OAUTH REST API */
-
             /* PROFILE REST API */
             getProfile: function () {
                 return $http({
@@ -107,7 +104,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 return $http({
                     url: urlBase + '/label_palette/list',
                     method: "GET",
-                    params: {root_id: _root_id}
+                    params: {root_idx: _root_id}
                 });
             },
 
@@ -116,7 +113,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                     url: urlBase + '/label_palette/add',
                     method: "POST",
                     data: {
-                        root_id: _root_id,
+                        root_idx: _root_id,
                         name: _name,
                         color: _color
                     }
@@ -136,7 +133,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                     url: urlBase + '/label_palette/update',
                     method: "POST",
                     data: {
-                        palette_number: _palette_number,
+                        id: _palette_number,
                         name: _name,
                         color: _color
                     }
