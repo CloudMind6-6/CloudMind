@@ -144,24 +144,24 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             },
 
             /* LABEL REST API */
-            addLabel: function (_node_id, _palette_id) {
+            addLabel: function (_node_idx, _palette_idx) {
                 return $http({
                     url: urlBase + '/label/add',
                     method: "POST",
                     data: {
-                        node_id: _node_id,
-                        palette_id: _palette_id
+                        node_idx: _node_idx,
+                        palette_idx: _palette_idx
                     }
                 });
             },
 
-            removeLabel: function (_node_id, _palette_id) {
+            removeLabel: function (_node_idx, _palette_idx) {
                 return $http({
                     url: urlBase + '/label/remove',
                     method: "POST",
                     data: {
-                        node_id: _node_id,
-                        palette_id: _palette_id
+                        node_idx: _node_idx,
+                        palette_idx: _palette_idx
                     }
                 });
             }
