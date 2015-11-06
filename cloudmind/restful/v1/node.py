@@ -80,7 +80,7 @@ class NodeAdd(Resource):
 class NodeRemove(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        node_id = args['id']
+        node_id = args['node_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
