@@ -92,6 +92,8 @@ class NodeRemove(Resource):
         if root_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 
+        node.remove_childs()
+
         db.session.delete(node)
         db.session.commit()
         return {"success": True}

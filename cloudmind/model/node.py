@@ -78,3 +78,8 @@ class Node(db.Model):
             'node': self.serialize,
             'user': self.serialize_member_detail
         }
+
+    def remove_childs(self):
+        for item in self.child_nodes:
+            item.remove_childs()
+            db.session.delete(item)
