@@ -57,9 +57,9 @@ class NodeAdd(Resource):
 
         node = Node(name=node_name, description=description)
         if root_id is not None:
-            node.root_node = root_node
+            node.root_node_id = root_node.id
         else:
-            node.root_node = node
+            node.root_node_id = node.id
 
         if parent_node_id is not None:
             node.parent_node = parent_node
