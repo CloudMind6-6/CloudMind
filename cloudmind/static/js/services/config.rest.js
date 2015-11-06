@@ -111,23 +111,23 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            addLabelpalette: function (_root_idx, _name, _color) {
+            addLabelpalette: function (_root_id, _name, _color) {
                 return $http({
                     url: urlBase + '/label_palette/add',
                     method: "POST",
                     data: {
-                        root_idx: _root_idx,
+                        root_id: _root_id,
                         name: _name,
                         color: _color
                     }
                 });
             },
 
-            removeLabelpalette: function (_palette_number) {
+            removeLabelpalette: function (_palette_id) {
                 return $http({
                     url: urlBase + '/label_palette/remove',
                     method: "POST",
-                    data: {palette_number: _palette_number}
+                    data: {id: _palette_id}
                 });
             },
 
@@ -144,24 +144,24 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             },
 
             /* LABEL REST API */
-            addLabel: function (_node_idx, _palette_number) {
+            addLabel: function (_node_id, _palette_id) {
                 return $http({
                     url: urlBase + '/label/add',
                     method: "POST",
                     data: {
-                        node_idx: _node_idx,
-                        palette_number: _palette_number
+                        node_id: _node_id,
+                        palette_id: _palette_id
                     }
                 });
             },
 
-            removeLabel: function (_node_idx, _palette_number) {
+            removeLabel: function (_node_id, _palette_id) {
                 return $http({
                     url: urlBase + '/label/remove',
                     method: "POST",
                     data: {
-                        node_idx: _node_idx,
-                        palette_number: _palette_number
+                        node_id: _node_id,
+                        palette_id: _palette_id
                     }
                 });
             }

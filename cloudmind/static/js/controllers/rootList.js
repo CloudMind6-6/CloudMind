@@ -61,7 +61,8 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
     /* REST API TEST CODE */
 
         $scope.updateNode = function(){
-            NodeStore.updateNode(1, 'updatedNOde',null, 'Node updated!!!');
+            NodeStore.updateNode(10, 'updatedNOde',null, 'Node updated!!!');
+            //NodeStore.removeNode(1);
         }
 
     }]);
