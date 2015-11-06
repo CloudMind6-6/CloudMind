@@ -52,7 +52,12 @@ class Node(db.Model):
             'parentidx': self.parent_node_id,
             'leafs': self.serialize_leafs,
             'assiendUser': self.serialize_member,
+            'labels': self.serialize_labels
         }
+
+    @property
+    def serialize_labels(self):
+        return [item.serialize for item in self.labels]
 
     @property
     def serialize_leafs(self):
@@ -78,3 +83,8 @@ class Node(db.Model):
             'node': self.serialize,
             'user': self.serialize_member_detail
         }
+
+    def remove_childs(self):
+        for item in self.child_nodes:
+            item.remove_childs()
+            db.session.delete(item)
