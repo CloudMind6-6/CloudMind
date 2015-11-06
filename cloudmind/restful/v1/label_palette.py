@@ -51,7 +51,10 @@ class PaletteAdd(Resource):
         palette = LabelPalette(root_node_id=root_id, name=name, color=color)
         db.session.add(palette)
         db.session.commit()
-        return {"success": True}
+        return {
+            "success": True,
+            "palette": palette.serialize
+        }
 
 
 class PaletteRemove(Resource):
