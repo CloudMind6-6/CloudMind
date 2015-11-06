@@ -77,7 +77,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         addNode : function(_node_name,_node_parent_idx, _node_root_idx){
 
-            HttpSvc.addNode(_nodename,_node_parent_idx, _node_root_idx)
+            HttpSvc.addNode(_node_name,_node_parent_idx, _node_root_idx)
                 .success(function (res){
                     console.log(res);
                     if(res.success) {
