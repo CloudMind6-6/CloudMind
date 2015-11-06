@@ -34,11 +34,10 @@ class Node(db.Model):
         if(db.session.query(Participant).
                 filter(Participant.own_node_id == self.id).
                 filter(Participant.user_id == user_id).
-                filter(Participant.is_accepted is True).
-                first() is None):
-            return False
-        else:
+                filter(Participant.is_accepted is True)):
             return True
+        else:
+            return False
 
     @property
     def serialize(self):

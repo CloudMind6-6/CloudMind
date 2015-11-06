@@ -2,12 +2,24 @@
  * calendarDemoApp - 0.1.3
  */
 
-app.controller('FullcalendarCtrl', ['$scope', function($scope) {
+app.controller('FullcalendarCtrl', ['$scope', 'NodeStore', function($scope, NodeStore) {
 
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
+
+    /* Node rest API test code*/
+    /*(initCaleandar();
+
+    function initCaleandar(){
+
+        $scope.addRootCallback = function (_node) {
+            console.log('calendar callback : ' + _node);
+        };
+
+        NodeStore.registerNodeStoreCallback($scope.addRootCallback);
+    }*/
 
     /* event source that contains custom events on the scope */
     /* 칼럼 형식 : idx, title, start, info */
@@ -118,6 +130,7 @@ app.controller('FullcalendarCtrl', ['$scope', function($scope) {
         }
       }
     };
+
     /* add custom event*/
     $scope.addEvent = function() {
       // 노드를 추가하는 화면 호출을 구현해야 함

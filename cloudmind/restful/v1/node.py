@@ -34,7 +34,7 @@ class NodeAdd(Resource):
         args = json.loads(request.data.decode('utf-8'))
         root_id = args.get('root_idx', None)
         parent_node_id = args.get('parent_node_idx', None)
-        node_name = args.get('nodename', None)
+        node_name = args.get('node_name', None)
         description = args.get('description', None)
 
         if 'user_id' not in session:
@@ -71,7 +71,7 @@ class NodeAdd(Resource):
         db.session.add(participant)
         db.session.commit()
 
-        return {"success": True}
+        return {"success": True, "node": node.serialize, "user": node.serialize_member_detail}
 
 
 class NodeRemove(Resource):

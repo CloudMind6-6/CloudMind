@@ -13,7 +13,7 @@ class RootList(Resource):
         node_list = []
         for item in participants:
             # if is root node
-            if item.own_node.parent_node is None:
+            if item.own_node.parent_node_id is None:
                 node_list.append(item.own_node.serialize_root)
         return {
             'success':  True,
