@@ -3,20 +3,20 @@
  http://cloud-mind.net/
  
 ## Installation
- * Download
+ 1. Download
  
  ```
  $ git clone https://github.com/6-6/CloudMind.git
  ```
  
- * Installation of dependent packages
+ 1. Installation of dependent packages
  
  ```
  $ cd CloudMind
  $ pip install -r requirements.txt 
  ```
  
- * Configure
+ 1. Configure
  
  ```
  $ cd cloudmind/config
@@ -25,7 +25,7 @@
  $ cd ../../
  ```
  
- * Database initialization
+ 1. Database initialization
  
  ```
  $ python manage.py db init
