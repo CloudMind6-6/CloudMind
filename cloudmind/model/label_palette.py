@@ -16,8 +16,7 @@ class LabelPalette(db.Model):
     @property
     def serialize(self):
         return {
-            'id': self.id,
-            'palette_number': self.palette_number,
+            'palette_idx': self.id,
             'color': self.color,
             'name': self.name,
             'root_idx': self.root_node_id

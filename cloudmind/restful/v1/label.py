@@ -11,8 +11,8 @@ import json
 class LabelAdd(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        node_id = args['node_id']
-        palette_id = args['palette_id']
+        node_id = args['node_idx']
+        palette_id = args['palette_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -32,8 +32,8 @@ class LabelAdd(Resource):
 class LabelRemove(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        node_id = args['node_id']
-        palette_id = args['palette_id']
+        node_id = args['node_idx']
+        palette_id = args['palette_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
