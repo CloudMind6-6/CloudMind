@@ -57,9 +57,9 @@ class NodeAdd(Resource):
 
         node = Node(name=node_name, description=description)
         if root_id is not None:
-            node.root_node_id = root_node.id
+            node.root_node = root_node
         else:
-            node.root_node_id = node.id
+            node.root_node = node
 
         if parent_node_id is not None:
             node.parent_node = parent_node
@@ -80,7 +80,7 @@ class NodeAdd(Resource):
 class NodeRemove(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        node_id = args['id']
+        node_id = args['node_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -91,7 +91,7 @@ class NodeRemove(Resource):
 
         root_node = node.root_node
         if root_node is None:
-            abort(404, message="Not found {}".format("Node"))
+            abort(404, message="Not found {}".format("root_node"))
         if root_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 

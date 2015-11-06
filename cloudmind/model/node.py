@@ -16,13 +16,19 @@ class Node(db.Model):
     parent_node_id = db.Column(db.Integer, db.ForeignKey('node.id'))
     # relationship
     creator = db.relationship('User')
-    root_node = db.relationship('Node', foreign_keys='Node.root_node_id')
+    root_node = db.relationship(
+        'Node',
+        foreign_keys='Node.root_node_id',
+        remote_side=[id],
+        post_update=True
+    )
     parent_node = db.relationship(
         'Node',
         backref=db.backref('child_nodes', order_by=id),
         foreign_keys='Node.parent_node_id',
-        remote_side=[id]
-        )
+        remote_side=[id],
+        post_update=True
+    )
     # child_nodes = db.relationship('Node', backref="parent_node", foreign_keys='Node.parent_node_id')
     # leafs = db.relationship('Leaf', order_by="Leaf.id", backref="node")
     # members = db.relationship('User', secondary=Participant)
