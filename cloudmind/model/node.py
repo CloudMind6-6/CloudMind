@@ -54,10 +54,10 @@ class Node(db.Model):
             'due_date': self.due_date.isoformat() if self.due_date is not None else None,
             'description': self.description,
             'creator_id': self.creator_id,
-            'rootidx': self.root_node_id,
-            'parentidx': self.parent_node_id,
+            'root_idx': self.root_node_id,
+            'parent_idx': self.parent_node_id,
             'leafs': self.serialize_leafs,
-            'assiendUser': self.serialize_member,
+            'assigned_user': self.serialize_member,
             'labels': self.serialize_labels
         }
 
