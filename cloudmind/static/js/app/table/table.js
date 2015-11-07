@@ -5,6 +5,709 @@ app.controller('TableCtrl', ['$scope', '$timeout', function($scope, $timeout) {
       {firstName: 'Francoise', lastName: 'Frere', birthDate: new Date('1955-08-27'), balance: 42343, email: 'raymondef@gmail.com'}
   ];
 
+    $scope.nodes = [
+
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        },
+        {
+            "Name": "Internet Explorer",
+            "Status": "Working",
+            "Duedate": "2015-10-12",
+            "People": "Kevin",
+            "TestCol": "w"
+        }
+    ];
   $scope.removeRow = function(row) {
       var index = $scope.rowCollectionBasic.indexOf(row);
       if (index !== -1) {

@@ -47,7 +47,8 @@ angular.module('app')
               // table
               .state('app.table', {
                   url: '/table',
-                  templateUrl: 'tpl/app_table.html'
+                  templateUrl: 'tpl/app_table.html',
+                  resolve: load( ['js/app/table/table.js'] )
               })
 
               // fullCalendar

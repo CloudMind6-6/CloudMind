@@ -6,16 +6,19 @@
     <div class="panel-heading">
       Node List
     </div>
-    <div class="table-responsive">
-      <table ui-jq="dataTable" ui-options="{
-          sAjaxSource: 'api/datatable.json',
-          aoColumns: [
-            { mData: 'Name' },
+    <div class="table-responsive" ng-controller="TableCtrl">
+      <table ui-jq="dataTable" ui-options="
+      {
+        bProcessing: true,
+      aaData: {{nodes}},
+      aoColumns: [
+      { mData: 'Name' },
             { mData: 'Status' },
             { mData: 'Duedate' },
-            { mData: 'People' },
-          ]
-        }" class="table table-striped b-t b-b">
+            { mData: 'People' }
+      ]
+      }
+     " class="table table-striped b-t b-b">
         <thead>
           <tr>
             <th  style="width:20%">노드 이름</th>
