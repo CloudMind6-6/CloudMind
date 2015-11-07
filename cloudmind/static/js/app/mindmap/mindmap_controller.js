@@ -1,6 +1,8 @@
 // Scene Graph Class
 
-SceneGraph = function()
+var scene_graph;
+
+SceneGraph = function(view)
 {
     this.node_map    = {};
     this.node_root   = null;
@@ -15,51 +17,63 @@ SceneGraph.prototype =
     {
         for(var i = 0; i < node_list.length; ++i)
         {
-            var node = node_list[i];
-            var scene_graph_node = new SceneGraphNode(node);
-            var scene_graph_node_parent = this.node_map[node.parent_idx];
+            this.appendNode(node_list[i]);
+        }
+    },
 
-            this.node_map[node.idx] = scene_graph_node;
+    appendNode : function(model)
+    {
+        var node_new = new SceneGraphNode(model);
+        var node_parent = this.node_map[model.parent_idx];
 
-            if (node.idx == node.root_idx)
+        this.node_map[model.idx] = node_new;
+
+        if (model.idx == model.root_idx)
+        {
+            this.node_root = node_new;
+
+            this.node_odd  = new SceneGraphNode();
+            this.node_even = new SceneGraphNode();
+
+            this.node_root.attachChild(this.node_odd);
+            this.node_root.attachChild(this.node_even);
+
+            this.node_odd.spanning_odd = true;
+            this.node_even.spanning_odd = false;
+        }
+        else
+        {
+            if(model.parent_idx == model.root_idx)
             {
-                this.node_root = scene_graph_node;
+                if(this.node_spanning_odd)
+                    this.node_odd.attachChild(node_new);
+                else
+                    this.node_even.attachChild(node_new);
 
-                this.node_odd  = new SceneGraphNode();
-                this.node_even = new SceneGraphNode();
-
-                this.node_root.attachChild(this.node_odd);
-                this.node_root.attachChild(this.node_even);
-
-                this.node_odd.node_spanning_odd = true;
-                this.node_even.node_spanning_odd = false;
+                this.node_spanning_odd = !this.node_spanning_odd;
             }
             else
             {
-                if(node.parent_idx == node.root_idx)
-                {
-                    if(this.node_spanning_odd)
-                        this.node_odd.attachChild(scene_graph_node);
-                    else
-                        this.node_even.attachChild(scene_graph_node);
-
-                    scene_graph_node.node_spanning_odd = this.node_spanning_odd;
-                    this.node_spanning_odd = !this.node_spanning_odd;
-                }
-                else
-                {
-                    scene_graph_node_parent.attachChild(scene_graph_node);
-                    scene_graph_node.node_spanning_odd = scene_graph_node_parent.node_spanning_odd;
-                }
+                node_parent.attachChild(node_new);
             }
         }
+    },
+
+    removeNode : function(idx)
+    {
+        var node = this.node_map[idx];
+        var parent = node.parent;
+
+        parent.detachChild(node);
+
+        this.node_map[idx] = null;
     },
 
     arrangeHorizontal : function()
     {
         this.node_odd.arrangeHorizontal();
         this.node_even.arrangeHorizontal();
-    }
+    },
 };
 
 
