@@ -38,6 +38,11 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
             });
         };
 
+        $scope.getDueDate = function(_idx){
+            return $scope.roots[_idx].node.due_date.substring(0,10);
+        };
+
+
         function initRootList() {
 
             NodeStore.setNavbarState(false);

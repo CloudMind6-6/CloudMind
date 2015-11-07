@@ -5,23 +5,28 @@
 
     <div ui-scroll-viewport class="row" style="height:400px;overflow-y: auto;">
         <div ng-repeat="root in roots track by $index" class="col-sm-3">
-            <div class="panel wrapper-md bg-pl-card" ng-click="selectRoot('{{root.node}}', '{{$index}}')">
-                <div class="text-xlg font-bold m-t-n-sm m-l-n-xs">{{ root.node.name }}</div>
-                <div class="text-base" align="right">{{ root.node.due_date }}</div>
-                <div align="right" class="m-r-n-xs panel wrapper-xs">
-                    <span ng-repeat="user in root.user">
-                        <span class="thumb-xxxs avatar-pl  ">
-                            <img ng-src="{{user.profile_url}}"/>
-                        </span>
-                    </span>
-                    <span ng-repeat="user in root.user">
-                        <span class="thumb-xxxs avatar-pl  ">
-                            <img ng-src="{{user.profile_url}}"/>
-                        </span>
-                    </span>
-                    <span ng-repeat="user in root.user">
-                        <span class="thumb-xxxs avatar-pl  ">
-                            <img  ng-src="{{user.profile_url}}"/>
+            <div class="panel wrapper bg-pl-card" ng-click="selectRoot('{{root.node}}', '{{$index}}')">
+                <div class="text-xlg font-bold m-t-n-sm ">{{ root.node.name }}</div>
+                <div class="text-md font-bold m-b-smm m-r-xs" align="right">{{getDueDate($index)}}</div>
+                <div align="right">
+                    <span class="panel wrapper-xs-pl bg-pl-pic">
+                        <span ng-repeat="user in root.user">
+                            <span class="m-l-xxs"></span>
+                            <span class="thumb-xxxs avatar-pl  ">
+                                <img src="../img/a0.jpg"/>
+                            </span>
+                            <span class="m-l-xxs"></span>
+                            <span class="thumb-xxxs avatar-pl  ">
+                                <img src="../img/a1.jpg"/>
+                            </span>
+                            <span class="m-l-xxs"></span>
+                            <span class="thumb-xxxs avatar-pl  ">
+                                <img src="../img/a2.jpg"/>
+                            </span>
+                            <span class="m-l-xxs"></span>
+                            <span class="thumb-xxxs avatar-pl  ">
+                                <img ng-src="{{user.profile_url}}"/>
+                            </span>
                         </span>
                     </span>
                 </div>

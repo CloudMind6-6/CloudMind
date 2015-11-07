@@ -3942,7 +3942,7 @@ a.text-#000000:hover {
   font-size: 2em;
 }
 .text-xlg {
-  font-size: 20px;
+  font-size: 22px;
 }
 .text-lg {
   font-size: 18px;
@@ -4017,7 +4017,11 @@ a.text-#000000:hover {
 }
 
 .wrapper-xs {
-  padding: 5px;
+  padding: 8px;
+}
+
+.wrapper-xs-pl {
+  padding: 8px 3px 7px 1px;
 }
 
 .wrapper-sm {
@@ -4276,7 +4280,7 @@ a.text-#000000:hover {
 }
 
 .m-l-xxs{
-  margin-left: 4px;
+  margin-left: 2px;
 }
 
 .m-l-xs {
@@ -4491,6 +4495,10 @@ a.text-#000000:hover {
   margin-bottom: 10px;
 }
 
+.m-b-smm {
+  margin-bottom: 13px;
+}
+
 .m-b {
   margin-bottom: 15px;
 }
@@ -4584,6 +4592,7 @@ a.text-#000000:hover {
   position: relative;
   white-space: nowrap;
   border-radius: 3px;
+  margin-top: -4px;
 }
 
 .dropdown-img {
@@ -4985,8 +4994,12 @@ a.text-#000000:hover {
 }
 
 .bg-pl-card{
-  background-color: #92c1e5;
+  background-color: rgb(254, 206, 205);
   color: ghostwhite;
+}
+
+.bg-pl-pic{
+  background-color: white;
 }
 
 /* Moving bar */
