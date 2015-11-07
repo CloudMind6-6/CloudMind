@@ -151,7 +151,6 @@ SceneGraphNode.prototype =
 // Scene Graph View Class
 
 var scene_graph_view = null;
-var sn = nodes.length;
 
 SceneGraphView = function()
 {
@@ -170,56 +169,63 @@ SceneGraphView.prototype =
 {
     onClickAdd : function()
     {
-        var new_idx = ++sn;
-        var new_model = {idx:new_idx, parent_idx:d3.select(this).attr("idx"), root_idx:1, name:"node" + new_idx, desc:"FAWEFAWEFAWG", assigned_users:[1001, 1002], labels:[1,4], due_date:"2015-11-19"};
+        var parent_idx  = d3.select(this).attr("idx");
+        var root_idx    = NodeStore.getNodeList()[0].root_idx;
 
-        nodes.push(new_model);
-
-        scene_graph.appendNode(new_model);
-        scene_graph.arrangeHorizontal();
-
-        scene_graph_view.appendNode(scene_graph.node_map[new_idx]);
-
-        for(var i = 0; i < nodes.length; ++i)
+        NodeStore.addNode("test", parent_idx, root_idx, function(new_model)
         {
-            var idx = nodes[i].idx;
+            NodeStore.setNodeList(root_idx, null, function()
+            {
+                var node_list = NodeStore.getNodeList();
 
-            scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-        }
+                scene_graph.appendNode(new_model);
+                scene_graph.arrangeHorizontal();
+
+                scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
+
+                for(var i = 0; i < node_list.length; ++i)
+                {
+                    var idx = node_list[i].node_idx;
+
+                    scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
+                }
+            });
+        });
     },
 
     onClickRemove : function()
     {
-        var remove_idx = d3.select(this).attr("idx");
-        var remove_node = scene_graph.node_map[remove_idx];
-        var remove_node_array = new Array();
+        var remove_idx  = d3.select(this).attr("idx");
+        var root_idx    = NodeStore.getNodeList()[0].root_idx;
 
-        remove_node.getChildrenRecursive(remove_node_array);
-        remove_node_array.push(remove_node);
-
-        for(var i = 0; i < remove_node_array.length; ++i)
+        NodeStore.removeNode(remove_idx, function(remove_idx)
         {
-            for(var j = 0; j < nodes.length; ++j)
+            NodeStore.setNodeList(root_idx, null, function()
             {
-                if(nodes[j].idx == remove_node_array[i].model.idx)
+                var node_list = NodeStore.getNodeList();
+
+                var remove_node = scene_graph.node_map[remove_idx];
+                var remove_node_array = new Array();
+
+                remove_node.getChildrenRecursive(remove_node_array);
+                remove_node_array.push(remove_node);
+
+                for(var i = 0; i < remove_node_array.length; ++i)
                 {
-                    nodes.splice(j, 1);
-                    break;
+                    scene_graph.removeNode(remove_node_array[i].model.node_idx);
+                    scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
                 }
-            }
 
-            scene_graph.removeNode(remove_node_array[i].model.idx);
-            scene_graph_view.removeNode(remove_node_array[i].model.idx);
-        }
+                scene_graph.arrangeHorizontal();
 
-        scene_graph.arrangeHorizontal();
+                for(var i = 0; i < node_list.length; ++i)
+                {
+                    var idx = node_list[i].node_idx;
 
-        for(var i = 0; i < nodes.length; ++i)
-        {
-            var idx = nodes[i].idx;
-
-            scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-        }
+                    scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
+                }
+            });
+        });
     },
 
     appendNode : function(node)
@@ -227,12 +233,13 @@ SceneGraphView.prototype =
         var model = node.model;
 
 
+
         // Info
 
         var div_node_info = this.canvas_node.append('div');
 
         div_node_info.attr("class", "mindmap_node_info")
-            .attr("idx", model.idx)
+            .attr("idx", model.node_idx)
             .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
             .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
             .style("width", scene_graph_form.width + "px")
@@ -275,7 +282,7 @@ SceneGraphView.prototype =
         var div_node_menu = this.canvas_node.append('div');
 
         div_node_menu.attr("class", "mindmap_node_menu")
-            .attr("idx", model.idx)
+            .attr("idx", model.node_idx)
             .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
             .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
             .style("width", scene_graph_form.width + "px")
@@ -288,16 +295,16 @@ SceneGraphView.prototype =
         var div_node_menu_side = div_node_menu.append('div').attr("class", "left");
 
         div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
-            .attr("idx", model.idx)
+            .attr("idx", model.node_idx)
             .on("click", this.onClickAdd);
         div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
-            .attr("idx", model.idx)
+            .attr("idx", model.node_idx)
             .on("click", this.onClickRemove);
 
         div_node_menu.append('div')
             .attr("class", "right")
             .append('i')
-            .attr("idx", model.idx)
+            .attr("idx", model.node_idx)
             .attr("class", "fa fa-2x fa-file-text");
 
 
@@ -305,7 +312,7 @@ SceneGraphView.prototype =
         // Link
 
         var path_node_link = this.canvas_link.append("path")
-            .attr("idx", model.idx)
+            .attr("idx", model.node_idx)
             .attr("fill", "none")
             .attr("stroke", "black")
             .attr("d", d3.svg.diagonal()
@@ -316,28 +323,28 @@ SceneGraphView.prototype =
 
         // Register
 
-        this.div_node_info_map[model.idx] = div_node_info;
-        this.div_node_menu_map[model.idx] = div_node_menu;
-        this.svg_node_link_map[model.idx] = path_node_link;
+        this.div_node_info_map[model.node_idx] = div_node_info;
+        this.div_node_menu_map[model.node_idx] = div_node_menu;
+        this.svg_node_link_map[model.node_idx] = path_node_link;
     },
 
-    removeNode : function(idx)
+    removeNode : function(node_idx)
     {
-        this.canvas_node.selectAll("div[idx='" + idx +"']").remove();
-        this.canvas_link.selectAll("path[idx='" + idx +"']").remove();
+        this.canvas_node.selectAll("div[idx='" + node_idx +"']").remove();
+        this.canvas_link.selectAll("path[idx='" + node_idx +"']").remove();
 
-        this.div_node_info_map[idx] = null;
-        this.div_node_menu_map[idx] = null;
-        this.svg_node_link_map[idx] = null;
+        this.div_node_info_map[node_idx] = null;
+        this.div_node_menu_map[node_idx] = null;
+        this.svg_node_link_map[node_idx] = null;
     },
 
     setNodePosition : function(node)
     {
         var model = node.model;
 
-        var div_node_info = this.div_node_info_map[model.idx];
-        var div_node_menu = this.div_node_menu_map[model.idx];
-        var svg_node_link = this.svg_node_link_map[model.idx];
+        var div_node_info = this.div_node_info_map[model.node_idx];
+        var div_node_menu = this.div_node_menu_map[model.node_idx];
+        var svg_node_link = this.svg_node_link_map[model.node_idx];
 
         div_node_info
             .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")

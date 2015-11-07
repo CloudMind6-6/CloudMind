@@ -40,3 +40,5 @@ nodes = [
     {idx:22, parent_idx:11, root_idx:1, name:"node22", desc:"FAWEFAWEFAWG", assigned_users:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
     {idx:23, parent_idx:11, root_idx:1, name:"node23", desc:"FAWEFAWEFAWG", assigned_users:[1001, 1002, 1003], labels:[0,7], due_date:"2015-11-19"},
 ];
+
+var NodeStore = null;

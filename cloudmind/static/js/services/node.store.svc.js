@@ -41,7 +41,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
              .success(function (res){
                      if(res.success) {
                          nodeList = res.node_list;
-                         nodeList.unshift(_node);
+                         //nodeList.unshift(_node);
                          callback('setNodeList');
                      }
                      else throw new Error;
@@ -192,10 +192,10 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     function removeNodeToList(_idx, callback){
 
 
-        if(nodeList[0].rootidx == _idx) nodeList = {};
+        if(nodeList[0].root_idx == _idx) nodeList = {};
 
         for(var i in nodeList){
-            if( nodeList[i].parentidx == _idx || nodeList[i].idx == _idx) {
+            if( nodeList[i].parent_idx == _idx || nodeList[i].node_idx == _idx) {
                 console.log(nodeList[i]);
                 delete nodeList[i];
             }
@@ -206,7 +206,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     function updateNodeToList(_idx, _node_name, _dueDate, _description){
 
         for(var i in nodeList){
-            if(nodeList[i].idx == _idx) {
+            if(nodeList[i].node_idx == _idx) {
                 console.log(nodeList[i]);
                 nodeList[i].name = _node_name;
                 nodeList[i].due_date = _dueDate;
@@ -219,7 +219,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
     function updatePaletteToList(_idx, _name, _color){
         for(var i in labelPalette){
-            if(labelPalette[i].idx == _idx) {
+            if(labelPalette[i].node_idx == _idx) {
                 console.log(nodeList[i]);
                 labelPalette[i].name = _name;
                 labelPalette[i].color = _color;
@@ -230,7 +230,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
     function removePaletteToList(_idx){
         for(var i in labelPalette){
-            if(labelPalette[i].idx == _idx) labelPalette.slice(i , 1 );
+            if(labelPalette[i].node_idx == _idx) labelPalette.slice(i , 1 );
         }
         nodeStoreCallback(false, nodeList);
     }
@@ -238,7 +238,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     function addLabelToNode(_node_id,_palette_id){
 
         for(var i in nodeList){
-            if(nodeList[i].idx == _node_id)
+            if(nodeList[i].node_idx == _node_id)
                 nodeList[i].label.push(_palette_id);
         }
 
@@ -247,7 +247,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
     function removeLabelToNode(_node_id,_palette_id, callback){
         for(var i in nodeList){
-            if(nodeList[i].idx == _node_id) {
+            if(nodeList[i].node_idx == _node_id) {
                 var idx = nodeList[i].label.indexOf(_palette_id);
                 nodeList[i].label.slice(idx,1);
             }

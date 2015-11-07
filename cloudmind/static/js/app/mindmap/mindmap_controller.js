@@ -8,27 +8,20 @@ SceneGraph = function(view)
     this.node_root   = null;
     this.node_odd    = null;
     this.node_even   = null;
-    this.node_spanning_odd = true;
 };
 
 SceneGraph.prototype =
 {
-    construct : function(node_list)
-    {
-        for(var i = 0; i < node_list.length; ++i)
-        {
-            this.appendNode(node_list[i]);
-        }
-    },
-
     appendNode : function(model)
     {
+        console.log(model);
+
         var node_new = new SceneGraphNode(model);
         var node_parent = this.node_map[model.parent_idx];
 
-        this.node_map[model.idx] = node_new;
+        this.node_map[model.node_idx] = node_new;
 
-        if (model.idx == model.root_idx)
+        if (model.node_idx == model.root_idx)
         {
             this.node_root = node_new;
 
@@ -45,12 +38,10 @@ SceneGraph.prototype =
         {
             if(model.parent_idx == model.root_idx)
             {
-                if(this.node_spanning_odd)
+                if(this.node_odd.children.length <= this.node_even.children.length)
                     this.node_odd.attachChild(node_new);
                 else
                     this.node_even.attachChild(node_new);
-
-                this.node_spanning_odd = !this.node_spanning_odd;
             }
             else
             {
@@ -80,7 +71,22 @@ SceneGraph.prototype =
 
 // Angular JS Link
 
-app.controller('MindmapCtrl', ['$scope', function($scope) {
-    $scope.label_palette = label_palette;
-    $scope.nodes = nodes;
+app.controller('MindmapCtrl', ['$scope', 'NodeStore', function($scope, nodeStore)
+{
+    NodeStore = nodeStore;
+
+    var node_list = NodeStore.getNodeList();
+
+    scene_graph = new SceneGraph();
+
+    for(var i = 0; i < node_list.length; ++i)
+        scene_graph.appendNode(node_list[i]);
+
+    scene_graph.arrangeHorizontal();
+
+
+    scene_graph_view = new SceneGraphView();
+
+    for(var i = 0; i < node_list.length; ++i)
+        scene_graph_view.appendNode(scene_graph.node_map[node_list[i].node_idx]);
 }]);
