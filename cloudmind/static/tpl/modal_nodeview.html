@@ -1,0 +1,133 @@
+<style>
+	.icon-background {
+	    color: rgba(101, 226, 193, 0.34);
+	}
+	#list ul {
+		overflow-y : hidden ;
+	}
+	#list li {
+		display: inline;
+		list-style:none;
+		margin-top: 20px;
+		margin-right: 5px;
+	}
+	#list li:nth-child(2) {
+		margin-left: 7px;
+	}
+	#list li:nth-child(2) .w-xs {
+		width: 110px; 
+	}
+	#list li:nth-child(3) .w-xs {
+		width: 110px; 
+	}
+	#list li:last-child {
+		top: -20px;
+	    left: 560px;
+	    position: absolute;
+	}
+	.node_title {
+		font-size: 18px;
+		font-weight: bold;
+		max-width: 100px;
+		overflow-x : hidden;
+	}
+	.list_part li {
+		list-style: none;
+		display: inline;
+	}
+	.list-part li:last-child  span{
+		color : #FFF;
+	}
+	.list_part li:last-child i{
+		color : rgba(19, 86, 69, 0.34);
+	}
+	.list_part li span {
+		text-align : center;
+	}
+	.list_labels li{
+		width: 80px;
+		height : 30px;
+		list-style: none;
+		border-radius: 5px;
+		line-height: 30px;
+		text-align: center;
+		margin-right : 10px;
+		display:inline-block;
+		margin-bottom: 10px;
+	}
+</style>
+
+
+<div class="view_top" style="padding-left : 15px;">
+	<ul id="list" style="padding-left:0; padding-top : 10px; margin-bottom: -6px">
+		<li class="node_title">노드 제목</li>
+		<li><button class="btn m-b-xs w-xs btn-default btn-rounded"><i class="fa fa-calendar-o text"></i><span class="text" style="margin-left: 7px;">2015-06-15</span><i class="fa fa-check text-active"></i></button>
+		</li>
+		<li><button class="btn m-b-xs w-xs btn-default btn-rounded"><i class="fa fa-chain-broken text"></i><span class="text" style="margin-left: 7px;">Add Node</span><i class="fa fa-check text-active"></i></button>
+		</li>
+		<li><button class="btn m-b-xs w-xs btn-default btn-rounded"><i class="fa fa-trash-o text"></i><span class="text" style="margin-left: 7px;">Delete</span><i class="fa fa-check text-active"></i></button>
+		</li>
+
+		<li ng-click="cancel()"><span class="fa-stack fa-2x">
+				<i class="fa icon-close fa-stack-1.7x"></i>
+			</span>
+		</li>
+	</ul>
+	
+</div>
+
+<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
+<div class="view_participants" style="position: relative; padding-left : 15px; ">
+	<ul class="list_part" style="padding-left: 0;">
+		<li><span class="fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x icon-background"></i>D</span></li>
+		<li><span class="fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x icon-background"></i>K</span></li>
+		<li><span class="fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x icon-background"></i>+</span></li>
+	</ul>
+</div>
+
+<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
+<div class="view_labels" style="position: relative; padding-left : 15px; margin-bottom : 10px;">
+	<ul class="list_labels" style="padding-left: 0;">
+		<li style="background-color: #d0d0d0">라벨1</li>
+		<li style="background-color: #d0d0d0">라벨1</li>
+		<li style="background-color: #d0d0d0">라벨1</li>
+		<li style="background-color: #d0d0d0">라벨1</li>
+		<li style="background-color: #d0d0d0">라벨1</li>
+		<li style="background-color: #d0d0d0">라벨1</li>
+		<li style="background-color: #d0d0d0">라벨2</li>
+		<li style="background-color: #d0d0d0">라벨2</li>
+		<li style="background-color: #d0d0d0">+</li>
+	</ul>
+</div>
+<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
+<div class="view_description" style="position: relative; padding-left : 15px; margin-bottom : 20px; ">
+	<h3>Description</h3>
+	<textarea  style="padding-left:0" class="form-control no-border" rows="3" placeholder="Description"></textarea>
+</div>
+<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
+<div class="view_subnodes" style="position: relative; padding-left : 15px; margin-bottom : 40px;">
+	<h3>Subnodes</h3>
+	<ul class="fa-ul">
+		<li><i class="fa-li fa fa-folder-o"></i>List icons</li>
+		<li><i class="fa-li fa fa-folder-o"></i>can be used</li>
+		<li><i class="fa-li fa fa-folder-o"></i>as bullets</li>
+		<li><i class="fa-li fa fa-folder-o"></i>in lists</li>
+		<li><i class="fa-li fa fa-plus-square-o"></i>Add Subnode</li>
+		
+	</ul>
+</div>
+<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
+<div class="view_leafs" style="position: relative; padding-left : 15px; margin-bottom : 40px">
+	<h3>Leafs</h3>
+	<ul class="fa-ul">
+		<li><i class="fa-li fa fa-leaf"></i>List icons.jpg</li>
+		<li><i class="fa-li fa fa-leaf"></i>can be used.exe</li>
+		<li><i class="fa-li fa fa-leaf"></i>as bullets.pdf</li>
+		<li><i class="fa-li fa fa-leaf"></i>in lists.iso</li>
+		<li><i class="fa-li fa fa-plus-square-o"></i>Add Leafs</li>
+	</ul>
+</div>
+
+<div class="modal-footer" style="margin-top: 40px">
+    <button class="btn btn-primary" ng-click="ok()">Apply</button>
+</div>
