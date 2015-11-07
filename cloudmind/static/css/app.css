@@ -4016,6 +4016,10 @@ a.text-#000000:hover {
   box-shadow: none !important;
 }
 
+.wrapper-xxs {
+  padding: 7px;
+}
+
 .wrapper-xs {
   padding: 8px;
 }
@@ -4286,6 +4290,11 @@ a.text-#000000:hover {
 .m-l-xs {
   margin-left: 5px;
 }
+
+.m-l-xsm {
+  margin-left: 7px;
+}
+
 
 .m-l-sm {
   margin-left: 10px;
@@ -4738,7 +4747,7 @@ a.text-#000000:hover {
 
 .thumb-lgm {
   display: inline-block;
-  width: 85px;
+  width: 130px;
 }
 
 .thumb-md {
@@ -4991,6 +5000,14 @@ a.text-#000000:hover {
   -webkit-animation: movingbar 0.75s infinite;
   -moz-animation: movingbar 0.75s infinite;
   animation: movingbar 0.75s infinite;
+}
+.icon-submit{
+  color: #00695c;
+  font-size: 18px;
+}
+.icon-cancel{
+  color: maroon;
+  font-size: 18px;
 }
 
 .bg-pl-card{

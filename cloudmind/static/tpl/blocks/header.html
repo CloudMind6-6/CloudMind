@@ -103,13 +103,11 @@
                         <i class="fa fa-pencil" ng-show=!(isEditmode) ng-click="clickEditName()"></i>
                       </div>
                       <div ng-show=isEditmode>
-                          <input type="text" class="form-control thumb-lgm" ng-model="newName">
-                          <button type="submit" class="btn btn-primary btn-sm-input" ng-click="updateName('{{ newName }}')">
-                              <span class="icon-sm-input-check"><i class="fa fa-check"></i></span>
-                          </button>
-                          <button type="button" class="btn btn-default btn-sm-input" ng-click="clickCancelBtn()">
-                              <span class="icon-sm-input-time"><i class="fa fa-times"></i></span>
-                          </button>
+                        <input type="text" class="form-control thumb-lgm m-l-n" ng-model="newName">
+                        <span class="m-l-xxs"></span>
+                        <i class="fa fa-check icon-submit" ng-click="updateName('{{ newName }}')"></i>
+                        <span class="m-l-xsm"></span>
+                        <i class="fa fa-times icon-cancel" ng-click="clickCancelBtn()"></i>
                       </div>
                     <p></p>
                     <div class="m-b-sm">{{ useremail }}</div>
@@ -129,6 +127,15 @@
         <!-- / navbar right -->
       </div>
       <!-- / navbar collapse -->
+
+      <!--
+      <button type="submit" class="btn btn-primary btn-sm-input" ng-click="updateName('{{ newName }}')">
+                              <span class="icon-sm-input-check"><i class="fa fa-check"></i></span>
+                          </button>
+                          <button type="button" class="btn btn-default btn-sm-input" ng-click="clickCancelBtn()">
+                              <span class="icon-sm-input-time"><i class="fa fa-times"></i></span>
+                          </button>
+       -->
 
 
 
