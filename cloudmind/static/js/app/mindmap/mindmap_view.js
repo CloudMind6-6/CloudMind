@@ -52,6 +52,12 @@ SceneGraphNode.prototype =
     {
         child.parent = this;
         child.spanning_odd = this.spanning_odd;
+        child.x = this.x;
+        child.y = this.y;
+        child.link_src_x = this.link_dst_x;
+        child.link_src_y = this.link_dst_y;
+        child.link_dst_x = this.link_dst_x;
+        child.link_dst_y = this.link_dst_y;
 
         this.children.push(child);
 
@@ -167,71 +173,9 @@ SceneGraphView = function()
 
 SceneGraphView.prototype =
 {
-    onClickAdd : function()
-    {
-        var parent_idx  = d3.select(this).attr("idx");
-        var root_idx    = NodeStore.getNodeList()[0].root_idx;
-
-        NodeStore.addNode("test", parent_idx, root_idx, function(new_model)
-        {
-            NodeStore.setNodeList(root_idx, null, function()
-            {
-                var node_list = NodeStore.getNodeList();
-
-                scene_graph.appendNode(new_model);
-                scene_graph.arrangeHorizontal();
-
-                scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
-
-                for(var i = 0; i < node_list.length; ++i)
-                {
-                    var idx = node_list[i].node_idx;
-
-                    scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-                }
-            });
-        });
-    },
-
-    onClickRemove : function()
-    {
-        var remove_idx  = d3.select(this).attr("idx");
-        var root_idx    = NodeStore.getNodeList()[0].root_idx;
-
-        NodeStore.removeNode(remove_idx, function(remove_idx)
-        {
-            NodeStore.setNodeList(root_idx, null, function()
-            {
-                var node_list = NodeStore.getNodeList();
-
-                var remove_node = scene_graph.node_map[remove_idx];
-                var remove_node_array = new Array();
-
-                remove_node.getChildrenRecursive(remove_node_array);
-                remove_node_array.push(remove_node);
-
-                for(var i = 0; i < remove_node_array.length; ++i)
-                {
-                    scene_graph.removeNode(remove_node_array[i].model.node_idx);
-                    scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
-                }
-
-                scene_graph.arrangeHorizontal();
-
-                for(var i = 0; i < node_list.length; ++i)
-                {
-                    var idx = node_list[i].node_idx;
-
-                    scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-                }
-            });
-        });
-    },
-
     appendNode : function(node)
     {
         var model = node.model;
-
 
 
         // Info
@@ -296,10 +240,16 @@ SceneGraphView.prototype =
 
         div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
             .attr("idx", model.node_idx)
-            .on("click", this.onClickAdd);
+            .on("click", function()
+            {
+                scene_graph.onEventAdd(d3.select(this).attr("idx"))
+            });
         div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
             .attr("idx", model.node_idx)
-            .on("click", this.onClickRemove);
+            .on("click", function()
+            {
+                scene_graph.onEventRemove(d3.select(this).attr("idx"))
+            });
 
         div_node_menu.append('div')
             .attr("class", "right")
@@ -347,14 +297,18 @@ SceneGraphView.prototype =
         var svg_node_link = this.svg_node_link_map[model.node_idx];
 
         div_node_info
+            .transition()
             .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
             .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
 
         div_node_menu
+            .transition()
             .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
             .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
 
-        svg_node_link.attr("d", d3.svg.diagonal()
+        svg_node_link
+            .transition()
+            .attr("d", d3.svg.diagonal()
             .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
             .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
             .projection(function(d) { return [d.y, d.x]; })

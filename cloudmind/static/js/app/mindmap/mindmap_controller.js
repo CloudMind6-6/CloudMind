@@ -65,6 +65,65 @@ SceneGraph.prototype =
         this.node_odd.arrangeHorizontal();
         this.node_even.arrangeHorizontal();
     },
+
+    onEventAdd : function(node_idx)
+    {
+        var root_idx    = NodeStore.getNodeList()[0].root_idx;
+
+        NodeStore.addNode("test", node_idx, root_idx, function(new_model)
+        {
+            NodeStore.setNodeList(root_idx, null, function()
+            {
+                var node_list = NodeStore.getNodeList();
+
+                scene_graph.appendNode(new_model);
+                scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
+
+                scene_graph.arrangeHorizontal();
+
+                for(var i = 0; i < node_list.length; ++i)
+                {
+                    var node = node_list[i];
+
+                    scene_graph_view.setNodePosition(scene_graph.node_map[node.node_idx]);
+                }
+            });
+        });
+    },
+
+    onEventRemove : function(node_idx)
+    {
+        var root_idx    = NodeStore.getNodeList()[0].root_idx;
+
+        NodeStore.removeNode(node_idx, function(remove_idx)
+        {
+            NodeStore.setNodeList(root_idx, null, function()
+            {
+                var node_list = NodeStore.getNodeList();
+
+                var remove_node = scene_graph.node_map[remove_idx];
+                var remove_node_array = new Array();
+
+                remove_node.getChildrenRecursive(remove_node_array);
+                remove_node_array.push(remove_node);
+
+                for(var i = 0; i < remove_node_array.length; ++i)
+                {
+                    scene_graph.removeNode(remove_node_array[i].model.node_idx);
+                    scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
+                }
+
+                scene_graph.arrangeHorizontal();
+
+                for(var i = 0; i < node_list.length; ++i)
+                {
+                    var idx = node_list[i].node_idx;
+
+                    scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
+                }
+            });
+        });
+    },
 };
 
 
@@ -78,15 +137,23 @@ app.controller('MindmapCtrl', ['$scope', 'NodeStore', function($scope, nodeStore
     var node_list = NodeStore.getNodeList();
 
     scene_graph = new SceneGraph();
+    scene_graph_view = new SceneGraphView();
 
-    for(var i = 0; i < node_list.length; ++i)
-        scene_graph.appendNode(node_list[i]);
+    for (var i = 0; i < node_list.length; ++i)
+    {
+        var node = node_list[i];
+
+        scene_graph.appendNode(node);
+        scene_graph_view.appendNode(scene_graph.node_map[node.node_idx]);
+    }
 
     scene_graph.arrangeHorizontal();
 
-
-    scene_graph_view = new SceneGraphView();
-
     for(var i = 0; i < node_list.length; ++i)
-        scene_graph_view.appendNode(scene_graph.node_map[node_list[i].node_idx]);
+    {
+        var node = node_list[i];
+
+        scene_graph_view.setNodePosition(scene_graph.node_map[node.node_idx]);
+    }
+
 }]);
