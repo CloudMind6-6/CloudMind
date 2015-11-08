@@ -94,7 +94,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.removeNode(_idx)
                 .success(function (res){
                     if(res.success) {
-                        callback(_idx, callback);
+                        callback(_idx);
                     }
                     else throw new Error;
                 })
@@ -114,6 +114,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 })
                 .error(function (err) {
                     console.log(err);
+                    callback(false);
                 }
             );
         },
@@ -183,7 +184,17 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .error(function(err){
                     console.log(err);
                 });
-        }
+        },
+
+        addLeaf : function(){
+
+        },
+
+        removeLeaf : function(){
+
+        },
+
+
     };
 
     /* Node List 수정 함수 /

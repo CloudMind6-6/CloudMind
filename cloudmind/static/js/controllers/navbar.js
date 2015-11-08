@@ -14,9 +14,14 @@ app.controller('NavBarCtrl', ['$scope', 'NodeStore', function($scope, NodeStore)
 
 app.controller('DropdownCtrl', ['$scope', function ($scope) {
 
-    $scope.toggleDropdown = function ($event) {
-        $event.stopPropagation();
+    $scope.toggleDropdown = function ($event, state) {
+        if(!state) $event.stopPropagation();
     };
+
+    $scope.toggled = function(open){
+        console.log(open);
+    };
+
 }]);
 
 app.controller('UserCtrl', ['$scope', 'HttpSvc', function($scope, HttpSvc) {
