@@ -57,7 +57,7 @@ class Node(db.Model):
             'root_idx': self.root_node_id,
             'parent_idx': self.parent_node_id,
             'leafs': self.serialize_leafs,
-            'assigned_user': self.serialize_member,
+            'assigned_users': self.serialize_member,
             'labels': self.serialize_labels
         }
 
