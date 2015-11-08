@@ -3871,6 +3871,10 @@ a.text-#000000:hover {
   float: none;
 }
 
+.pull-right{
+  float: right;
+}
+
 .rounded {
   border-radius: 500px;
 }
@@ -4060,6 +4064,10 @@ a.text-#000000:hover {
 
 .padder {
   padding-right: 15px;
+  padding-left: 15px;
+}
+
+.padder-l {
   padding-left: 15px;
 }
 
@@ -4287,6 +4295,11 @@ a.text-#000000:hover {
   margin-left: 2px;
 }
 
+.m-l-xxsm{
+  margin-left: 3.5px;
+}
+
+
 .m-l-xs {
   margin-left: 5px;
 }
@@ -4321,7 +4334,7 @@ a.text-#000000:hover {
 }
 
 .m-l-n-xxs {
-  margin-left: -1px;
+  margin-left: -2px;
 }
 
 .m-l-n-xs {
@@ -4357,11 +4370,15 @@ a.text-#000000:hover {
 }
 
 .m-t-xxs {
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .m-t-xs {
   margin-top: 5px;
+}
+
+.m-t-s {
+  margin-top: 8px;
 }
 
 .m-t-sm {
@@ -4425,7 +4442,7 @@ a.text-#000000:hover {
 }
 
 .m-r-xxs {
-  margin-right: 1px;
+  margin-right: 3px;
 }
 
 .m-r-xs {
@@ -4493,7 +4510,7 @@ a.text-#000000:hover {
 }
 
 .m-b-xxs {
-  margin-bottom: 1px;
+  margin-bottom: 3px;
 }
 
 .m-b-xs {
@@ -4528,8 +4545,9 @@ a.text-#000000:hover {
   margin-bottom: 50px;
 }
 
+
 .m-b-n-xxs {
-  margin-bottom: -1px;
+  margin-bottom: -3px;
 }
 
 .m-b-n-xs {

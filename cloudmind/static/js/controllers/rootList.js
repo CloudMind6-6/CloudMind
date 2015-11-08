@@ -24,6 +24,7 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
 
             UserStore.setUserList(userList, _node.node_idx);
             NodeStore.setNodeStore(_node.node_idx, _node, function () {
+                console.log('ok');
                 $state.go('app.mindmap');
                 NodeStore.setNavbarState(true);
             });
@@ -72,5 +73,20 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
 
         }
 
-    }]);
+    }
+]);
+
+app.controller('modal-rootlist',['$scope', '$modalInstance', function($scope, $modalInstance){
+    $scope.cancel = function() {
+        $modalInstance.close();
+    };
+
+    $scope.ok = function() {
+        $scope.addRoot($scope.nodename);
+        $modalInstance.close({
+            name: $scope.name,
+            groupType: $scope.groupType
+        });
+    };
+}]);
 

@@ -30,7 +30,7 @@
         <div ng-repeat="e in events" class="bg-white-only r r-2x m-b-xs wrapper-sm {{className}}" >
           <input ng-model="e.title" class="form-control m-t-n-xs no-border no-padder no-bg" >
           <a class="pull-right text-xs text-muted"><i class="fa fa-trash-o"></i></a>
-          <div class="text-xs text-muted">{{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}</div>
+          <div class="text-xs text-muted">{{e.due_date | date:"MMM dd"}} - {{e.due_date | date:"MMM dd"}}</div>
         </div>
       </div>
     </div>
