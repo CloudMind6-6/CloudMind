@@ -67,11 +67,13 @@ class NodeAdd(Resource):
         db.session.add(node)
         db.session.commit()
 
-        participant = Participant(is_accepted=True)
-        participant.own_node = node
-        participant.user = creator
-        participant.from_user = creator
-        db.session.add(participant)
+        # 루트노드 일 경우에만 맴버로 등록
+        if root_id is None:
+            participant = Participant(is_accepted=True)
+            participant.own_node = node
+            participant.user = creator
+            participant.from_user = creator
+            db.session.add(participant)
         db.session.commit()
 
         return {"success": True, "node": node.serialize, "user": node.serialize_member_detail}
