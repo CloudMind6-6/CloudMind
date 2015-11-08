@@ -57,11 +57,11 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             },
 
             /* NODE REST API */
-            getNodes: function (_root_id) {
+            getNodes: function (_root_idx) {
                 return $http({
                     url: urlBase + '/node/list',
                     method: "GET",
-                    params: {root_id: _root_id}
+                    params: {root_idx: _root_idx}
                 });
             },
 
@@ -85,12 +85,12 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            updateNode: function (_idx, _node_name, _dueDate, _description) {
+            updateNode: function (_node_idx, _node_name, _dueDate, _description) {
                 return $http({
                     url: urlBase + '/node/update',
                     method: "POST",
                     data: {
-                        id: _idx,
+                        node_idx: _node_idx,
                         node_name: _node_name,
                         description: _description,
                         due_date: _dueDate
@@ -100,40 +100,40 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
 
             /* LABEL PALETTE REST API */
 
-            getLabelpalettes: function (_root_id) {
+            getLabelpalettes: function (_root_idx) {
                 return $http({
                     url: urlBase + '/label_palette/list',
                     method: "GET",
-                    params: {root_idx: _root_id}
+                    params: {root_idx: _root_idx}
                 });
             },
 
-            addLabelpalette: function (_root_id, _name, _color) {
+            addLabelpalette: function (_root_idx, _name, _color) {
                 return $http({
                     url: urlBase + '/label_palette/add',
                     method: "POST",
                     data: {
-                        root_idx: _root_id,
+                        root_idx: _root_idx,
                         name: _name,
                         color: _color
                     }
                 });
             },
 
-            removeLabelpalette: function (_palette_id) {
+            removeLabelpalette: function (_palette_idx) {
                 return $http({
                     url: urlBase + '/label_palette/remove',
                     method: "POST",
-                    data: {id: _palette_id}
+                    data: {palette_idx: _palette_idx}
                 });
             },
 
-            updateLabelpalette: function (_palette_number, _name, _color) {
+            updateLabelpalette: function (_palette_idx, _name, _color) {
                 return $http({
                     url: urlBase + '/label_palette/update',
                     method: "POST",
                     data: {
-                        id: _palette_number,
+                        palette_idx: _palette_idx,
                         name: _name,
                         color: _color
                     }
