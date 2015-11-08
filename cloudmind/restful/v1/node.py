@@ -11,7 +11,7 @@ import json
 
 class NodeList(Resource):
     def get(self):
-        root_id = request.args.get('root_id')
+        root_id = request.args.get('root_idx')
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -105,15 +105,14 @@ class NodeRemove(Resource):
             }
 
 
-
 class NodeUpdate(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        node_id = args['id']
+        node_id = args['node_idx']
         node_name = args['node_name']
         description = args['description']
         due_date = args['due_date']
-        #  users = args['assigned_users']
+        #  users = args['assignedUser']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")

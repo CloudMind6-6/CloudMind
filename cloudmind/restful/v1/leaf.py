@@ -36,7 +36,7 @@ def leaf_download(leaf_id):
 class LeafUpload(Resource):
     def post(self):
         userfile = request.files['userfile']
-        root_id = request.args.get('root_id')
+        root_id = request.args.get('root_idx')
         if 'user_id' not in session:
             abort(403, message="already logged out")
 

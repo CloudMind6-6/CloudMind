@@ -60,7 +60,7 @@ class PaletteAdd(Resource):
 class PaletteRemove(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        palette_id = args['id']
+        palette_id = args['palette_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -83,7 +83,7 @@ class PaletteRemove(Resource):
 class PaletteUpdate(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        palette_id = args['id']
+        palette_id = args['palette_idx']
         name = args['name']
         color = args['color']
 
