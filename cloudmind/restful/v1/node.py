@@ -112,7 +112,7 @@ class NodeUpdate(Resource):
         node_name = args['node_name']
         description = args['description']
         due_date = args['due_date']
-        #  users = args['assignedUser']
+        #  users = args['assigned_users']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
