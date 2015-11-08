@@ -97,7 +97,7 @@ class NodeRemove(Resource):
 
         node.remove_all()
 
-        nodes = db.session.query(Node).all()
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
         return {
             'success': True,
             'node_list': [i.serialize for i in nodes]
