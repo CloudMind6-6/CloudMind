@@ -14,8 +14,6 @@ SceneGraph.prototype =
 {
     appendNode : function(model)
     {
-        console.log(model);
-
         var node_new = new SceneGraphNode(model);
         var node_parent = this.node_map[model.parent_idx];
 
@@ -38,15 +36,13 @@ SceneGraph.prototype =
         {
             if(model.parent_idx == model.root_idx)
             {
-                if(this.node_odd.children.length <= this.node_even.children.length)
+                if(this.node_odd.bounding_height <= this.node_even.bounding_height)
                     this.node_odd.attachChild(node_new);
                 else
                     this.node_even.attachChild(node_new);
             }
             else
-            {
                 node_parent.attachChild(node_new);
-            }
         }
     },
 
@@ -68,7 +64,7 @@ SceneGraph.prototype =
 
     onEventAdd : function(node_idx)
     {
-        var root_idx    = NodeStore.getNodeList()[0].root_idx;
+        var root_idx = NodeStore.getNodeList()[0].root_idx;
 
         NodeStore.addNode("test", node_idx, root_idx, function(new_model)
         {
@@ -93,7 +89,7 @@ SceneGraph.prototype =
 
     onEventRemove : function(node_idx)
     {
-        var root_idx    = NodeStore.getNodeList()[0].root_idx;
+        var root_idx = NodeStore.getNodeList()[0].root_idx;
 
         NodeStore.removeNode(node_idx, function(remove_idx)
         {
