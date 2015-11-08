@@ -11,7 +11,7 @@ import json
 
 class NodeList(Resource):
     def get(self):
-        root_id = request.args.get('root_id')
+        root_id = request.args.get('root_idx')
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -67,14 +67,22 @@ class NodeAdd(Resource):
         db.session.add(node)
         db.session.commit()
 
-        participant = Participant(is_accepted=True)
-        participant.own_node = node
-        participant.user = creator
-        participant.from_user = creator
-        db.session.add(participant)
+        # 루트노드 일 경우에만 맴버로 등록
+        if root_id is None:
+            participant = Participant(is_accepted=True)
+            participant.own_node = node
+            participant.user = creator
+            participant.from_user = creator
+            db.session.add(participant)
         db.session.commit()
 
-        return {"success": True, "node": node.serialize, "user": node.serialize_member_detail}
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_id).all()
+        return {
+            "success": True,
+            "node": node.serialize,
+            "user": node.serialize_member_detail,
+            'node_list': [i.serialize for i in nodes]
+        }
 
 
 class NodeRemove(Resource):
@@ -96,20 +104,18 @@ class NodeRemove(Resource):
             abort(404, message="노드멤버 아님")
 
         node.remove_all()
-        db.session.commit()
 
-        nodes = db.session.query(Node).all()
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
         return {
             'success': True,
             'node_list': [i.serialize for i in nodes]
             }
 
 
-
 class NodeUpdate(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
-        node_id = args['id']
+        node_id = args['node_idx']
         node_name = args['node_name']
         description = args['description']
         due_date = args['due_date']
@@ -134,4 +140,9 @@ class NodeUpdate(Resource):
 
         db.session.add(node)
         db.session.commit()
-        return {"success": True}
+
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
+        return {
+            "success": True,
+            'node_list': [i.serialize for i in nodes]
+        }
