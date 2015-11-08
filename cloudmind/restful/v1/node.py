@@ -96,7 +96,6 @@ class NodeRemove(Resource):
             abort(404, message="노드멤버 아님")
 
         node.remove_all()
-        db.session.commit()
 
         nodes = db.session.query(Node).all()
         return {

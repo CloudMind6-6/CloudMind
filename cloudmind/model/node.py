@@ -95,3 +95,4 @@ class Node(db.Model):
             item.remove_all()
         db.session.query(Participant).filter(Participant.own_node_id == self.id).delete()
         db.session.delete(self)
+        db.session.commit()
