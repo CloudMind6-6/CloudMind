@@ -1,3 +1,8 @@
+<style>
+  body {
+    overflow-y: scroll;
+  }
+</style>
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3">List</h1>
 </div>
@@ -10,15 +15,15 @@
       <table ui-jq="dataTable" ui-options="
       {
         bProcessing: true,
-      aaData: {{nodes}},
-      aoColumns: [
-      { mData: 'Name' },
-            { mData: 'Status' },
-            { mData: 'Duedate' },
-            { mData: 'People' }
+        aaData: {{nodes}},
+        aoColumns: [
+            { mData: 'name' },
+            { mData: 'labels' },
+            { mData: 'due_date' },
+            { mData: 'people' }
       ]
       }
-     " class="table table-striped b-t b-b">
+     "class="table table-striped b-t b-b">
         <thead>
           <tr>
             <th  style="width:20%">노드 이름</th>
