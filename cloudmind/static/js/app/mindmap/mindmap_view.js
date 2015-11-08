@@ -33,7 +33,7 @@ SceneGraphNode = function(model)
 {
     this.parent = null;
     this.children = new Array();
-    this.node_spanning_odd = true;
+    this.spanning_odd = true;
     this.x = 0;
     this.y = 0;
     this.width  = scene_graph_form.width  + scene_graph_form.margin_x;
@@ -51,24 +51,63 @@ SceneGraphNode.prototype =
     attachChild : function(child)
     {
         child.parent = this;
-        child.node_spanning_odd = this.node_spanning_odd;
+        child.spanning_odd = this.spanning_odd;
+        child.x = this.x;
+        child.y = this.y;
+        child.link_src_x = this.link_dst_x;
+        child.link_src_y = this.link_dst_y;
+        child.link_dst_x = this.link_dst_x;
+        child.link_dst_y = this.link_dst_y;
 
         this.children.push(child);
 
         this.updateUpward();
     },
 
-    updateUpward : function()
+    detachChild : function(child)
     {
-        this.width = 0;
-        this.height = 0;
+        for(var i = 0; i < this.children.length; ++i)
+        {
+            if(this.children[i] == child)
+            {
+                this.children.splice(i, 1);
+                break;
+            }
+        }
 
+        this.updateUpward();
+    },
+
+    getChildrenRecursive : function(children)
+    {
         for(var i = 0; i < this.children.length; ++i)
         {
             var child = this.children[i];
 
-            this.width  += child.width;
-            this.height += child.height;
+            child.getChildrenRecursive(children);
+            children.push(child);
+        }
+    },
+
+    updateUpward : function()
+    {
+        if(this.children.length)
+        {
+            this.width = 0;
+            this.height = 0;
+
+            for(var i = 0; i < this.children.length; ++i)
+            {
+                var child = this.children[i];
+
+                this.width  += child.width;
+                this.height += child.height;
+            }
+        }
+        else
+        {
+            this.width  = scene_graph_form.width  + scene_graph_form.margin_x;
+            this.height = scene_graph_form.height + scene_graph_form.margin_y;
         }
 
         if(this.parent)
@@ -85,7 +124,7 @@ SceneGraphNode.prototype =
 
             child.y = this.y - (this.height/2) + child_current_pos + (child.height/2);
 
-            if(this.node_spanning_odd)
+            if(this.spanning_odd)
             {
                 child.x = this.x - scene_graph_form.stride_x;
 
@@ -117,6 +156,8 @@ SceneGraphNode.prototype =
 
 // Scene Graph View Class
 
+var scene_graph_view = null;
+
 SceneGraphView = function()
 {
     this.body        = d3.select("body");
@@ -124,6 +165,10 @@ SceneGraphView = function()
     this.canvas_link = this.canvas_node.select("svg");
     this.center_x    = screen.width  / 2;
     this.center_y    = screen.height / 2 - 40;
+
+    this.div_node_info_map = new Object();
+    this.div_node_menu_map = new Object();
+    this.svg_node_link_map = new Object();
 }
 
 SceneGraphView.prototype =
@@ -132,11 +177,13 @@ SceneGraphView.prototype =
     {
         var model = node.model;
 
+
+        // Info
+
         var div_node_info = this.canvas_node.append('div');
-        var div_node_menu = this.canvas_node.append('div');
-        var div_node_edit = this.canvas_node.append('div');
 
         div_node_info.attr("class", "mindmap_node_info")
+            .attr("idx", model.node_idx)
             .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
             .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
             .style("width", scene_graph_form.width + "px")
@@ -173,16 +220,18 @@ SceneGraphView.prototype =
         }
 
 
+
+        // Menu
+
+        var div_node_menu = this.canvas_node.append('div');
+
         div_node_menu.attr("class", "mindmap_node_menu")
-            .style("left", this.center_x - scene_graph_form.half_width  + scene_graph_node.x + "px")
-            .style("top",  this.center_y - scene_graph_form.half_height + scene_graph_node.y + "px")
+            .attr("idx", model.node_idx)
+            .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
+            .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
             .style("width", scene_graph_form.width + "px")
             .style("height", scene_graph_form.height + "px")
             .style("border-radius", scene_graph_form.height / 10 + "px")
-            /*
-             .on("mouseover", function(){d3.select(this).style("visibility", "visible");})
-             .on("mouseout", function(){d3.select(this).style("visibility", "hidden");})
-             */
             .on("mouseover", function(){d3.select(this).classed("over", true);})
             .on("mouseout", function(){d3.select(this).classed("over", false);})
 
@@ -190,32 +239,79 @@ SceneGraphView.prototype =
         var div_node_menu_side = div_node_menu.append('div').attr("class", "left");
 
         div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
+            .attr("idx", model.node_idx)
+            .on("click", function()
+            {
+                scene_graph.onEventAdd(d3.select(this).attr("idx"))
+            });
         div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
+            .attr("idx", model.node_idx)
+            .on("click", function()
+            {
+                scene_graph.onEventRemove(d3.select(this).attr("idx"))
+            });
 
         div_node_menu.append('div')
             .attr("class", "right")
             .append('i')
+            .attr("idx", model.node_idx)
             .attr("class", "fa fa-2x fa-file-text");
 
 
 
-        div_node_edit.attr("class", "mindmap_node_edit")
-            .style("left", this.center_x - scene_graph_form.half_width * 3  + scene_graph_node.x + "px")
-            .style("top",  this.center_y - scene_graph_form.half_height * 3 + scene_graph_node.y + "px")
-            .style("width", scene_graph_form.width * 3 + "px")
-            .style("height", scene_graph_form.height * 3 + "px")
-            .style("border-radius", scene_graph_form.height * 3 / 10 + "px")
+        // Link
 
-
-
-        var diagonal = d3.svg.diagonal()
-            .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
-            .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
-            .projection(function(d) { return [d.y, d.x]; });
-
-        this.canvas_link.append("path")
+        var path_node_link = this.canvas_link.append("path")
+            .attr("idx", model.node_idx)
             .attr("fill", "none")
             .attr("stroke", "black")
-            .attr("d", diagonal);
+            .attr("d", d3.svg.diagonal()
+                .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
+                .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; }));
+
+
+        // Register
+
+        this.div_node_info_map[model.node_idx] = div_node_info;
+        this.div_node_menu_map[model.node_idx] = div_node_menu;
+        this.svg_node_link_map[model.node_idx] = path_node_link;
     },
+
+    removeNode : function(node_idx)
+    {
+        this.canvas_node.selectAll("div[idx='" + node_idx +"']").remove();
+        this.canvas_link.selectAll("path[idx='" + node_idx +"']").remove();
+
+        this.div_node_info_map[node_idx] = null;
+        this.div_node_menu_map[node_idx] = null;
+        this.svg_node_link_map[node_idx] = null;
+    },
+
+    setNodePosition : function(node)
+    {
+        var model = node.model;
+
+        var div_node_info = this.div_node_info_map[model.node_idx];
+        var div_node_menu = this.div_node_menu_map[model.node_idx];
+        var svg_node_link = this.svg_node_link_map[model.node_idx];
+
+        div_node_info
+            .transition()
+            .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
+            .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
+
+        div_node_menu
+            .transition()
+            .style("left", this.center_x - scene_graph_form.half_width  + node.x + "px")
+            .style("top",  this.center_y - scene_graph_form.half_height + node.y + "px")
+
+        svg_node_link
+            .transition()
+            .attr("d", d3.svg.diagonal()
+            .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
+            .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
+            .projection(function(d) { return [d.y, d.x]; })
+        );
+    }
 }

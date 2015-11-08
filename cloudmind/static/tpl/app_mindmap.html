@@ -68,23 +68,6 @@
     }
 </style>
 
-<script>
-    var scene_graph = new SceneGraph();
-    var scene_graph_view = new SceneGraphView();
-
-    scene_graph.construct(nodes);
-    scene_graph.arrangeHorizontal();
-
-    for(var i = 0; i < nodes.length; ++i)
-    {
-        var node = nodes[i];
-        var scene_graph_node = scene_graph.node_map[node.idx];
-
-        scene_graph_view.appendNode(scene_graph_node);
-    }
-
-</script>
-
 <div ng-controller="MindmapCtrl">
     <svg width="100%" height="6000"></svg>
 </div>
