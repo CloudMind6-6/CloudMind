@@ -77,7 +77,14 @@ class PaletteRemove(Resource):
 
         db.session.delete(palette)
         db.session.commit()
-        return {"success": True}
+
+        palettes = db.session.query(LabelPalette).filter(LabelPalette.root_node_id == root_node.id).all()
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
+        return {
+            "success": True,
+            "palette_list": [i.serialize for i in palettes],
+            "node_list": [i.serialize for i in nodes]
+        }
 
 
 class PaletteUpdate(Resource):

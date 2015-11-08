@@ -76,7 +76,13 @@ class NodeAdd(Resource):
             db.session.add(participant)
         db.session.commit()
 
-        return {"success": True, "node": node.serialize, "user": node.serialize_member_detail}
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_id).all()
+        return {
+            "success": True,
+            "node": node.serialize,
+            "user": node.serialize_member_detail,
+            'node_list': [i.serialize for i in nodes]
+        }
 
 
 class NodeRemove(Resource):
@@ -134,4 +140,9 @@ class NodeUpdate(Resource):
 
         db.session.add(node)
         db.session.commit()
-        return {"success": True}
+
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
+        return {
+            "success": True,
+            'node_list': [i.serialize for i in nodes]
+        }

@@ -24,9 +24,14 @@ class LabelAdd(Resource):
             label = Label(own_node_id=node_id, palette_id=palette_id)
             db.session.add(label)
             db.session.commit()
-            return {"success": True}
         else:
             abort(404, message="노드멤버 아님")
+
+        nodes = db.session.query(Node).filter(Node.root_node_id == own_node.root_node_id).all()
+        return {
+            "success": True,
+            'node_list': [i.serialize for i in nodes]
+        }
 
 
 class LabelRemove(Resource):
@@ -44,6 +49,11 @@ class LabelRemove(Resource):
         if own_node.check_member(session['user_id']):
             db.session.query(Label).filter(Label.own_node_id == node_id).filter(Label.palette_id == palette_id).delete()
             db.session.commit()
-            return {"success": True}
         else:
             abort(404, message="노드멤버 아님")
+
+        nodes = db.session.query(Node).filter(Node.root_node_id == own_node.root_node_id).all()
+        return {
+            "success": True,
+            'node_list': [i.serialize for i in nodes]
+        }
