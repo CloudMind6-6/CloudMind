@@ -1,22 +1,6 @@
 
 app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', function( $scope, $modalInstance, NodeStore){
 
-    /*
-    $scope.modal_callback = {
-        addNode : 'ADD NODE CALLBACK',
-        updateNode : 'UPDATE NODA CALLBACK',
-
-        addLabel : 'ADD LABEL CALLBACK',
-        removeLabel : 'REMOVE LABEL CALLBACK',
-
-        addLeaf : 'ADD LEAF CALLBACK',
-        removeLeaf : 'REMOVE LEAF CALLBACK',
-
-        addPalette : 'ADD PALETTE CALLBACK',
-        removePalette : 'REMOVE PALETTE CALLBACK',
-        updatePalette : 'UPDATE PALETTE CALLBACK'
-    };*/
-
     $scope.modal_callback = {
         addNode : null,
         updateNode : null,
@@ -46,7 +30,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
             $scope.modalNode.description, function(_node, _node_list){
 
-                if(!$scope.modal_callback.updateNode)
+                if($scope.modal_callback.updateNode)
                     $scope.modal_callback.updateNode(_node, _node_list);
 
                 $modalInstance.close({
@@ -61,14 +45,18 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         if(!$scope.modalNode.name) return;
 
         NodeStore.addNode($scope.modalNode.name, $scope.modalNode.parent_idx,
-            $scope.modalNode.root_idx, function(){
-                 if(!$scope.modal_callback.addNode) $scope.modal_callback.addNode();
-
+            $scope.modalNode.root_idx, function(_node, _node_list){
+                if($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
+                console.log(_node);
+                console.log(_node_list);
+                $scope.clickChildNodeInModal(_node);
+                $scope.newNode_name = '';
             });
     };
 
     $scope.clickChildNodeInModal = function(_node){
         $scope.modalNode = JSON.parse(JSON.stringify(_node));
+        init_NodeViewModal();
     };
 
     $scope.filterChildNode = function(_node){
@@ -79,7 +67,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     $scope.filterChildLeaf = function(leaf){
 
-    }
+    };
     /* label */
 
     $scope.addLabelInModal = function() {
@@ -87,7 +75,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         NodeStore.addLabel($scope.modalNode.node_idx, $scope.labelPalette.palette_idx,
             function(_node_id,_palette_id,_node_list){
                 $scope.modalNode.labels.push(_palette_id);
-                if(!$scope.modal_callback.addLabel) $scope.modal_callback.addLabel(_node_id,_palette_id,_node_list);
+                if($scope.modal_callback.addLabel) $scope.modal_callback.addLabel(_node_id,_palette_id,_node_list);
         });
     };
 
@@ -123,8 +111,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     $scope.editPaletteMode = function(_idx){
         $scope.editPalette[_idx] = true;
         $scope.newPaletteName = $scope.labelPalette[_idx].name;
-
-
     };
 
     $scope.updateLabelPalette = function(_idx){
@@ -163,6 +149,8 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         $scope.editPalette = [];
         $scope.leafStateInModal = false;
         $scope.isEditmode = false;
+
+        $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var i=0;i<8; i++)
             $scope.editPalette.push(false);

@@ -123,7 +123,7 @@
 				<div class="font-bold text-md m-t-n-xs m-l-xs">Label Palette</div>
 				<hr class="m-b-sm m-t-sm hr-color">
 				<div ng-repeat="lp in labelPalette track by $index">
-					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md" ng-click="hasLabel($index)" style="background-color: {{lp.color}}" >{{ lp.name }}</div>
+					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md" ng-click="hasLabel($index)" style="background-color: {{lp.color}}" > &nbsp;{{ lp.name }}</div>
 					<i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[$index])
 					   ng-click="editPaletteMode($index)"></i>
 					<div class="m-b-xs m-l-xsm" ng-show=editPalette[$index]>
@@ -157,18 +157,16 @@
 	</div>
 	<div ng-controller="DropdownCtrl" class="dropdown" o dropdown>
 		<a href class="dropdown-toggle" dropdown-toggle>
-			<span ng-click="clickChildNodeInModal(node)">
 			<i class="fa fa-plus-square-o m-r-xs"></i>
 			Add Node
-			</span>
 		</a>
 		<div class="dropdown-menu m-t-s w" >
 			<div class="wrapper-xs">
-				<span ng-click="toggleDropdown($event)">
-					<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
-					<hr class="m-b-sm m-t-sm hr-color">
-					<input class="form-control m-t-s" type="text" ng-model="newNode_name" />
-				</span>
+					<span ng-click="toggleDropdown($event)">
+						<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
+						<hr class="m-b-sm m-t-sm hr-color">
+						<input class="form-control m-t-s" type="text" ng-model="newNode_name" />
+					</span>
 				<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click="toggleDropdown($event, true); addNodeInModal();"> Add new node </button>
 			</div>
 		</div>

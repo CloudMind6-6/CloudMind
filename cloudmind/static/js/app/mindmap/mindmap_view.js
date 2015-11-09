@@ -9,8 +9,8 @@ var scene_graph_form =
     node_height:50,
     leaf_width:100,
     leaf_height:100,
-    stride_x:30,
-    stride_y:30,
+    stride_x:40,
+    stride_y:40,
     margin_x:20,
     margin_y:20,
 };
@@ -23,7 +23,7 @@ var scene_graph_form =
 SceneGraphNode = function(model)
 {
     this.parent = null;
-    this.children = new Array();
+    this.children = [];
     this.spanning_odd = true;
 
     this.x = 0;
@@ -33,6 +33,8 @@ SceneGraphNode = function(model)
     {
         this.width  = scene_graph_form.root_width;
         this.height = scene_graph_form.root_height;
+
+        this.type = 'root';
     }
     else
     {
@@ -40,11 +42,15 @@ SceneGraphNode = function(model)
         {
             this.width = scene_graph_form.leaf_width;
             this.height = scene_graph_form.leaf_height;
+
+            this.type = 'leaf';
         }
         else
         {
             this.width = scene_graph_form.node_width;
             this.height = scene_graph_form.node_height;
+
+            this.type = 'node';
         }
     }
 
@@ -195,15 +201,42 @@ SceneGraphView = function()
     this.center_x    = screen.width  / 2;
     this.center_y    = screen.height / 2 - 40;
 
-    this.div_node_info_map = new Object();
-    this.div_node_menu_map = new Object();
-    this.svg_node_link_map = new Object();
+    this.div_node_info_map = {};
+    this.div_node_menu_map = {};
+    this.svg_node_link_map = {};
 }
 
 SceneGraphView.prototype =
 {
     appendNode : function(node)
     {
+        var class_map =
+        {
+            root:
+            {
+                node:"mindmap_root_info",
+                label:"mindmap_root_label",
+                menu:"mindmap_root_menu",
+                menu_add:"fa fa-3x fa-plus-square",
+                menu_remove:"fa fa-3x fa-trash-o",
+                menu_view:"fa fa-5x fa-file-text",
+                link:"mindmap_root_link",
+                portrait:"mindmap_root_portrait"
+            },
+
+            node:
+            {
+                node:"mindmap_node_info",
+                label:"mindmap_node_label",
+                menu:"mindmap_node_menu",
+                menu_add:"fa fa-lg fa-plus-square",
+                menu_remove:"fa fa-lg fa-trash-o",
+                menu_view:"fa fa-2x fa-file-text",
+                link:"mindmap_node_link",
+                portrait:"mindmap_node_portrait"
+            },
+        };
+
         var model = node.model;
 
 
@@ -211,13 +244,10 @@ SceneGraphView.prototype =
 
         var div_node_info = this.canvas_node.append('div');
 
-        div_node_info.attr("class", "mindmap_node_info")
+        div_node_info.attr("class", class_map[node.type].node)
             .attr("idx", model.node_idx)
             .style("left", this.center_x + node.x - node.width/2 + "px")
             .style("top", this.center_y + node.y - node.height/2 + "px")
-            .style("width", node.width + "px")
-            .style("height", node.height + "px")
-            .style("border-radius", node.height / 10 + "px")
 
         var ul_node_label_container = div_node_info.append('ul').attr("class", "nav navbar-nav");
 
@@ -226,7 +256,7 @@ SceneGraphView.prototype =
             var label = model.labels[j];
 
             ul_node_label_container.append('li')
-                .attr("class", "mindmap_label")
+                .attr("class", class_map[node.type].label)
                 .style("background-color", label_palette[label].color);
         }
 
@@ -239,13 +269,11 @@ SceneGraphView.prototype =
 
         for(var j = 0; j < model.assigned_users.length; ++j)
         {
-            var assigned_user = model.assigned_users[j];
-
-            div_node_assigned_container.append('img')
+            div_node_assigned_container
+                .append('span')
+                .attr("class", "thumb-xxxs avatar-pl " + class_map[node.type].portrait)
+                .append('img')
                 .attr("src", "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg")
-                .attr("width", "10px")
-                .attr("height", "10px")
-                .style("margin-left", "1px")
         }
 
 
@@ -254,37 +282,31 @@ SceneGraphView.prototype =
 
         var div_node_menu = this.canvas_node.append('div');
 
-        div_node_menu.attr("class", "mindmap_node_menu")
+        div_node_menu.attr("class", class_map[node.type].menu)
             .attr("idx", model.node_idx)
             .style("left", this.center_x + node.x - node.width/2 + "px")
             .style("top", this.center_y + node.y - node.height/2 + "px")
-            .style("width", node.width + "px")
-            .style("height", node.height + "px")
-            .style("border-radius", node.height / 10 + "px")
             .on("mouseover", function(){d3.select(this).classed("over", true);})
             .on("mouseout", function(){d3.select(this).classed("over", false);})
 
 
         var div_node_menu_side = div_node_menu.append('div').attr("class", "left");
 
-        div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-plus-square")
+        div_node_menu_side.append('div').append('i')
             .attr("idx", model.node_idx)
-            .on("click", function()
-            {
-                scene_graph.onEventAdd(d3.select(this).attr("idx"))
-            });
-        div_node_menu_side.append('div').append('i').attr("class", "fa fa-lg fa-trash-o")
-            .attr("idx", model.node_idx)
-            .on("click", function()
-            {
-                scene_graph.onEventRemove(d3.select(this).attr("idx"))
-            });
+            .attr("class", class_map[node.type].menu_add)
+            .on("click", function(){ scene_graph.onEventAdd(d3.select(this).attr("idx")) });
 
-        div_node_menu.append('div')
-            .attr("class", "right")
+        div_node_menu_side.append('div').append('i')
+            .attr("idx", model.node_idx)
+            .attr("class", class_map[node.type].menu_remove)
+            .on("click", function(){ scene_graph.onEventRemove(d3.select(this).attr("idx")) });
+
+        div_node_menu.append('div').attr("class", "right")
             .append('i')
             .attr("idx", model.node_idx)
-            .attr("class", "fa fa-2x fa-file-text");
+            .attr("class", class_map[node.type].menu_view)
+            .on("click", function(){ scene_graph.onEventView(d3.select(this).attr("idx")) });
 
 
 
@@ -292,8 +314,7 @@ SceneGraphView.prototype =
 
         var path_node_link = this.canvas_link.append("path")
             .attr("idx", model.node_idx)
-            .attr("fill", "none")
-            .attr("stroke", "black")
+            .attr("class", class_map[model.parent_idx == model.root_idx ? 'root' : 'node'].link)
             .attr("d", d3.svg.diagonal()
                 .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
                 .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
@@ -305,6 +326,11 @@ SceneGraphView.prototype =
         this.div_node_info_map[model.node_idx] = div_node_info;
         this.div_node_menu_map[model.node_idx] = div_node_menu;
         this.svg_node_link_map[model.node_idx] = path_node_link;
+    },
+
+    appendLeaf : function(node)
+    {
+
     },
 
     removeNode : function(node_idx)

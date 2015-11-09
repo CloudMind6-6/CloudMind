@@ -7,6 +7,8 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
 
     $scope.className = 'b-1 b-2x b-info';
 
+    /*
+
     $scope.labelPalette = [
         {palette_idx: 1, palette_number:0, name:"NONE", color:"#80FF80"},
         {palette_idx: 2, palette_number:1, name:"WARNING", color:"#FFFF80"},
@@ -18,6 +20,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
         {palette_idx: 8, palette_number:7, name:"555", color:"#FFFFFF"},
     ];;
 
+    /*
     $scope.nodes = [
         {node_idx:1, parent_idx:null, root_idx:1, name:"node1", description:"", assigned_users:[1001, 1002, 1003], labels:[0,1], due_date:"2015-11-09"},
         {node_idx:2, parent_idx:1, root_idx:1, name:"node2", description: null, assigned_users:[1001, 1002, 1003], labels:[1,2], due_date:"2015-11-08"},
@@ -27,18 +30,17 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
         {node_idx:6, parent_idx:1, root_idx:1, name:"node6", description:"", assigned_users:[1001, 1002, 1003], labels:[3,2,1], due_date:"2015-11-04"},
         {node_idx:7, parent_idx:1, root_idx:1, name:"node7", description:"FAWEFAWEFAWG", assigned_users:[1001, 1002, 1003], labels:[1,4,6,3], due_date:"2015-11-02"},
         {node_idx:8, parent_idx:1, root_idx:1, name:"node8", description:"FAWEFAWEFAWG", assigned_users:[1001, 1002, 1003], labels:[0,6], due_date:"2015-11-02"}
-    ];
+    ];*/
 
     $scope.events = [];
 
-    /*init 하는 부분에  start 삽입하기.... due_date*/
     initCalendar();
 
     function initCalendar(){
 
         var count = 0;
-        //$scope.nodes =  NodeStore.getNodeList();
-        //$scope.label_palette = NodeStore.getLabelPalette();
+        $scope.nodes =  NodeStore.getNodeList();
+        $scope.labelPalette = NodeStore.getLabelPalette();
 
         angular.forEach($scope.nodes, function(value, key){
             $scope.events.push({
@@ -136,8 +138,6 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
             className: ['b-l b-2x b-info'], location: 'New York',
             // info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'
         });
-
-        console.log('asd');
     };
 
     /* Change View */
