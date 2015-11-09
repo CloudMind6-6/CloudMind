@@ -60,8 +60,11 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                         for(var i in palette_list){
                             var idx = palette_list[i].palette_idx;
                             labelPalette[idx] = palette_list[i];
+                            if(i==5) labelPalette[idx].color = '#00'+labelPalette[idx].color.toString(16).toUpperCase();
+                            else labelPalette[idx].color = '#'+labelPalette[idx].color.toString(16).toUpperCase();
                         }
                         callback('setPalette');
+
                     }
                     else throw new Error;
                 })
