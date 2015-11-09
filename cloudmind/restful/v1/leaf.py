@@ -9,6 +9,7 @@ from flask import send_file
 from flask import session
 from flask_restful import abort
 from flask_restful import Resource
+import json
 import os
 import time
 import uuid
@@ -58,3 +59,30 @@ class LeafUpload(Resource):
         db.session.add(leaf)
         db.session.commit()
         return {"success": True}
+
+
+class LeafRemove(Resource):
+    def post(self):
+        args = json.loads(request.data.decode('utf-8'))
+        leaf_id = args['leaf_idx']
+
+        if 'user_id' not in session:
+            abort(403, message="already logged out")
+
+        leaf = db.session.query(Leaf).filter(Leaf.id == leaf_id).first()
+        if leaf is None:
+            abort(404, message="Not found {}".format("Node"))
+
+        root_node = leaf.root_node
+        if root_node is None:
+            abort(404, message="Not found {}".format("root_node"))
+        if root_node.check_member(session['user_id']) is False:
+            abort(404, message="노드멤버 아님")
+
+        leaf.remove_all()
+
+        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
+        return {
+            'success': True,
+            'node_list': [i.serialize for i in nodes]
+            }
