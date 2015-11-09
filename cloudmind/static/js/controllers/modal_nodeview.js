@@ -1,6 +1,9 @@
 
 app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', function( $scope, $modalInstance, NodeStore){
 
+
+    var static_date;
+
     $scope.modal_callback = {
         addNode : null,
         updateNode : null,
@@ -28,7 +31,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
         var _dueDate = new Date($scope.modalNode.due_date);
 
-        NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,$scope.modalNode.due_date,
+        NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,null,
 
             $scope.modalNode.description, function(_node, _node_list){
 
@@ -151,11 +154,15 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         $scope.leafStateInModal = false;
         $scope.isEditmode = false;
 
+        if(!$scope.modalNode.due_date) $scope.modalNode.due_date = '2015-09-09';
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
+
+        $scope.labelPalette = NodeStore.getLabelPalette();
+
     }
 }]);
 

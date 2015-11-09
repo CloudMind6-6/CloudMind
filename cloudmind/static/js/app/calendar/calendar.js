@@ -36,6 +36,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
 
         $scope.modalNode = JSON.parse(JSON.stringify( $scope.nodes[node.idx]));
 
+        $scope.staticDate = node.due_date;
         $modal.open({
             templateUrl: 'tpl/modal_nodeview.html',
             controller: 'Modal_NodeView',

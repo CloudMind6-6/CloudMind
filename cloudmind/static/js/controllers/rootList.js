@@ -62,8 +62,8 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
     /* REST API TEST CODE */
         $scope.updateNode = function(){
 
-            //NodeStore.updateNode(1, 'ㅇㅁㄴ',null, 'Node updated!!!', function(){console.log('수정했당!');});
-            NodeStore.removeNode(2, function(){ console.log('지워졌당!');});
+            NodeStore.updateNode(1, 'ㅇㅁㄴ',null, 'Node updated!!!', function(){console.log('수정했당!');});
+            //NodeStore.removeNode(2, function(){ console.log('지워졌당!');});
             //NodeStore.addLabelPalette(1,'palette',111111,function(){console.log('add palette')});
             //NodeStore.removeLabelPalette(1, function(res){console.log(res);})
             //NodeStore.updateLabelPalette(2,'ㅏㅣㅇㄴㅁㅁㄴ아ㅣ;','222222', function(res){console.log(res);})
