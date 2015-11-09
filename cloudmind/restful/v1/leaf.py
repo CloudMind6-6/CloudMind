@@ -52,7 +52,7 @@ class LeafUpload(Resource):
         filepath = os.path.join(current_app.config['UPLOAD_DIR'], filename)
         userfile.save(filepath)
 
-        creator = User.query.filter(User.userid == session['user_id']).first()
+        creator = User.query.filter(User.id == session['user_id']).first()
         leaf = Leaf(name=name, file_path=filepath)
         leaf.creator = creator
         leaf.parent_node = parent_node

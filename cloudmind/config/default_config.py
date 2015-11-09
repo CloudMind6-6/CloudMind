@@ -14,3 +14,10 @@ class Config(object):
     # OAuth
     OAUTH_GOOGLE_CLIENTID = ''
     OAUTH_GOOGLE_SECRETKEY = ''
+
+    # EMAIL
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'you@google.com'
+    MAIL_PASSWORD = 'GooglePasswordHere'
