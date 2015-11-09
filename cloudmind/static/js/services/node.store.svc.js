@@ -108,7 +108,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.updateNode(_idx, _node_name, _dueDate, _description)
                 .success(function (res) {
                     if (res.success) {
-                        callback(res.node);
+                        callback(res.node, res.node_list);
                     }
                     else throw new Error;
                 })
@@ -149,7 +149,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.updateLabelpalette(_palette_id, _name, _color)
                 .success(function (res) {
                     if(res.success){
-                        callback(res.palette);
+                        callback(res.palette, res.label_palette_list);
                     }
                     else throw new Error;
                 })

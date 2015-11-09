@@ -416,6 +416,11 @@ a.list-group-item.hover {
   border-radius: 4px;
 }
 
+.panel-circle {
+  border-radius: 500px;
+}
+
+
 .panel .accordion-toggle {
   display: block;
   font-size: 14px;
@@ -4020,6 +4025,10 @@ a.text-#000000:hover {
   box-shadow: none !important;
 }
 
+.wrapper-xxxs {
+  padding: 5px;
+}
+
 .wrapper-xxs {
   padding: 7px;
 }
@@ -4087,6 +4096,16 @@ a.text-#000000:hover {
 
 .pull-out {
   margin: -10px -15px;
+}
+
+.wrapper-xs-pls {
+  padding: 5px 15px 5px 15px;
+  background-color :  #d0d0d0;
+}
+
+.wrapper-xs-circle {
+  padding: 12px 18px 12px 18px;
+  background-color :  #d0d0d0;
 }
 
 .b {
@@ -4291,14 +4310,13 @@ a.text-#000000:hover {
   margin-left: 0 !important;
 }
 
-.m-l-xxs{
-  margin-left: 2px;
+.m-l-xxs {
+  margin-left: 1px;
 }
 
-.m-l-xxsm{
-  margin-left: 3.5px;
+.m-l-xxsm {
+  margin-left: 3px;
 }
-
 
 .m-l-xs {
   margin-left: 5px;
@@ -4307,7 +4325,6 @@ a.text-#000000:hover {
 .m-l-xsm {
   margin-left: 7px;
 }
-
 
 .m-l-sm {
   margin-left: 10px;
@@ -4722,7 +4739,7 @@ a.text-#000000:hover {
 }
 
 .w-md {
-  width: 240px;
+  width: 230px;
 }
 
 .w-lg {
@@ -4753,6 +4770,11 @@ a.text-#000000:hover {
   height: 100%;
 }
 
+.thumb-xlg {
+  display: inline-block;
+  width: 200px;
+}
+
 .thumb-xl {
   display: inline-block;
   width: 128px;
@@ -4780,7 +4802,7 @@ a.text-#000000:hover {
 
 .thumb-sm {
   display: inline-block;
-  width: 40px;
+  width: 45px;
 }
 
 .thumb-xs {
@@ -5026,6 +5048,14 @@ a.text-#000000:hover {
 .icon-cancel{
   color: maroon;
   font-size: 18px;
+}
+
+.icon-pencil {
+  color: #787878;
+}
+
+.hr-color{
+  color : #e5e5e5;
 }
 
 .bg-pl-card{

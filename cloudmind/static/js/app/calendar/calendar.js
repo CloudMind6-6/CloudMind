@@ -7,10 +7,19 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
 
     $scope.className = 'b-1 b-2x b-info';
 
-    $scope.labelPalette = [];
+    $scope.labelPalette = [
+        {palette_idx: 1, palette_number:0, name:"NONE", color:"#80FF80"},
+        {palette_idx: 2, palette_number:1, name:"WARNING", color:"#FFFF80"},
+        {palette_idx: 3, palette_number:2, name:"ALERT", color:"#FFF080"},
+        {palette_idx: 4, palette_number:3, name:"111", color:"#8080FF"},
+        {palette_idx: 5, palette_number:4, name:"222", color:"#FF80FF"},
+        {palette_idx: 6, palette_number:5, name:"333", color:"#808080"},
+        {palette_idx: 7, palette_number:6, name:"444", color:"#000000"},
+        {palette_idx: 8, palette_number:7, name:"555", color:"#FFFFFF"},
+    ];;
 
     $scope.nodes = [
-        {node_idx:1, parent_idx:1, root_idx:1, name:"node1", description:"", assigned_users:[1001, 1002, 1003], labels:[0,1], due_date:"2015-11-09"},
+        {node_idx:1, parent_idx:null, root_idx:1, name:"node1", description:"", assigned_users:[1001, 1002, 1003], labels:[0,1], due_date:"2015-11-09"},
         {node_idx:2, parent_idx:1, root_idx:1, name:"node2", description: null, assigned_users:[1001, 1002, 1003], labels:[1,2], due_date:"2015-11-08"},
         {node_idx:3, parent_idx:2, root_idx:1, name:"node3", description:"", assigned_users:[1001, 1002, 1003], labels:[0,2,1], due_date:"2015-11-07"},
         {node_idx:4, parent_idx:1, root_idx:1, name:"node4", description:"", assigned_users:[1001, 1002, 1003], labels:[5,6,3], due_date:"2015-11-06"},
@@ -55,7 +64,6 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
             controller: 'Modal_NodeView',
             scope: $scope
         });
-
     };
 
     /* alert on Resize */
@@ -85,7 +93,6 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
         }
         (wrap.find('.fc-overlay').length == 0) && wrap.append($scope.overlay);
     }
-
 
     $scope.updateDuedate = function (event, delta, revertFunc, jsEvent, ui, view) {
         NodeStore.updateNode(event.node_idx, event.name, event.start.format(), event.info, function(_node){

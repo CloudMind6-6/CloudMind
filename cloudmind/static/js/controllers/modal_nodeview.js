@@ -1,6 +1,7 @@
 
 app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', function( $scope, $modalInstance, NodeStore){
 
+    /*
     $scope.modal_callback = {
         addNode : 'ADD NODE CALLBACK',
         updateNode : 'UPDATE NODA CALLBACK',
@@ -14,6 +15,21 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         addPalette : 'ADD PALETTE CALLBACK',
         removePalette : 'REMOVE PALETTE CALLBACK',
         updatePalette : 'UPDATE PALETTE CALLBACK'
+    };*/
+
+    $scope.modal_callback = {
+        addNode : null,
+        updateNode : null,
+
+        addLabel : null,
+        removeLabel : null,
+
+        addLeaf : null,
+        removeLeaf : null,
+
+        addPalette : null,
+        removePalette : null,
+        updatePalette : null
     };
 
     init_NodeViewModal();
@@ -22,57 +38,107 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         $modalInstance.close();
     };
 
+    /* Node */
+
     $scope.applyInModal = function() {
 
         NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name, $scope.modalNode.due_date,
-            $scope.modalNode.description, $scope.modal_callback.updateNode);
 
-        $modalInstance.close({
-            name: $scope.name,
-            groupType: $scope.groupType
-        });
+            $scope.modalNode.description, function(_node, _node_list){
+
+                if(!$scope.modal_callback.updateNode)
+                    $scope.modal_callback.updateNode(_node, _node_list);
+
+                $modalInstance.close({
+                    name: $scope.name,
+                    groupType: $scope.groupType
+                });
+            });
     };
 
     $scope.addNodeInModal = function() {
-        // 동적으로 추가하고 이름 입력해서 추가하도록 하자 아님 새창을 띄울까.
 
-        $scope.nameInModal = 1;
-        if(!$scope.nameInModal) return;
+        if(!$scope.modalNode.name) return;
 
-        NodeStore.addNode($scope.nameInModal, $scope.modalNode.parent_idx,
+        NodeStore.addNode($scope.modalNode.name, $scope.modalNode.parent_idx,
             $scope.modalNode.root_idx, function(){
-                //$scope.modal_callback.addNode();
+                 if(!$scope.modal_callback.addNode) $scope.modal_callback.addNode();
 
             });
     };
 
     $scope.clickChildNodeInModal = function(_node){
-        //앵귤러에서 조건 걸어서 출력하기
-        $scope.modalNode = _node;
-
+        $scope.modalNode = JSON.parse(JSON.stringify(_node));
     };
 
+    $scope.filterChildNode = function(_node){
+
+        if(_node.parent_idx == $scope.modalNode.node_idx) return true;
+        else return false;
+    };
+
+    $scope.filterChildLeaf = function(leaf){
+
+    }
+    /* label */
+
     $scope.addLabelInModal = function() {
+
         NodeStore.addLabel($scope.modalNode.node_idx, $scope.labelPalette.palette_idx,
             function(_node_id,_palette_id,_node_list){
                 $scope.modalNode.labels.push(_palette_id);
-                $scope.modal_callback.addLabel(_node_id,_palette_id,_node_list);
+                if(!$scope.modal_callback.addLabel) $scope.modal_callback.addLabel(_node_id,_palette_id,_node_list);
         });
     };
 
     $scope.removeLabelInModal = function(){
         NodeStore.removeLabel($scope.modalNode.node_idx, $scope.labelPalette.palette_idx,
             function(_node_id,_palette_id,_node_list){
-
-                $scope.modalNode.labels.push(_palette_id);
+                // 라벨지우기!! //  json --> 맵형식으로 관리하면... 바로 지울 수 이씀
+                $scope.modalNode.labels.pop(_palette_id);
                 $scope.modal_callback.removeLabel(_node_id,_palette_id,_node_list);
             });
     };
 
+    $scope.hasLabel = function(_idx){
+
+        console.log($scope.modalNode.labels);
+        console.log(_idx);
+
+        if($scope.modalNode.labels.indexOf(_idx) == -1) {
+            console.log('없당');
+            $scope.addLabelInModal();
+        }
+        else  $scope.removeLabelInModal();
+
+    };
+
+    /* Participant */
+
     $scope.addParticipantInModal = function(){
+        console.log('사용자 검색 뷰 필요!');
+    };
 
-        //
+    /* label palette */
+    $scope.editPaletteMode = function(_idx){
+        $scope.editPalette[_idx] = true;
+        $scope.newPaletteName = $scope.labelPalette[_idx].name;
 
+
+    };
+
+    $scope.updateLabelPalette = function(_idx){
+
+        NodeStore.updateLabelPalette($scope.labelPalette[_idx].palette_idx, $scope.newPaletteName, $scope.labelPalette[_idx].color,
+            function (_palette, _palette_list) {
+                $scope.labelPalette = _palette_list;
+                if(!$scope.modal_callback.updatePalette)
+                    $scope.modal_callback.updatePalette(_palette, _palette_list);
+            });
+    }
+
+    $scope.cancelEditPaletteMode = function(_idx){
+        $scope.editPalette[_idx] = false;
     };
 
     $scope.addLeafInModal = function(){
@@ -87,18 +153,26 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     $scope.downloadLeafInModal = function(_idx){
 
-
         //해당 경로 다운로드 요청
         //$scope.selectedNode.leafs[_idx].file_path
 
     };
 
     function init_NodeViewModal(){
-        $scope.leafStateInModal = false;
 
-        if(($scope.modalNode.description==null) || ($scope.modalNode.description.length == 0))
-            $scope.modalNode.description = 'description';
+        $scope.editPalette = [];
+        $scope.leafStateInModal = false;
+        $scope.isEditmode = false;
+
+        for(var i=0;i<8; i++)
+            $scope.editPalette.push(false);
+
+
+        //if(($scope.modalNode.description==null) || ($scope.modalNode.description.length == 0))
+        //    $scope.modalNode.description = 'description';
+
     }
+
 }]);
 
 app.controller('DatepickekCtrl', ['$scope', function($scope) {
@@ -135,58 +209,4 @@ app.controller('DatepickekCtrl', ['$scope', function($scope) {
 
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[1];
-}]);
-
-app.controller('AddNodeCtrl', ['$scope', 'HttpSvc', function($scope, HttpSvc) {
-
-    $scope.isEditmode = false;
-
-    initUser();
-
-    $scope.clickEditName = function(){
-        $scope.isEditmode = true;
-        $scope.newName = $scope.username;
-    };
-
-    $scope.updateName = function(){
-        $scope.isEditmode = false;
-        if(!$scope.newName)
-            return;
-
-        HttpSvc.updateName($scope.newName)
-            .success(function (res) {
-                if (res.success) {
-                    $scope.username = $scope.newName;
-                }
-                else throw new Error;
-            })
-            .error(function (err) {
-                console.log(err);
-            });
-    };
-
-    $scope.clickCancelBtn = function(){
-        $scope.isEditmode = false;
-    };
-
-    $scope.updatePicture = function($event){
-        angular.element('#fileBtn').trigger('click');
-
-    };
-
-    function initUser() {
-        HttpSvc.getProfile()
-            .success(function (res) {
-                if (res.success) {
-                    $scope.username = res.profile.name;
-                    $scope.useremail = res.profile.email;
-                    $scope.profile_url = res.profile.profile_url;
-                }
-                else throw new Error;
-            })
-            .error(function (err) {
-                console.log(err);
-            });
-    }
-
 }]);

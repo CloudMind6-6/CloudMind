@@ -1,7 +1,4 @@
 <style>
-	.icon-background {
-	    color: rgba(101, 226, 193, 0.34);
-	}
 	#list ul {
 		overflow-y : hidden ;
 	}
@@ -65,12 +62,12 @@
 			<button class="btn m-b-xs w-xs btn-default btn-rounded" datepicker-popup="{{format}}" ng-model="dt"
 					is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
 					ng-click="open($event)">
-				<i class="fa fa-calendar-o text m-l-xxsm"></i>
+				<i class="fa fa-calendar-o text m-l-xxs"></i>
 				<span class="text margin-left">{{ modalNode.due_date }}</span>
 			</button>
 		</li>
 		<li ng-controller="DropdownCtrl" class="dropdown" o dropdown>
-			<a href class="dropdown-toggle" dropdown-toggle >
+			<a href class="dropdown-toggle" dropdown-toggle>
 			<button class="btn m-b-xs w-xs btn-default btn-rounded">
 				<i class="fa fa-chain-broken text"></i>
 				<span class="text m-l-xsm">Add Node</span>
@@ -81,7 +78,7 @@
 				<div class="wrapper-xs">
 					<span ng-click="toggleDropdown($event)">
 						<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
-						<hr class="m-t-xxs m-b-xxs"color="#e5e5e5">
+						<hr class="m-b-sm m-t-sm hr-color">
 						<input class="form-control m-t-s" type="text" ng-model="newNode_name" />
 					</span>
 					<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click="toggleDropdown($event, true); addNodeInModal();"> Add new node </button>
@@ -97,42 +94,95 @@
 	</div>
 </div>
 
-<hr class="m-b-xxs m-b-sm" color="#e5e5e5">
+<hr class="m-b-sm m-t-sm hr-color">
+
 <div class="view_participants pos-rlt padder-l m-b-sm">
-	<span class="list_part no-padder" ng-repeat="user in modalNode.assigned_users">
-		<span class="fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x icon-background"></i></span>
+	<span ng-repeat="user in modalNode.assigned_users">
+		<span class="thumb-sm avatar m-r-xs">
+			<img src="../img/a10.jpg">
+		</span>
 	</span>
-	<span class="fa-stack fa-2x"><i class="fa fa-circle fa-stack-2x "></i></span>
+	<span class="thumb-md avatar">
+		<span class="panel-circle wrapper-xs-circle m-r-xs" ng-click="addParticipantInModal()">+</span>
+	</span>
 </div>
 
-<hr class="m-b-sm m-t-sm" color="#e5e5e5">
-<div class="view_labels pos-rlt padder-l m-b-sm">
-	<ul class="list_labels" ng-repeat="label in modalNode.labels track by $index" style="padding-left: 0;">
-		<li  style="background-color: #d0d0d0">labelPalette</li>
-	</ul>
-	<li style="background-color: #d0d0d0" ng-click="addLabelInModal()">+</li>
+<hr class="m-b-sm m-t-sm hr-color">
+
+<div class=" view_labels pos-rlt padder-l m-b-md m-t-md">
+	<span class="list_labels" ng-repeat="label in modalNode.labels track by $index" style="padding-left: 0;">
+		<span class="panel wrapper-xxxs m-r-xs" style="background-color: {{labelPalette[label].color}}" >{{ labelPalette[label].name }}</span>
+	</span>
+	<div class="dropdown inline"  ng-controller="DropdownCtrl" o dropdown>
+	<a href class="dropdown-toggle" dropdown-toggle>
+		<span class="panel wrapper-xs-pls" >+</span>
+	</a>
+	<div class="dropdown-menu m-t-sm w-lg" >
+		<div class="wrapper-xs">
+			<span ng-click="toggleDropdown($event)">
+				<div class="font-bold text-md m-t-n-xs m-l-xs">Label Palette</div>
+				<hr class="m-b-sm m-t-sm hr-color">
+				<div ng-repeat="lp in labelPalette track by $index">
+					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md" ng-click="hasLabel($index)" style="background-color: {{lp.color}}" >{{ lp.name }}</div>
+					<i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[$index])
+					   ng-click="editPaletteMode($index)"></i>
+					<div class="m-b-xs m-l-xsm" ng-show=editPalette[$index]>
+						<input type="text" class="form-control thumb-xlg" ng-model="newPaletteName">
+						<span class="m-l-xs"></span>
+						<i class="fa fa-check icon-submit" ng-click="updateLabelPalette($index)"></i>
+						<span class="m-l-xs"></span>
+						<i class="fa fa-times icon-cancel" ng-click="cancelEditPaletteMode($index)"></i>
+					</div>
+				</div>
+			</span>
+		</div>
+		</div>
+	</div>
+	</div>
 </div>
-<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
-<div class="view_description" style="position: relative; padding-left : 15px; margin-bottom : 20px; ">
+
+<hr class="m-b-sm m-t-sm hr-color">
+<div class="view_description pos-rlt m-b-md" style="padding-left : 15px;">
 	<h3>Description</h3>
 	<textarea  style="padding-left:0" class="form-control no-border" rows="3" placeholder="Description">{{ modalNode.description }}</textarea>
 </div>
-<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
-<div class="view_subnodes" style="position: relative; padding-left : 15px; margin-bottom : 40px;">
+<hr class="m-b-sm m-t-sm hr-color">
+<div class="view_subnodes m-b-xl pos-rlt" style="padding-left : 15px;">
 	<h3>Subnodes</h3>
-	<ul  ng-repeat="node in nodes track by $index"  class="fa-ul">
-		<li ng-click="clickChildNodeInModal()"><i class="fa-li fa fa-folder-o"></i>List icons</li>
-	</ul>
+	<div ng-repeat="node in nodes | filter:filterChildNode track by $index" class="fa-ul m-l-sm">
+		<span ng-click="clickChildNodeInModal(node)">
+			<i class="fa fa-folder-o m-r-xs"></i>
+			{{node.name}}
+		</span>
+	</div>
+	<div ng-controller="DropdownCtrl" class="dropdown" o dropdown>
+		<a href class="dropdown-toggle" dropdown-toggle>
+			<span ng-click="clickChildNodeInModal(node)">
+			<i class="fa fa-plus-square-o m-r-xs"></i>
+			Add Node
+			</span>
+		</a>
+		<div class="dropdown-menu m-t-s w" >
+			<div class="wrapper-xs">
+				<span ng-click="toggleDropdown($event)">
+					<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
+					<hr class="m-b-sm m-t-sm hr-color">
+					<input class="form-control m-t-s" type="text" ng-model="newNode_name" />
+				</span>
+				<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click="toggleDropdown($event, true); addNodeInModal();"> Add new node </button>
+			</div>
+		</div>
+	</div>
 </div>
-<hr style="margin-top: 10px ; margin-bottom: 10px"color="#e5e5e5">
+<hr class="m-b-sm m-t-sm hr-color">
 <div class="view_leafs" style="position: relative; padding-left : 15px; margin-bottom : 40px">
 	<h3>Leafs</h3>
-	<ul class="fa-ul" ng-repeat="root in nodes track by $index" >
+	<ul class="fa-ul">
 		<li><i class="fa-li fa fa-leaf" ng-click="downloadLeafInModal($index)"></i>List icons.jpg</li>
 		<li><i class="fa-li fa fa-leaf"></i>can be used.exe</li>
 		<li><i class="fa-li fa fa-leaf"></i>as bullets.pdf</li>
 		<li><i class="fa-li fa fa-leaf"></i>in lists.iso</li>
-		<li><i class="fa-li fa fa-plus-square-o"></i>Add Leafs</li>
+		<li><i class="fa-li fa fa-plus-square-o"></i>Add Leaf</li>
 	</ul>
 </div>
 
