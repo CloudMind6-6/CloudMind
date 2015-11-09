@@ -34,10 +34,9 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,_dueDate.toJSON(),
             $scope.newDes, function(_node, _node_list){
 
-
-
                 if($scope.modal_callback.updateNode)
                     $scope.modal_callback.updateNode(_node, _node_list);
+                $scope.nodes = _node_list;
 
                 $modalInstance.close({
                     name: $scope.name,
@@ -153,7 +152,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
         $scope.leafStateInModal = false;
         $scope.isEditmode = false;
-        $scope.newDes=null;
+        $scope.newDes = $scope.modalNode.description;
 
         if(!$scope.modalNode.due_date) $scope.modalNode.due_date = '2015-09-09';
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
