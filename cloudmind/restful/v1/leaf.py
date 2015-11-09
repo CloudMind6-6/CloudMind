@@ -25,10 +25,10 @@ def leaf_download(leaf_id):
     if leaf is None:
         return "Not found {}".format("Leaf")
 
-    root_node = leaf.root_node
-    if root_node is None:
+    parent_node = leaf.parent_node
+    if parent_node is None:
         return "Not found {}".format("Node")
-    if root_node.check_member(session['user_id']) is False:
+    if parent_node.check_member(session['user_id']) is False:
         return "노드멤버 아님"
 
     return send_file(leaf.file_path, as_attachment=True, attachment_filename=leaf.name, mimetype=leaf.file_type)
@@ -58,7 +58,10 @@ class LeafUpload(Resource):
         leaf.parent_node = parent_node
         db.session.add(leaf)
         db.session.commit()
-        return {"success": True}
+        return {
+            "success": True,
+            "leaf": leaf.serialize
+        }
 
 
 class LeafRemove(Resource):
