@@ -1,13 +1,16 @@
 // Scene Graph Class
 
-var scene_graph;
+var node_store = null;
+var scope = null;
+var modal = null;
+var scene_graph = null;
 
-SceneGraph = function(view)
+SceneGraph = function()
 {
-    this.node_map    = {};
-    this.node_root   = null;
-    this.node_odd    = null;
-    this.node_even   = null;
+    this.node_map   = {};
+    this.node_root  = null;
+    this.node_odd   = null;
+    this.node_even  = null;
 };
 
 SceneGraph.prototype =
@@ -64,73 +67,78 @@ SceneGraph.prototype =
 
     onEventAdd : function(node_idx)
     {
-        var root_idx = NodeStore.getNodeList()[0].root_idx;
+        var root_idx = node_store.getNodeList()[0].root_idx;
 
-        NodeStore.addNode("test", node_idx, root_idx, function(new_model)
+        node_store.addNode("테스트", node_idx, root_idx, function(new_model, model_list)
         {
-            NodeStore.setNodeList(root_idx, null, function()
+            scene_graph.appendNode(new_model);
+            scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
+
+            scene_graph.arrangeHorizontal();
+
+            for(var i = 0; i < model_list.length; ++i)
             {
-                var node_list = NodeStore.getNodeList();
+                var idx = model_list[i].node_idx;
 
-                scene_graph.appendNode(new_model);
-                scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
-
-                scene_graph.arrangeHorizontal();
-
-                for(var i = 0; i < node_list.length; ++i)
-                {
-                    var node = node_list[i];
-
-                    scene_graph_view.setNodePosition(scene_graph.node_map[node.node_idx]);
-                }
-            });
+                scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
+            }
         });
     },
 
     onEventRemove : function(node_idx)
     {
-        var root_idx = NodeStore.getNodeList()[0].root_idx;
-
-        NodeStore.removeNode(node_idx, function(remove_idx)
+        node_store.removeNode(node_idx, function(remove_idx, model_list)
         {
-            NodeStore.setNodeList(root_idx, null, function()
+            var remove_node = scene_graph.node_map[remove_idx];
+            var remove_node_array = new Array();
+
+            remove_node.getChildrenRecursive(remove_node_array);
+            remove_node_array.push(remove_node);
+
+            for(var i = 0; i < remove_node_array.length; ++i)
             {
-                var node_list = NodeStore.getNodeList();
+                scene_graph.removeNode(remove_node_array[i].model.node_idx);
+                scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
+            }
 
-                var remove_node = scene_graph.node_map[remove_idx];
-                var remove_node_array = new Array();
+            scene_graph.arrangeHorizontal();
 
-                remove_node.getChildrenRecursive(remove_node_array);
-                remove_node_array.push(remove_node);
+            for(var i = 0; i < model_list.length; ++i)
+            {
+                var idx = model_list[i].node_idx;
 
-                for(var i = 0; i < remove_node_array.length; ++i)
-                {
-                    scene_graph.removeNode(remove_node_array[i].model.node_idx);
-                    scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
-                }
-
-                scene_graph.arrangeHorizontal();
-
-                for(var i = 0; i < node_list.length; ++i)
-                {
-                    var idx = node_list[i].node_idx;
-
-                    scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-                }
-            });
+                scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
+            }
         });
     },
+
+    onEventView : function(node_idx)
+    {
+        scope.modalNode = JSON.parse(JSON.stringify( scene_graph.node_map[node_idx].model ));
+
+        modal.open
+        ({
+            templateUrl: 'tpl/modal_nodeview.html',
+            controller: 'Modal_NodeView',
+            scope: scope
+        });
+    }
 };
 
 
 
 // Angular JS Link
 
-app.controller('MindmapCtrl', ['$scope', 'NodeStore', function($scope, nodeStore)
+app.controller('MindmapCtrl', ['$scope', '$modal', 'NodeStore', function($scope, $modal, NodeStore)
 {
-    NodeStore = nodeStore;
+    scope = $scope;
 
-    var node_list = NodeStore.getNodeList();
+    node_store = NodeStore;
+
+    modal = $modal;
+    modal.callback = node_store;
+
+    var node_list = node_store.getNodeList();
 
     scene_graph = new SceneGraph();
     scene_graph_view = new SceneGraphView();
@@ -151,5 +159,4 @@ app.controller('MindmapCtrl', ['$scope', 'NodeStore', function($scope, nodeStore
 
         scene_graph_view.setNodePosition(scene_graph.node_map[node.node_idx]);
     }
-
 }]);

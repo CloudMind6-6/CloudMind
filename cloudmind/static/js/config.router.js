@@ -64,8 +64,7 @@ angular.module('app')
                   url: '/mindmap',
                   templateUrl: 'tpl/app_mindmap.html',
                   // use resolve to load other dependences
-                  resolve: load([   'js/app/mindmap/mindmap_model.js',
-                                    'js/app/mindmap/mindmap_view.js',
+                  resolve: load([   'js/app/mindmap/mindmap_view.js',
                                     'js/app/mindmap/mindmap_controller.js'])
               })
 
