@@ -121,6 +121,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.updateNode(_idx, _node_name, _dueDate, _description)
                 .success(function (res) {
                     if (res.success) {
+                        console.log(res);
                         nodeList = res.node_list;
                         callback(res.node, res.node_list);
                     }
