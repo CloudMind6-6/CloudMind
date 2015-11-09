@@ -31,7 +31,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
         var _dueDate = new Date($scope.modalNode.due_date);
 
-        NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,null,
+        NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,_dueDate.toString(),
 
             $scope.modalNode.description, function(_node, _node_list){
 
@@ -95,7 +95,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     $scope.hasLabel = function(_idx){
 
         if($scope.modalNode.labels.indexOf(_idx) == -1) {
-            console.log('없당');
             $scope.addLabelInModal(_idx);
         }
         else  $scope.removeLabelInModal(_idx);
