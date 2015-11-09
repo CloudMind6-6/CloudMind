@@ -36,14 +36,14 @@ def leaf_download(leaf_id):
 class LeafUpload(Resource):
     def post(self):
         userfile = request.files['userfile']
-        root_id = request.args.get('root_idx')
+        parent_node_id = request.args.get('node_parent_idx')
         if 'user_id' not in session:
             abort(403, message="already logged out")
 
-        root_node = db.session.query(Node).filter(Node.id == root_id).first()
-        if root_node is None:
+        parent_node = db.session.query(Node).filter(Node.id == parent_node_id).first()
+        if parent_node is None:
             abort(404, message="Not found {}".format("Node"))
-        if root_node.check_member(session['user_id']) is False:
+        if parent_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 
         name = secure_filename(userfile.filename)
@@ -54,7 +54,7 @@ class LeafUpload(Resource):
         creator = User.query.filter(User.userid == session['user_id']).first()
         leaf = Leaf(name=name, file_path=filepath)
         leaf.creator = creator
-        leaf.parent_node = root_node
+        leaf.parent_node = parent_node
         db.session.add(leaf)
         db.session.commit()
         return {"success": True}
