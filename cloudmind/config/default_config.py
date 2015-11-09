@@ -1,5 +1,4 @@
-#  -*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-
 import os.path
 import tempfile
 
@@ -9,7 +8,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(tempfile.gettempdir(), 'test.db')
 
     # Path
-    UPLOAD_DIR = ''
+    UPLOAD_DIR = os.path.abspath(os.path.dirname(__file__) + '/../..') + '/cloudmind/files'
 
     # OAuth
     OAUTH_GOOGLE_CLIENTID = ''

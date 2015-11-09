@@ -23,7 +23,7 @@ class Leaf(db.Model):
     def __init__(self, name, file_path):
         self.name = name
         self.file_path = file_path
-        self.file_type = mimetypes.guess_type(file_path)[0]
+        self.file_type = mimetypes.guess_type(name)[0]
 
     def __repr__(self):
         return '<Leaf %r>' % self.name
@@ -34,7 +34,6 @@ class Leaf(db.Model):
             'id': self.id,
             'name': self.name,
             'creation_date': self.creation_date.isoformat(),
-            'file_path': self.file_path,
             'file_type': self.file_type,
             'creator_id': self.creator_id,
             'parent_node_id': self.parent_node_id
