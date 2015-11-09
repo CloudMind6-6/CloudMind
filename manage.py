@@ -22,6 +22,7 @@ class RunCommand(Command):
     def run(self):
         app.run(host='0.0.0.0', port=8080, debug=False)
 
+
 manager.add_command('debug', DebugCommand)
 manager.add_command('run', RunCommand)
 manager.add_command('db', MigrateCommand)

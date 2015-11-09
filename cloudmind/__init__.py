@@ -7,6 +7,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from flask_mail import Mail
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
@@ -15,6 +16,8 @@ app.secret_key = 'development'
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
+
+mail = Mail(app)
 
 api = Api(apiv1)
 from cloudmind.restful.v1 import label
