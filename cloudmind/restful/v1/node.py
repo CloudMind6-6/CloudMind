@@ -3,6 +3,7 @@ from cloudmind.model.label_palette import LabelPalette
 from cloudmind.model.node import Node
 from cloudmind.model.participant import Participant
 from cloudmind.model.user import User
+import dateutil
 from flask import request
 from flask import session
 from flask_restful import abort
@@ -134,7 +135,7 @@ class NodeUpdate(Resource):
         node_id = args['node_idx']
         node_name = args['node_name']
         description = args['description']
-        due_date = args['due_date']
+        due_date = dateutil.parser.parse(args['due_date'])
         #  users = args['assigned_users']
 
         if 'user_id' not in session:
