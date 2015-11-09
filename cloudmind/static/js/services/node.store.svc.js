@@ -6,7 +6,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     var navbarCallback = null;
 
     var nodeList = [];
-    var labelPalette = [];
+    var labelPalette;
 
     return {
 
@@ -54,7 +54,13 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.getLabelpalettes(_idx)
                 .success(function (res){
                     if(res.success) {
-                        labelPalette = res.label_palette_list;
+                        var palette_list = res.label_palette_list;
+
+                        labelPalette = new Object();
+                        for(var i in palette_list){
+                            var idx = palette_list[i].palette_idx;
+                            labelPalette[idx] = palette_list[i];
+                        }
                         callback('setPalette');
                     }
                     else throw new Error;
@@ -141,7 +147,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.removeLabelpalette(_palette_id)
                 .success(function (res) {
                     nodeList = res.node_list;
-                    labelPalette = res.palette_list;
+
                     if(res.success) callback(res.node_list, res.palette_list);
                     else throw new Error;
                 })
@@ -170,7 +176,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .success(function(res){
                     if(res.success) {
                         nodeList = res.node_list;
-                        callback(_node_id, res.node_list);
+                        callback(_node_id, res.node_list, _palette_id);
                     }
                     else throw new Error;
                 })
@@ -184,7 +190,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .success(function(res){
                     if(res.success) {
                         nodeList = res.node_list;
-                        callback(_node_id, res.node_list);
+                        callback(_node_id, res.node_list, _palette_id);
                     }
                     else throw new Error;
                 })
@@ -200,77 +206,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         removeLeaf : function(){
 
         }
-
-
     };
 
-    /* Node List 수정 함수 /
-    /*
-
-    function removeNodeToList(_idx, callback){
 
 
-        if(nodeList[0].root_idx == _idx) nodeList = {};
-
-        for(var i in nodeList){
-            if( nodeList[i].parent_idx == _idx || nodeList[i].node_idx == _idx) {
-                console.log(nodeList[i]);
-                delete nodeList[i];
-            }
-        }
-        callback();
-    }
-
-    function updateNodeToList(_idx, _node_name, _dueDate, _description){
-
-        for(var i in nodeList){
-            if(nodeList[i].node_idx == _idx) {
-                console.log(nodeList[i]);
-                nodeList[i].name = _node_name;
-                nodeList[i].due_date = _dueDate;
-                nodeList[i].description = _description
-            }
-        }
-
-        nodeStoreCallback(nodeList);
-    }
-
-    function updatePaletteToList(_idx, _name, _color){
-        for(var i in labelPalette){
-            if(labelPalette[i].node_idx == _idx) {
-                console.log(nodeList[i]);
-                labelPalette[i].name = _name;
-                labelPalette[i].color = _color;
-            }
-        }
-        nodeStoreCallback(false, nodeList);
-    }
-
-    function removePaletteToList(_idx){
-        for(var i in labelPalette){
-            if(labelPalette[i].node_idx == _idx) labelPalette.slice(i , 1 );
-        }
-        nodeStoreCallback(false, nodeList);
-    }
-
-    function addLabelToNode(_node_id,_palette_id){
-
-        for(var i in nodeList){
-            if(nodeList[i].node_idx == _node_id)
-                nodeList[i].label.push(_palette_id);
-        }
-
-        nodeStoreCallback(nodeList);
-    }
-
-    function removeLabelToNode(_node_id,_palette_id, callback){
-        for(var i in nodeList){
-            if(nodeList[i].node_idx == _node_id) {
-                var idx = nodeList[i].label.indexOf(_palette_id);
-                nodeList[i].label.slice(idx,1);
-            }
-        }
-        callback(nodeList);
-    }*/
 }]);
 

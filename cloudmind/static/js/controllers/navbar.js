@@ -16,6 +16,7 @@ app.controller('DropdownCtrl', ['$scope', function ($scope) {
 
     $scope.toggleDropdown = function ($event, state) {
         if(!state) $event.stopPropagation();
+        $scope.newName='';
     };
 
     $scope.toggled = function(open){

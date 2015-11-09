@@ -26,7 +26,9 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     $scope.applyInModal = function() {
 
-        NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name, $scope.modalNode.due_date,
+        var _dueDate = new Date($scope.modalNode.due_date);
+
+        NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,$scope.modalNode.due_date,
 
             $scope.modalNode.description, function(_node, _node_list){
 
@@ -40,17 +42,14 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
             });
     };
 
-    $scope.addNodeInModal = function() {
+    $scope.addNodeInModal = function(_nodename) {
 
-        if(!$scope.modalNode.name) return;
+        if(!_nodename) return;
 
-        NodeStore.addNode($scope.modalNode.name, $scope.modalNode.parent_idx,
+        NodeStore.addNode(_nodename, $scope.modalNode.parent_idx,
             $scope.modalNode.root_idx, function(_node, _node_list){
                 if($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
-                console.log(_node);
-                console.log(_node_list);
                 $scope.clickChildNodeInModal(_node);
-                $scope.newNode_name = '';
             });
     };
 
@@ -70,34 +69,33 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
     /* label */
 
-    $scope.addLabelInModal = function() {
+    $scope.addLabelInModal = function(_idx) {
 
-        NodeStore.addLabel($scope.modalNode.node_idx, $scope.labelPalette.palette_idx,
-            function(_node_id,_palette_id,_node_list){
+        NodeStore.addLabel($scope.modalNode.node_idx, _idx,
+            function(_node_id, _node_list, _palette_id){
                 $scope.modalNode.labels.push(_palette_id);
-                if($scope.modal_callback.addLabel) $scope.modal_callback.addLabel(_node_id,_palette_id,_node_list);
+                if($scope.modal_callback.addLabel) $scope.modal_callback.addLabel(_node_id,_node_list,_palette_id);
         });
     };
 
-    $scope.removeLabelInModal = function(){
-        NodeStore.removeLabel($scope.modalNode.node_idx, $scope.labelPalette.palette_idx,
-            function(_node_id,_palette_id,_node_list){
-                // 라벨지우기!! //  json --> 맵형식으로 관리하면... 바로 지울 수 이씀
-                $scope.modalNode.labels.pop(_palette_id);
-                $scope.modal_callback.removeLabel(_node_id,_palette_id,_node_list);
+    $scope.removeLabelInModal = function(_idx){
+        NodeStore.removeLabel($scope.modalNode.node_idx, _idx,
+            function(_node_id, _node_list, _palette_id){
+                var idx = $scope.modalNode.labels.indexOf(_palette_id);
+                console.log(idx);
+                $scope.modalNode.labels.splice(idx, 1);
+                console.log($scope.modalNode.labels);
+                if($scope.modal_callback.addLabel) $scope.modal_callback.removeLabel(_node_id,_node_list,_palette_id);
             });
     };
 
     $scope.hasLabel = function(_idx){
 
-        console.log($scope.modalNode.labels);
-        console.log(_idx);
-
         if($scope.modalNode.labels.indexOf(_idx) == -1) {
             console.log('없당');
-            $scope.addLabelInModal();
+            $scope.addLabelInModal(_idx);
         }
-        else  $scope.removeLabelInModal();
+        else  $scope.removeLabelInModal(_idx);
 
     };
 
@@ -113,15 +111,17 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         $scope.newPaletteName = $scope.labelPalette[_idx].name;
     };
 
-    $scope.updateLabelPalette = function(_idx){
+    $scope.updateLabelPalette = function(_palette, _newPaletteName){
 
-        NodeStore.updateLabelPalette($scope.labelPalette[_idx].palette_idx, $scope.newPaletteName, $scope.labelPalette[_idx].color,
-            function (_palette, _palette_list) {
-                $scope.labelPalette = _palette_list;
-                if(!$scope.modal_callback.updatePalette)
-                    $scope.modal_callback.updatePalette(_palette, _palette_list);
+        NodeStore.updateLabelPalette(_palette.palette_idx, _newPaletteName, _palette.color,
+            function (_palette) {
+                $scope.labelPalette[_palette.palette_idx].name = _palette.name;
+                $scope.cancelEditPaletteMode(_palette.palette_idx);
+                $scope.modalNode.labels = $scope.modalNode.labels;
+                if($scope.modal_callback.updatePalette)
+                    $scope.modal_callback.updatePalette(_palette);
             });
-    }
+    };
 
     $scope.cancelEditPaletteMode = function(_idx){
         $scope.editPalette[_idx] = false;
@@ -146,21 +146,17 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     function init_NodeViewModal(){
 
-        $scope.editPalette = [];
+        $scope.editPalette = new Object();
+
         $scope.leafStateInModal = false;
         $scope.isEditmode = false;
 
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
-        for(var i=0;i<8; i++)
-            $scope.editPalette.push(false);
-
-
-        //if(($scope.modalNode.description==null) || ($scope.modalNode.description.length == 0))
-        //    $scope.modalNode.description = 'description';
-
+        for(var p in $scope.labelPalette){
+            $scope.editPalette[p] = false;
+        }
     }
-
 }]);
 
 app.controller('DatepickekCtrl', ['$scope', function($scope) {
