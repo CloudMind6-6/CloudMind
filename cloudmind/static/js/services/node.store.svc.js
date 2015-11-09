@@ -21,27 +21,26 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         /* Node INIT*/
 
-        setNodeStore : function(_idx, _node, callback){
+        setNodeStore : function(_idx,  callback){
 
             var isSet = {setNodeList : false, setPalette : false};
 
-            this.setNodeList(_idx, _node, function(_value){
+            this.setNodeList(_idx, null, function(_value){
                 isSet[_value] = true;
                 if(isSet.setNodeList && isSet.setPalette) callback();
             });
 
-            this.setLabelPalette(_idx, function(_value){
+            this.setLabelPalette(_idx,  function(_value){
                 isSet[_value] = true;
                 if(isSet.setNodeList && isSet.setPalette) callback();
             });
         },
 
-        setNodeList : function (_idx,_node, callback) {
+        setNodeList : function (_idx, _null, callback) {
              HttpSvc.getNodes(_idx)
              .success(function (res){
                      if(res.success) {
                          nodeList = res.node_list;
-                         //nodeList.unshift(_node);
                          callback('setNodeList');
                      }
                      else throw new Error;
@@ -79,7 +78,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.addNode(_node_name,_node_parent_idx, _node_root_idx)
                 .success(function (res){
                     if(res.success) {
-                        if(_node_parent_idx) callback(res.node);
+                        console.log(res.node);
+                        nodeList = res.node_list;
+                        if(_node_parent_idx) callback(res.node, res.node_list);
                         else callback(res.node, res.user);
                     }
                     else throw new Error;
@@ -94,7 +95,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.removeNode(_idx)
                 .success(function (res){
                     if(res.success) {
-                        callback(_idx);
+                        nodeList = res.node_list;
+                        callback(_idx, res.node_list);
                     }
                     else throw new Error;
                 })
@@ -108,6 +110,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.updateNode(_idx, _node_name, _dueDate, _description)
                 .success(function (res) {
                     if (res.success) {
+                        nodeList = res.node_list;
                         callback(res.node, res.node_list);
                     }
                     else throw new Error;
@@ -125,7 +128,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.addLabelpalette(_root_idx, _name, _color)
                 .success(function (res) {
                     if(res.success){
-                        callback(res.label_palette );
+                        callback(res.palette);
                     }
                     else throw new Error;
                 })
@@ -137,7 +140,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         removeLabelPalette : function(_palette_id, callback){ /* 라벨 팔레트 또한 지울때 모든 라벨을 삭제해줘야함 */
             HttpSvc.removeLabelpalette(_palette_id)
                 .success(function (res) {
-                    if(res.success) callback(_palette_id);
+                    nodeList = res.node_list;
+                    labelPalette = res.palette_list;
+                    if(res.success) callback(res.node_list, res.palette_list);
                     else throw new Error;
                 })
                 .error(function(err){
@@ -149,7 +154,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.updateLabelpalette(_palette_id, _name, _color)
                 .success(function (res) {
                     if(res.success){
-                        callback(res.palette, res.label_palette_list);
+                        callback(res.palette);
                     }
                     else throw new Error;
                 })
@@ -164,7 +169,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.addLabel(_node_id, _palette_id)
                 .success(function(res){
                     if(res.success) {
-                        callback(_node_id,_palette_id);
+                        nodeList = res.node_list;
+                        callback(_node_id, res.node_list);
                     }
                     else throw new Error;
                 })
@@ -177,7 +183,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.removeLabel(_node_id, _palette_id)
                 .success(function(res){
                     if(res.success) {
-                        callback(_node_id,_palette_id);
+                        nodeList = res.node_list;
+                        callback(_node_id, res.node_list);
                     }
                     else throw new Error;
                 })
@@ -192,7 +199,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         removeLeaf : function(){
 
-        },
+        }
 
 
     };

@@ -6,7 +6,13 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
 
     return{
         setUserList : function(_userList, _selectedRootIdx){
-            userList = _userList;
+
+            userList = new Object();
+
+            for(var i in _userList){
+                var idx = _userList[i].account_id;
+                userList[idx] = _userList[i];
+            }
             selectedRootIdx = _selectedRootIdx;
         },
 
@@ -29,5 +35,6 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
             // userList에만 추가하면 됨
         }
     }
+
 
 }]);

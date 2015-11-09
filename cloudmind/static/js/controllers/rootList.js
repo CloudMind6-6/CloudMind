@@ -23,8 +23,7 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
             else userList = _user;
 
             UserStore.setUserList(userList, _node.node_idx);
-            NodeStore.setNodeStore(_node.node_idx, _node, function () {
-                console.log('ok');
+            NodeStore.setNodeStore(_node.node_idx, function () {
                 $state.go('app.mindmap');
                 NodeStore.setNavbarState(true);
             });
