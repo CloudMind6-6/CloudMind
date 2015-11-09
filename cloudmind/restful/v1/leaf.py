@@ -71,7 +71,7 @@ class LeafRemove(Resource):
 
         leaf = db.session.query(Leaf).filter(Leaf.id == leaf_id).first()
         if leaf is None:
-            abort(404, message="Not found {}".format("Node"))
+            abort(404, message="Not found {}".format("Leaf"))
 
         root_node = leaf.root_node
         if root_node is None:
