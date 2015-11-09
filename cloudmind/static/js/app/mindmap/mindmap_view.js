@@ -218,7 +218,7 @@ SceneGraphView.prototype =
                 label:"mindmap_root_label",
                 menu:"mindmap_root_menu",
                 menu_add:"fa fa-3x fa-plus-square",
-                menu_remove:"fa fa-3x fa-trash-o",
+                menu_remove:"fa fa-3x fa-minus-square",
                 menu_view:"fa fa-5x fa-file-text",
                 link:"mindmap_root_link",
                 portrait:"mindmap_root_portrait"
@@ -230,7 +230,7 @@ SceneGraphView.prototype =
                 label:"mindmap_node_label",
                 menu:"mindmap_node_menu",
                 menu_add:"fa fa-lg fa-plus-square",
-                menu_remove:"fa fa-lg fa-trash-o",
+                menu_remove:"fa fa-lg fa-minus-square",
                 menu_view:"fa fa-2x fa-file-text",
                 link:"mindmap_node_link",
                 portrait:"mindmap_node_portrait"
@@ -251,13 +251,11 @@ SceneGraphView.prototype =
 
         var ul_node_label_container = div_node_info.append('ul').attr("class", "nav navbar-nav");
 
-        for(var j = 0; j < model.labels.length; ++j)
+        for(var i = 0; i < model.labels.length; ++i)
         {
-            var label = model.labels[j];
-
             ul_node_label_container.append('li')
                 .attr("class", class_map[node.type].label)
-                .style("background-color", label_palette[label].color);
+                .style("background-color", node_store.getLabelPalette()[model.labels[i]].color);
         }
 
         div_node_info.append('div')
@@ -267,13 +265,15 @@ SceneGraphView.prototype =
         var div_node_assigned_container = div_node_info.append('div')
             .attr("class", "assigned");
 
-        for(var j = 0; j < model.assigned_users.length; ++j)
+        for(var i = 0; i < model.assigned_users.length; ++i)
         {
+            var user = user_store.syncUserList()[model.assigned_users[i]];
+
             div_node_assigned_container
                 .append('span')
                 .attr("class", "thumb-xxxs avatar-pl " + class_map[node.type].portrait)
                 .append('img')
-                .attr("src", "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg")
+                .attr("src", user.profile_url)
         }
 
 

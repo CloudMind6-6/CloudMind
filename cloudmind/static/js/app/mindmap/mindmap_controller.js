@@ -1,6 +1,7 @@
 // Scene Graph Class
 
 var node_store = null;
+var user_store = null;
 var scope = null;
 var modal = null;
 var scene_graph = null;
@@ -129,16 +130,33 @@ SceneGraph.prototype =
 
 // Angular JS Link
 
-app.controller('MindmapCtrl', ['$scope', '$modal', 'NodeStore', function($scope, $modal, NodeStore)
+app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', function($scope, $modal, UserStore, NodeStore)
 {
     scope = $scope;
 
+    user_store = UserStore;
     node_store = NodeStore;
 
     modal = $modal;
-    modal.callback = node_store;
+    modal.callback =
+    {
+        addNode : null,
+        updateNode : null,
+
+        addLabel : null,
+        removeLabel : null,
+
+        addLeaf : null,
+        removeLeaf : null,
+
+        addPalette : null,
+        removePalette : null,
+        updatePalette : null,
+    };
 
     var node_list = node_store.getNodeList();
+
+    console.log(node_store.getLabelPalette());
 
     scene_graph = new SceneGraph();
     scene_graph_view = new SceneGraphView();
