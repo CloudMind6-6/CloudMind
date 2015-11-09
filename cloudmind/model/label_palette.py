@@ -5,7 +5,7 @@ class LabelPalette(db.Model):
     __tablename__ = 'label_palette'
     id = db.Column(db.Integer, primary_key=True)
     color = db.Column(db.Integer)
-    name = db.Column(db.String(20))
+    name = db.Column(db.String(20), default='')
     root_node_id = db.Column(db.Integer, db.ForeignKey('node.id'))
     # relationship
     root_node = db.relationship('Node')

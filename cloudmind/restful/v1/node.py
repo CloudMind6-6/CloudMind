@@ -1,4 +1,5 @@
 from cloudmind import db
+from cloudmind.model.label_palette import LabelPalette
 from cloudmind.model.node import Node
 from cloudmind.model.participant import Participant
 from cloudmind.model.user import User
@@ -67,14 +68,29 @@ class NodeAdd(Resource):
         db.session.add(node)
         db.session.commit()
 
-        # 루트노드 일 경우에만 맴버로 등록
+        # 루트노드 일 경우에만 맴버로 등록 후 기본 팔레트 추가
         if root_id is None:
             participant = Participant(is_accepted=True)
             participant.own_node = node
             participant.user = creator
             participant.from_user = creator
             db.session.add(participant)
-        db.session.commit()
+            db.session.commit()
+
+            colors = [
+                0x61bd4f,
+                0xf2d600,
+                0xffab4a,
+                0xeb5a46,
+                0xc377e0,
+                0x0079bf,
+                0xff80ce,
+                0x4d4d4d
+            ]
+            for color in colors:
+                palette = LabelPalette(root_node_id=node.id, color=color)
+                db.session.add(palette)
+                db.session.commit()
 
         nodes = db.session.query(Node).filter(Node.root_node_id == root_id).all()
         return {
