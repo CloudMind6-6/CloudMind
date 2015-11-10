@@ -214,6 +214,20 @@ a:hover .caret-white {
   border-color: #cfdadd;
 }
 
+.list-modal{
+  display: inline;
+  list-style:none;
+  margin-right: 7px;
+}
+.ul-modal{
+  overflow-y : hidden ;
+}
+.close-modal{
+  top: 4px;
+  left: 550px;
+  position: absolute;
+}
+
 .list-group {
   border-radius: 2px;
 }
@@ -4080,9 +4094,18 @@ a.text-#000000:hover {
   padding-left: 15px;
 }
 
+.padder-r {
+  padding-right: 15px;
+}
+
 .padder-v {
   padding-top: 15px;
   padding-bottom: 15px;
+}
+
+.padder-list{
+  padding-left: 5px;
+  padding-top: 10px;
 }
 
 .no-padder {
@@ -4351,7 +4374,7 @@ a.text-#000000:hover {
 }
 
 .m-l-n-xxs {
-  margin-left: -2px;
+  margin-left: -3px;
 }
 
 .m-l-n-xs {
@@ -4730,6 +4753,10 @@ a.text-#000000:hover {
   width: 90px;
 }
 
+.w-xsm {
+  width: 110px;
+}
+
 .w-sm {
   width: 150px;
 }
@@ -4770,6 +4797,9 @@ a.text-#000000:hover {
   height: 100%;
 }
 
+.dis-inline {
+  display: inline-block;
+}
 .thumb-xlg {
   display: inline-block;
   width: 200px;
@@ -4802,7 +4832,7 @@ a.text-#000000:hover {
 
 .thumb-sm {
   display: inline-block;
-  width: 45px;
+  width: 42px;
 }
 
 .thumb-xs {
@@ -4919,6 +4949,12 @@ a.text-#000000:hover {
   filter: alpha(opacity=80);
 }
 
+.node_title {
+  font-size: 24px;
+  font-weight: bold;
+  max-width: 100px;
+  overflow-x : hidden;
+}
 /*desktop*/
 
 @media screen and (min-width: 992px) {

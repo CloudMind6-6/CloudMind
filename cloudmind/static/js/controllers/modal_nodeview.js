@@ -1,5 +1,5 @@
 
-app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', function( $scope, $modalInstance, NodeStore){
+app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'UserStore', function( $scope, $modalInstance, NodeStore, UserStore){
 
     init_NodeViewModal();
 
@@ -139,16 +139,18 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     function init_NodeViewModal(){
 
         $scope.editPalette = new Object();
-        $scope.isEditmode = false;
-        $scope.newDes = $scope.modalNode.description;
-        $scope.newLeaf = null;
+        $scope.isEditmode  = false;
+        $scope.newDes      = $scope.modalNode.description;
+        $scope.newLeaf     = null;
 
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
+
         $scope.labelPalette = NodeStore.getLabelPalette();
+        $scope.users = UserStore.syncUserList();
     }
 }]);
 
