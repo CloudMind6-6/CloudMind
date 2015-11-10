@@ -164,15 +164,19 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             },
 
             /* 수정해야함!!!!!!!!! */
-            uploadLeaf: function (_node_idx, _palette_idx) {
-                return $http({
-                    url: urlBase + '/label/remove',
-                    method: "POST",
-                    data: {
-                        node_idx: _node_idx,
-                        palette_idx: _palette_idx
-                    }
+            uploadLeaf: function (_file, _node_idx, callback) {
+                var fd = new FormData();
+                fd.append('userfile' , _file);
+                fd.append('node_parent_idx' , _node_idx);
+
+                return $http.post(urlBase + '/leaf/upload', fd, {
+                    headers: {'Content-Type': undefined}
+                })
+                .success(function(res){
+                    callback(res);
                 });
+                
+                
             },
 
             downloadLeaf: function (_node_idx, _palette_idx) {
