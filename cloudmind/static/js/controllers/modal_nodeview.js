@@ -1,24 +1,6 @@
 
 app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', function( $scope, $modalInstance, NodeStore){
 
-
-    var static_date;
-/*
-    $scope.modal_callback = {
-        addNode : null,
-        updateNode : null,
-
-        addLabel : null,
-        removeLabel : null,
-
-        addLeaf : null,
-        removeLeaf : null,
-
-        addPalette : null,
-        removePalette : null,
-        updatePalette : null
-    };
-*/
     init_NodeViewModal();
 
     $scope.cancel = function() {
@@ -49,8 +31,11 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
         if(!_nodename) return;
 
+        $scope.modal_callback.addNode();
+
         NodeStore.addNode(_nodename, $scope.modalNode.parent_idx,
-            $scope.modalNode.root_idx, function(_node, _node_list){
+            $scope.modalNode.root_idx, function(_node, _node_list
+            ){
                 if($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
                 $scope.clickChildNodeInModal(_node);
             });
@@ -80,6 +65,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
         NodeStore.addLabel($scope.modalNode.node_idx, _idx,
             function(_node_id, _node_list, _palette_id){
+                console.log('test label modal');
                 $scope.modalNode.labels.push(_palette_id);
                 if($scope.modal_callback.addLabel) $scope.modal_callback.addLabel(_node_id,_node_list,_palette_id);
         });
@@ -135,8 +121,9 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     $scope.addLeafInModal = function(){
         $scope.leafStateInModal = true;
-        // NodeStore.uploadLeaf();
-
+        NodeStore.addLeaf($scope.myFile, $scope.modalNode.node_idx , function(res) {
+            console.log(res);
+        });
     };
 
     $scope.removeLeafInModal = function(_idx){
@@ -144,13 +131,13 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
 
     $scope.downloadLeafInModal = function(_idx){
-
         //해당 경로 다운로드 요청
         //$scope.selectedNode.leafs[_idx].file_path
-
     };
 
     function init_NodeViewModal(){
+
+        console.log('test');
 
         $scope.editPalette = new Object();
 
@@ -164,9 +151,8 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
-
         $scope.labelPalette = NodeStore.getLabelPalette();
-
+        
     }
 }]);
 

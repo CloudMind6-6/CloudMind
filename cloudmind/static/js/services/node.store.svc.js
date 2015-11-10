@@ -121,9 +121,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.updateNode(_idx, _node_name, _dueDate, _description)
                 .success(function (res) {
                     if (res.success) {
-                        console.log(res);
                         nodeList = res.node_list;
-                        callback(res.node, res.node_list);
+                        callback(_idx, res.node_list);
                     }
                     else throw new Error;
                 })
@@ -218,8 +217,18 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 });
         },
 
-        addLeaf : function(){
-
+        addLeaf : function(file, _node_idx){
+            HttpSvc.uploadLeaf(file, _node_idx )
+                .success(function(res){
+                    console.log(res)
+                    if(res) {
+                        callback(_node_id);
+                    }
+                    else throw new Error;
+                })
+            .error(function(err){
+                console.log(err);
+            });
         },
 
         removeLeaf : function(){

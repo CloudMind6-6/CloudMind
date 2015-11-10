@@ -9,6 +9,25 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
 
     $scope.events = [];
 
+    $scope.modal_callback = {
+        addNode : function(){
+            console.log('test add node');
+        },
+        updateNode : null,
+
+        addLabel : function(){
+            console.log('test add label');
+        },
+        removeLabel : null,
+
+        addLeaf : null,
+        removeLeaf : null,
+
+        addPalette : null,
+        removePalette : null,
+        updatePalette : null
+    };
+
     initCalendar();
 
     function initCalendar(){
@@ -73,13 +92,14 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
     }
 
     $scope.updateDuedate = function (event, delta, revertFunc, jsEvent, ui, view) {
-        NodeStore.updateNode(event.node_idx, event.name, event.start.format(), event.info, function(_node){
-            if(!_node) {
+
+        NodeStore.updateNode(event.node_idx, event.title, event.start.format(), event.info, function (_idx, _node_list) {
+            if (!_node_list) {
                 revertFunc();
                 return;
             }
-            $scope.nodes[event.node_idx].due_date = _node.due_date;
-            console.log($scope.nodes[event.node_idx]);
+            $scope.nodes[event.idx].due_date = event.start.format();
+            console.log($scope.nodes[event.idx]);
         });
     };
 
