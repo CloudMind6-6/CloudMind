@@ -204,8 +204,18 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 });
         },
 
-        addLeaf : function(){
-
+        addLeaf : function(file, _node_idx){
+            HttpSvc.uploadLeaf(file, _node_idx )
+                .success(function(res){
+                    console.log(res)
+                    if(res) {
+                        callback(_node_id);
+                    }
+                    else throw new Error;
+                })
+            .error(function(err){
+                console.log(err);
+            });
         },
 
         removeLeaf : function(){
