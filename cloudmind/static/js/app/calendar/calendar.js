@@ -9,6 +9,25 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
 
     $scope.events = [];
 
+    $scope.modal_callback = {
+        addNode : function(){
+            console.log('test add node');
+        },
+        updateNode : null,
+
+        addLabel : function(){
+            console.log('test add label');
+        },
+        removeLabel : null,
+
+        addLeaf : null,
+        removeLeaf : null,
+
+        addPalette : null,
+        removePalette : null,
+        updatePalette : null
+    };
+
     initCalendar();
 
     function initCalendar(){
