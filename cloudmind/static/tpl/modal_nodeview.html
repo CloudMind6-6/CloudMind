@@ -56,6 +56,9 @@
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
 					<hr class="m-b-sm m-t-sm hr-color">
+					<div ng-repeat="user in modalNode.assigned_users">
+						<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
+					</div>
 					<input class="form-control m-t-s" type="text" ng-model="keyword" />
 				</span>
 			</div>
@@ -129,17 +132,15 @@
 	</div>
 </div>
 <hr class="m-b-sm m-t-sm hr-color">
-<div class="view_leafs" style="position: relative; padding-left : 15px; margin-bottom : 40px">
+<div class="view_leafs m-l-md m-b-sm" style="position: relative;">
 	<h3>Leafs</h3>
-	<div class="fa-ul" ng-repeat="leaf in modalNode.leafs track by $index">
-		<span ng-click="downloadLeafInModal(leaf.id)" ><i class="fa fa-leaf"></i>{{leaf.name}}</span>
+	<div class="m-b-xs" ng-repeat="leaf in modalNode.leafs track by $index">
+		<span ng-click="downloadLeafInModal(leaf.id)" ><i class="fa fa-leaf m-r-xs"></i>{{leaf.name}}</span>
 	</div>
-	<span>
-		<i class="fa-li fa fa-plus-square-o"></i>
-		<input style="font-size: 12px" type="file" id="leafName" file-model="newLeaf"/>
-		<button class="btn btn-primary" ng-click="addLeafInModal()">Leaf Upload</button>
+	<span style="width:250px; float: left">
+		<input class="text-base" type="file" id="leafName" file-model="newLeaf"/>
 	</span>
-
+	<button class="btn btn-modal btn-info no-padder" ng-click="addLeafInModal()">upload</button>
 </div>
 <div class="modal-footer" style="margin-top: 40px">
     <button class="btn btn-primary" ng-click="applyInModal(newDes)">Apply</button>

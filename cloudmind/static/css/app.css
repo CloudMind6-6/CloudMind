@@ -11,7 +11,7 @@ body {
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   line-height: 1.42857143;
-  color: #FFFFFF;
+  color: #58666e;
   background-color: transparent;
 }
 
@@ -865,6 +865,7 @@ body {
 }
 
 .navbar {
+  color: white;
   margin: 0;
   border-width: 0;
   border-radius: 0;
@@ -903,8 +904,8 @@ body {
   text-decoration: none;
   background-color: transparent;
   border: none;
+  color: white;
 }
-
 .navbar-brand {
   display: inline-block;
   float: none;
@@ -914,9 +915,11 @@ body {
   font-size: 20px;
   font-weight: 700;
   line-height: 50px;
+  color: white;
 }
 
 .navbar-brand:hover {
+  color: white;
   text-decoration: none;
 }
 
@@ -925,6 +928,7 @@ body {
   max-height: 20px;
   margin-top: -4px;
   vertical-align: middle;
+  color: white;
 }
 
 html.bg {
@@ -936,6 +940,10 @@ html.bg {
 .app.container {
   padding-right: 0;
   padding-left: 0;
+}
+
+.modal-color{
+  color: rgba(0, 0, 0, 0.45);
 }
 
 @media (min-width: 768px) {
@@ -1582,6 +1590,13 @@ html.bg {
 .arrow.pull-down {
   top: auto;
   bottom: 19px;
+}
+
+.btn-modal{
+  width: 50px;
+  height: 25px;
+  display: inline-block;
+
 }
 
 .btn {
@@ -2309,6 +2324,10 @@ fieldset[disabled] .btn-black.active {
   margin-right: -8.5em;
   margin-left: 0;
   text-align: left;
+}
+
+.file-upload{
+  width: 30px;
 }
 
 .i-switch {

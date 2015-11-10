@@ -41,7 +41,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
                 idx: count++,
                 node_idx: value.node_idx,
                 title: value.name,
-                start: value.due_date,
+                start: value.due_date.substring(0,10),
                 info: value.description
             });
         });
@@ -117,23 +117,6 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
             eventResize: $scope.alertOnResize,
             eventMouseover: $scope.alertOnMouseOver
         }
-    };
-
-    /* add custom event*/
-    $scope.addEvent = function () {
-        // 노드를 추가하는 화면 호출을 구현해야 함
-        var count = 0;
-        for (var k in $scope.events) {
-            ++count;
-        }
-
-        $scope.events.push({
-            idx: count,
-            title: 'New Event',
-            start: new Date(y, m, d),
-            className: ['b-l b-2x b-info'], location: 'New York',
-            // info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'
-        });
     };
 
     /* Change View */
