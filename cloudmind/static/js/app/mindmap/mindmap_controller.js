@@ -40,6 +40,9 @@ SceneGraph.prototype =
         {
             if(model.parent_idx == model.root_idx)
             {
+                console.log("odd : " + this.node_odd.bounding_height);
+                console.log("even : " + this.node_even.bounding_height);
+
                 if(this.node_odd.bounding_height <= this.node_even.bounding_height)
                     this.node_odd.attachChild(node_new);
                 else
@@ -62,6 +65,9 @@ SceneGraph.prototype =
 
     arrangeHorizontal : function()
     {
+        this.node_odd.x = -this.node_root.width/2;
+        this.node_even.x = this.node_root.width/2;
+
         this.node_odd.arrangeHorizontal();
         this.node_even.arrangeHorizontal();
     },

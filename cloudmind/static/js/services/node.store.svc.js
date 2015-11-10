@@ -217,12 +217,12 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 });
         },
 
-        addLeaf : function(file, _node_idx){
-            HttpSvc.uploadLeaf(file, _node_idx )
+        addLeaf : function(file, _node_idx, callback){
+            HttpSvc.uploadLeaf(file, _node_idx, callback)
                 .success(function(res){
-                    console.log(res)
-                    if(res) {
-                        callback(_node_id);
+                    console.log(res);
+                    if(res.success) {
+                        callback(_node_idx, res.leaf);
                     }
                     else throw new Error;
                 })
@@ -235,8 +235,5 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         }
     };
-
-
-
 }]);
 

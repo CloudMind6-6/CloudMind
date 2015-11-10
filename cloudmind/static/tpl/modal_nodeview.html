@@ -175,18 +175,17 @@
 <hr class="m-b-sm m-t-sm hr-color">
 <div class="view_leafs" style="position: relative; padding-left : 15px; margin-bottom : 40px">
 	<h3>Leafs</h3>
-	<ul class="fa-ul">
-		<li><i class="fa-li fa fa-leaf" ng-click="downloadLeafInModal($index)"></i>List icons.jpg</li>
-		<li><i class="fa-li fa fa-leaf"></i>can be used.exe</li>
-		<li><i class="fa-li fa fa-leaf"></i>as bullets.pdf</li>
-		<li><i class="fa-li fa fa-leaf"></i>in lists.iso</li>
-		<li><i class="fa-li fa fa-plus-square-o"></i>
-			<input style="font-size: 12px" type="file" file-model="myFile"/>
-		</li>
-	</ul>
-</div>
+	<div class="fa-ul" ng-repeat="label in modalNode.labels track by $index">
+		<span  ng-click="downloadLeafInModal($index)"" ><i class="fa-li fa fa-leaf"></i>{{label.name}}</span>
 
+	</div>
+	<span>
+		<i class="fa-li fa fa-plus-square-o"></i>
+		<input style="font-size: 12px" type="file" id="leafName" onchange="angular.element(this).scope().fileChanged()" file-model="newLeaf"/>
+		<button class="btn btn-primary" ng-click="addLeafInModal()">Leaf Upload</button>
+	</span>
+
+</div>
 <div class="modal-footer" style="margin-top: 40px">
-	<button style="float:left; margin:0" class="btn btn-primary" ng-click="addLeafInModal()">Leaf Upload</button>
     <button class="btn btn-primary" ng-click="applyInModal(newDes)">Apply</button>
 </div>
