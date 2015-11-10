@@ -29,30 +29,41 @@ SceneGraphNode = function(model)
     this.x = 0;
     this.y = 0;
 
-    if(model == null || model.node_idx == model.root_idx)
+    if(model == null)
     {
-        this.width  = scene_graph_form.root_width;
-        this.height = scene_graph_form.root_height;
+        this.width  = 0;
+        this.height = 0;
 
-        this.type = 'root';
+        this.type = 'null';
     }
     else
     {
-        if (model.leafs.node_idx)
+        if(model.node_idx == model.root_idx)
         {
-            this.width = scene_graph_form.leaf_width;
-            this.height = scene_graph_form.leaf_height;
+            this.width  = scene_graph_form.root_width;
+            this.height = scene_graph_form.root_height;
 
-            this.type = 'leaf';
+            this.type = 'root';
         }
         else
         {
-            this.width = scene_graph_form.node_width;
-            this.height = scene_graph_form.node_height;
+            if (model.leafs.node_idx)
+            {
+                this.width = scene_graph_form.leaf_width;
+                this.height = scene_graph_form.leaf_height;
 
-            this.type = 'node';
+                this.type = 'leaf';
+            }
+            else
+            {
+                this.width = scene_graph_form.node_width;
+                this.height = scene_graph_form.node_height;
+
+                this.type = 'node';
+            }
         }
     }
+
 
     this.bounding_width  = this.width  + scene_graph_form.margin_x;
     this.bounding_height = this.height + scene_graph_form.margin_y;
