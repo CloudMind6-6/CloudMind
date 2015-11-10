@@ -1,5 +1,6 @@
 from cloudmind import db
 import datetime
+from flask import url_for
 
 
 class User(db.Model):
@@ -31,5 +32,5 @@ class User(db.Model):
             'account_id': self.id,
             'name': self.name,
             'email': self.email,
-            'profile_url': self.picture
+            'profile_url': url_for('.profile_download', user_id=self.id)
         }

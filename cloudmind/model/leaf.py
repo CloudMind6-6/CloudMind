@@ -1,6 +1,6 @@
 from cloudmind import db
 import datetime
-import mimetypes
+import magic
 
 
 class Leaf(db.Model):
@@ -23,7 +23,8 @@ class Leaf(db.Model):
     def __init__(self, name, file_path):
         self.name = name
         self.file_path = file_path
-        self.file_type = mimetypes.guess_type(name)[0]
+
+        self.file_type = magic.from_file(file_path, mime=True).decode('utf-8')
 
     def __repr__(self):
         return '<Leaf %r>' % self.name

@@ -47,7 +47,7 @@ class LeafUpload(Resource):
         if parent_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 
-        name = secure_filename(userfile.filename)
+        name = userfile.filename
         filename = secure_filename(str(int(time.time() * 1000))+'_'+uuid.uuid4().hex)
         filepath = os.path.join(current_app.config['UPLOAD_DIR'], filename)
         userfile.save(filepath)
