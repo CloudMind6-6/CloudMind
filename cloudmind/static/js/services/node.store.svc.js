@@ -220,9 +220,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         addLeaf : function(file, _node_idx, callback){
             HttpSvc.uploadLeaf(file, _node_idx, callback)
                 .success(function(res){
-                    console.log(res);
                     if(res.success) {
-                        console.log(res);
                         callback(_node_idx, res.leaf, res.node_list);
                     }
                     else throw new Error;

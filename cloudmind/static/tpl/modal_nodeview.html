@@ -48,17 +48,16 @@
 	<span ng-controller="DropdownCtrl" class="dropdown" o dropdown>
 		<a href class="dropdown-toggle" dropdown-toggle>
 			<span class="thumb-md avatar m-b-xs m-t">
-			<span class="panel-circle wrapper-xs-circle m-r-xs" ng-click="addParticipantInModal()">+</span>
+			<span class="panel-circle wrapper-xs-circle m-r-xs">+</span>
 			</span>
 		</a>
 		<div class="dropdown-menu m-t-s w" >
 			<div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
-					<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
+					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
 					<hr class="m-b-sm m-t-sm hr-color">
-					<input class="form-control m-t-s" type="text" ng-model="newName" />
+					<input class="form-control m-t-s" type="text" ng-model="keyword" />
 				</span>
-				<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click=" addNodeInModal(newName); toggleDropdown($event, true);"> Add new node </button>
 			</div>
 		</div>
 	</span>
