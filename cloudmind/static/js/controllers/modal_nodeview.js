@@ -118,7 +118,8 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
         console.log($scope.newLeaf);
         NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx , function(_node_idx, _leaf) {
             console.log(_node_idx, _leaf);
-            $scope.modalNode.labels.push(_leaf);
+            var file_idx = _leaf.idx;
+            $scope.modalNode.leafs.push(_leaf);
         });
     };
 
@@ -127,8 +128,9 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
     };
 
     $scope.downloadLeafInModal = function(_idx){
-        //해당 경로 다운로드 요청
-        //$scope.selectedNode.leafs[_idx].file_path
+        var URL = "/api/v1/leaf/" + _idx;
+        window.open(URL,'_blank');
+        return URL + _idx;
     };
 
     $scope.fileChanged = function(){
