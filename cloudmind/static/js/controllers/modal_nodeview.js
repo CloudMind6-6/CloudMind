@@ -83,7 +83,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
             $scope.addLabelInModal(_idx);
         }
         else  $scope.removeLabelInModal(_idx);
-
     };
 
     /* Participant */
@@ -93,11 +92,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
     };
 
     /* label palette */
-    $scope.editPaletteMode = function(_idx){
-        $scope.editPalette[_idx] = true;
-        $scope.newPaletteName = $scope.labelPalette[_idx].name;
-    };
-
     $scope.updateLabelPalette = function(_palette, _newPaletteName){
 
         NodeStore.updateLabelPalette(_palette.palette_idx, _newPaletteName, _palette.color,
@@ -105,9 +99,15 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
                 $scope.labelPalette[_palette.palette_idx].name = _palette.name;
                 $scope.cancelEditPaletteMode(_palette.palette_idx);
                 $scope.modalNode.labels = $scope.modalNode.labels;
+
                 if($scope.modal_callback.updatePalette)
                     $scope.modal_callback.updatePalette(_palette);
             });
+    };
+
+    $scope.editPaletteMode = function(_idx){
+        $scope.editPalette[_idx] = true;
+        $scope.newPaletteName = $scope.labelPalette[_idx].name;
     };
 
     $scope.cancelEditPaletteMode = function(_idx){
@@ -115,7 +115,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
     };
 
     $scope.addLeafInModal = function(){
-        console.log($scope.newLeaf);
+
         NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx , function(_node_idx, _leaf) {
             console.log(_node_idx, _leaf);
             var file_idx = _leaf.idx;
@@ -131,11 +131,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
         var URL = "/api/v1/leaf/" + _idx;
         window.open(URL,'_blank');
         return URL + _idx;
-    };
-
-    $scope.fileChanged = function(){
-        var filename = document.getElementById('leafName').value;
-        console.log(filename);
     };
 
     function init_NodeViewModal(){
