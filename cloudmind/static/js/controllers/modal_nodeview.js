@@ -132,7 +132,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     $scope.addLeafInModal = function(){
         $scope.leafStateInModal = true;
         // NodeStore.uploadLeaf();
-
     };
 
     $scope.removeLeafInModal = function(_idx){
@@ -140,10 +139,8 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
 
     $scope.downloadLeafInModal = function(_idx){
-
         //해당 경로 다운로드 요청
         //$scope.selectedNode.leafs[_idx].file_path
-
     };
 
     function init_NodeViewModal(){
@@ -160,9 +157,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
-
         $scope.labelPalette = NodeStore.getLabelPalette();
-
     }
 }]);
 
