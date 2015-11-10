@@ -53,7 +53,8 @@ class Profile(Resource):
         user.name = name
         db.session.commit()
         return {
-            'success': True
+            'success': True,
+            'profile': user.serialize
         }
 
 
@@ -78,7 +79,8 @@ class ProfileUpload(Resource):
         db.session.commit()
 
         return {
-            'success': True
+            'success': True,
+            'profile': user.serialize
         }
 
 
@@ -93,4 +95,3 @@ class ProfileSearch(Resource):
             'success': True,
             'profile': user.serialize
         }
-        return {}

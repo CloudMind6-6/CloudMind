@@ -58,9 +58,11 @@ class LeafUpload(Resource):
         leaf.parent_node = parent_node
         db.session.add(leaf)
         db.session.commit()
+
+        nodes = db.session.query(Node).filter(Node.root_node_id == parent_node.root_node_id).all()
         return {
             "success": True,
-            "leaf": leaf.serialize
+            'node_list': [i.serialize for i in nodes]
         }
 
 
