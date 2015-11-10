@@ -222,7 +222,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .success(function(res){
                     console.log(res);
                     if(res.success) {
-                        callback(_node_idx, res.leaf);
+                        console.log(res);
+                        callback(_node_idx, res.leaf, res.node_list);
                     }
                     else throw new Error;
                 })

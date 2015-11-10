@@ -133,12 +133,11 @@
 <div class="view_leafs" style="position: relative; padding-left : 15px; margin-bottom : 40px">
 	<h3>Leafs</h3>
 	<div class="fa-ul" ng-repeat="leaf in modalNode.leafs track by $index">
-		<span ng-click="downloadLeafInModal({{leaf.id}})" ><i class="fa-li fa fa-leaf"></i>{{leaf.name}}</span>
-
+		<span ng-click="downloadLeafInModal(leaf.id)" ><i class="fa fa-leaf"></i>{{leaf.name}}</span>
 	</div>
 	<span>
 		<i class="fa-li fa fa-plus-square-o"></i>
-		<input style="font-size: 12px" type="file" id="leafName" onchange="angular.element(this).scope().fileChanged()" file-model="newLeaf"/>
+		<input style="font-size: 12px" type="file" id="leafName" file-model="newLeaf"/>
 		<button class="btn btn-primary" ng-click="addLeafInModal()">Leaf Upload</button>
 	</span>
 

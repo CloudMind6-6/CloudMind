@@ -116,10 +116,9 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
 
     $scope.addLeafInModal = function(){
 
-        NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx , function(_node_idx, _leaf) {
-            console.log(_node_idx, _leaf);
-            var file_idx = _leaf.idx;
+        NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx , function(_node_idx, _leaf,_node_list) {
             $scope.modalNode.leafs.push(_leaf);
+            console.log(_leaf);
         });
     };
 
