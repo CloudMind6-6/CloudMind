@@ -3,7 +3,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
 
     var static_date;
-
+/*
     $scope.modal_callback = {
         addNode : null,
         updateNode : null,
@@ -18,7 +18,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         removePalette : null,
         updatePalette : null
     };
-
+*/
     init_NodeViewModal();
 
     $scope.cancel = function() {
@@ -73,6 +73,10 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     /* label */
 
     $scope.addLabelInModal = function(_idx) {
+        console.log("scope : ");
+        console.log($scope);
+        console.log("modalInst : ");
+        console.log($modalInstance);
 
         NodeStore.addLabel($scope.modalNode.node_idx, _idx,
             function(_node_id, _node_list, _palette_id){

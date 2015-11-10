@@ -134,6 +134,19 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             );
         },
 
+        getNode : function(_idx)
+        {
+            for(var i = 0; i < nodeList.length; ++i)
+            {
+                var node = nodeList[i];
+
+                if(_idx == node.node_idx)
+                    return node;
+            }
+
+            return null;
+        },
+
         /* Palette */
         addLabelPalette : function(_root_idx, _name, _color, callback){
 

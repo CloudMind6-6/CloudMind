@@ -204,77 +204,56 @@ SceneGraphView = function()
     this.div_node_info_map = {};
     this.div_node_menu_map = {};
     this.svg_node_link_map = {};
+
+    this.class_map =
+   {
+        root:
+        {
+            node:"mindmap_root_info",
+            label:"mindmap_root_label",
+            menu:"mindmap_root_menu",
+            menu_add:"fa fa-3x fa-plus-square",
+            menu_remove:"fa fa-3x fa-minus-square",
+            menu_view:"fa fa-5x fa-file-text",
+            link:"mindmap_root_link",
+            portrait:"mindmap_root_portrait"
+        },
+
+        node:
+        {
+            node:"mindmap_node_info",
+            label:"mindmap_node_label",
+            menu:"mindmap_node_menu",
+            menu_add:"fa fa-lg fa-plus-square",
+            menu_remove:"fa fa-lg fa-minus-square",
+            menu_view:"fa fa-2x fa-file-text",
+            link:"mindmap_node_link",
+            portrait:"mindmap_node_portrait"
+        },
+    };
 }
 
 SceneGraphView.prototype =
 {
     appendNode : function(node)
     {
-        var class_map =
-        {
-            root:
-            {
-                node:"mindmap_root_info",
-                label:"mindmap_root_label",
-                menu:"mindmap_root_menu",
-                menu_add:"fa fa-3x fa-plus-square",
-                menu_remove:"fa fa-3x fa-minus-square",
-                menu_view:"fa fa-5x fa-file-text",
-                link:"mindmap_root_link",
-                portrait:"mindmap_root_portrait"
-            },
-
-            node:
-            {
-                node:"mindmap_node_info",
-                label:"mindmap_node_label",
-                menu:"mindmap_node_menu",
-                menu_add:"fa fa-lg fa-plus-square",
-                menu_remove:"fa fa-lg fa-minus-square",
-                menu_view:"fa fa-2x fa-file-text",
-                link:"mindmap_node_link",
-                portrait:"mindmap_node_portrait"
-            },
-        };
-
         var model = node.model;
+        var class_info = this.class_map[node.type];
+
 
 
         // Info
 
         var div_node_info = this.canvas_node.append('div');
 
-        div_node_info.attr("class", class_map[node.type].node)
+        this.div_node_info_map[model.node_idx] = div_node_info;
+
+        div_node_info.attr("class", class_info.node)
             .attr("idx", model.node_idx)
             .style("left", this.center_x + node.x - node.width/2 + "px")
             .style("top", this.center_y + node.y - node.height/2 + "px")
 
-        var ul_node_label_container = div_node_info.append('ul').attr("class", "nav navbar-nav");
-
-        for(var i = 0; i < model.labels.length; ++i)
-        {
-            ul_node_label_container.append('li')
-                .attr("class", class_map[node.type].label)
-                .style("background-color", node_store.getLabelPalette()[model.labels[i]].color);
-        }
-
-        div_node_info.append('div')
-            .attr("class", "description")
-            .text(model.name);
-
-        var div_node_assigned_container = div_node_info.append('div')
-            .attr("class", "assigned");
-
-        for(var i = 0; i < model.assigned_users.length; ++i)
-        {
-            var user = user_store.syncUserList()[model.assigned_users[i]];
-
-            div_node_assigned_container
-                .append('span')
-                .attr("class", "thumb-xxxs avatar-pl " + class_map[node.type].portrait)
-                .append('img')
-                .attr("src", user.profile_url)
-        }
+        this.updateNode(node);
 
 
 
@@ -282,7 +261,9 @@ SceneGraphView.prototype =
 
         var div_node_menu = this.canvas_node.append('div');
 
-        div_node_menu.attr("class", class_map[node.type].menu)
+        this.div_node_menu_map[model.node_idx] = div_node_menu;
+
+        div_node_menu.attr("class", class_info.menu)
             .attr("idx", model.node_idx)
             .style("left", this.center_x + node.x - node.width/2 + "px")
             .style("top", this.center_y + node.y - node.height/2 + "px")
@@ -294,18 +275,18 @@ SceneGraphView.prototype =
 
         div_node_menu_side.append('div').append('i')
             .attr("idx", model.node_idx)
-            .attr("class", class_map[node.type].menu_add)
+            .attr("class", class_info.menu_add)
             .on("click", function(){ scene_graph.onEventAdd(d3.select(this).attr("idx")) });
 
         div_node_menu_side.append('div').append('i')
             .attr("idx", model.node_idx)
-            .attr("class", class_map[node.type].menu_remove)
+            .attr("class", class_info.menu_remove)
             .on("click", function(){ scene_graph.onEventRemove(d3.select(this).attr("idx")) });
 
         div_node_menu.append('div').attr("class", "right")
             .append('i')
             .attr("idx", model.node_idx)
-            .attr("class", class_map[node.type].menu_view)
+            .attr("class", class_info.menu_view)
             .on("click", function(){ scene_graph.onEventView(d3.select(this).attr("idx")) });
 
 
@@ -314,17 +295,12 @@ SceneGraphView.prototype =
 
         var path_node_link = this.canvas_link.append("path")
             .attr("idx", model.node_idx)
-            .attr("class", class_map[model.parent_idx == model.root_idx ? 'root' : 'node'].link)
+            .attr("class", class_info.link)
             .attr("d", d3.svg.diagonal()
                 .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
                 .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
                 .projection(function(d) { return [d.y, d.x]; }));
 
-
-        // Register
-
-        this.div_node_info_map[model.node_idx] = div_node_info;
-        this.div_node_menu_map[model.node_idx] = div_node_menu;
         this.svg_node_link_map[model.node_idx] = path_node_link;
     },
 
@@ -343,7 +319,7 @@ SceneGraphView.prototype =
         this.svg_node_link_map[node_idx] = null;
     },
 
-    setNodePosition : function(node)
+    updateNodePosition : function(node)
     {
         var model = node.model;
 
@@ -368,5 +344,64 @@ SceneGraphView.prototype =
             .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
             .projection(function(d) { return [d.y, d.x]; })
         );
+    },
+
+    updateLabel : function(node)
+    {
+        var div_node_info = this.div_node_info_map[node.model.node_idx];
+        var class_info = this.class_map[node.type];
+
+        div_node_info.selectAll('ul').remove();
+
+        var ul_node_label_container = div_node_info.append('ul').attr("class", "nav navbar-nav");
+
+        for(var i = 0; i < node.model.labels.length; ++i)
+        {
+            ul_node_label_container.append('li')
+                .attr("class", class_info.label)
+                .style("background-color", node_store.getLabelPalette()[node.model.labels[i]].color);
+        }
+    },
+
+    updateName : function(node)
+    {
+        var div_node_info = this.div_node_info_map[node.model.node_idx];
+
+        div_node_info.selectAll("div[id='name']").remove();
+
+        div_node_info.append('div')
+            .attr("id", "name")
+            .attr("class", "description")
+            .text(node.model.name);
+    },
+
+    updateUsers : function(node)
+    {
+        var div_node_info = this.div_node_info_map[node.model.node_idx];
+        var class_info = this.class_map[node.type];
+
+        div_node_info.selectAll("div[id='users']").remove();
+
+        var div_node_assigned_container = div_node_info.append('div')
+            .attr("id", "users")
+            .attr("class", "assigned");
+
+        for(var i = 0; i < node.model.assigned_users.length; ++i)
+        {
+            var user = user_store.syncUserList()[node.model.assigned_users[i]];
+
+            div_node_assigned_container
+                .append('span')
+                .attr("class", "thumb-xxxs avatar-pl " + class_info.portrait)
+                .append('img')
+                .attr("src", user.profile_url)
+        }
+    },
+
+    updateNode : function(node)
+    {
+        this.updateLabel(node);
+        this.updateName(node);
+        this.updateUsers(node);
     }
 }

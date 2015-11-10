@@ -70,47 +70,12 @@ SceneGraph.prototype =
     {
         var root_idx = node_store.getNodeList()[0].root_idx;
 
-        node_store.addNode("테스트", node_idx, root_idx, function(new_model, model_list)
-        {
-            scene_graph.appendNode(new_model);
-            scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
-
-            scene_graph.arrangeHorizontal();
-
-            for(var i = 0; i < model_list.length; ++i)
-            {
-                var idx = model_list[i].node_idx;
-
-                scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-            }
-        });
+        node_store.addNode("테스트", node_idx, root_idx, scope.onAddNode);
     },
 
     onEventRemove : function(node_idx)
     {
-        node_store.removeNode(node_idx, function(remove_idx, model_list)
-        {
-            var remove_node = scene_graph.node_map[remove_idx];
-            var remove_node_array = new Array();
-
-            remove_node.getChildrenRecursive(remove_node_array);
-            remove_node_array.push(remove_node);
-
-            for(var i = 0; i < remove_node_array.length; ++i)
-            {
-                scene_graph.removeNode(remove_node_array[i].model.node_idx);
-                scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
-            }
-
-            scene_graph.arrangeHorizontal();
-
-            for(var i = 0; i < model_list.length; ++i)
-            {
-                var idx = model_list[i].node_idx;
-
-                scene_graph_view.setNodePosition(scene_graph.node_map[idx]);
-            }
-        });
+        node_store.removeNode(node_idx, scope.onRemoveNode);
     },
 
     onEventView : function(node_idx)
@@ -137,26 +102,7 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
     user_store = UserStore;
     node_store = NodeStore;
 
-    modal = $modal;
-    modal.callback =
-    {
-        addNode : null,
-        updateNode : null,
-
-        addLabel : null,
-        removeLabel : null,
-
-        addLeaf : null,
-        removeLeaf : null,
-
-        addPalette : null,
-        removePalette : null,
-        updatePalette : null,
-    };
-
     var node_list = node_store.getNodeList();
-
-    console.log(node_store.getLabelPalette());
 
     scene_graph = new SceneGraph();
     scene_graph_view = new SceneGraphView();
@@ -175,6 +121,102 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
     {
         var node = node_list[i];
 
-        scene_graph_view.setNodePosition(scene_graph.node_map[node.node_idx]);
+        scene_graph_view.updateNodePosition(scene_graph.node_map[node.node_idx]);
     }
+
+
+
+
+
+    scope.onAddNode = function(new_model, model_list)
+    {
+        scene_graph.appendNode(new_model);
+        scene_graph_view.appendNode(scene_graph.node_map[new_model.node_idx]);
+
+        scene_graph.arrangeHorizontal();
+
+        for(var i = 0; i < model_list.length; ++i)
+        {
+            var idx = model_list[i].node_idx;
+
+            scene_graph_view.updateNodePosition(scene_graph.node_map[idx]);
+        }
+    };
+
+    scope.onRemoveNode = function(remove_idx, model_list)
+    {
+        var remove_node = scene_graph.node_map[remove_idx];
+        var remove_node_array = new Array();
+
+        remove_node.getChildrenRecursive(remove_node_array);
+        remove_node_array.push(remove_node);
+
+        for(var i = 0; i < remove_node_array.length; ++i)
+        {
+            scene_graph.removeNode(remove_node_array[i].model.node_idx);
+            scene_graph_view.removeNode(remove_node_array[i].model.node_idx);
+        }
+
+        scene_graph.arrangeHorizontal();
+
+        for(var i = 0; i < model_list.length; ++i)
+        {
+            var idx = model_list[i].node_idx;
+
+            scene_graph_view.updateNodePosition(scene_graph.node_map[idx]);
+        }
+    };
+
+    scope.onUpdateNode = function(model_idx, model_list)
+    {
+        console.log("model_idx : " + model_idx);
+
+        var node = scene_graph.node_map[model_idx];
+
+        node.model = node_store.getNode(model_idx);
+
+        scene_graph_view.updateNode(node);
+    };
+
+    scope.onAddLabel = function(model_idx, model_list, palette_idx)
+    {
+        var node = scene_graph.node_map[model_idx];
+
+        node.model = node_store.getNode(model_idx);
+
+        console.log("onAddLabel" + node.model);
+
+        scene_graph_view.updateLabel(node);
+    };
+
+    scope.onRemoveLabel = function(model_idx, model_list, palette_idx)
+    {
+        var node = scene_graph.node_map[model_idx];
+
+        node.model = node_store.getNode(model_idx);
+
+        console.log("onRemoveLabel" + node.model);
+
+        scene_graph_view.updateLabel(node);
+    };
+
+    modal = $modal;
+    $scope.modal_callback =
+    {
+        addNode : scope.onAddNode,
+        updateNode : scope.onUpdateNode,
+
+        addLabel : scope.onAddLabel,
+        removeLabel : scope.onRemoveLabel,
+
+        addLeaf : null,
+        removeLeaf : null,
+
+        addPalette : null,
+        removePalette : null,
+        updatePalette : null,
+    };
+
+    console.log("modal ");
+    console.log($modal);
 }]);
