@@ -9,15 +9,15 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     /* Node */
 
-    $scope.applyInModal = function(_newDes) {
+    $scope.applyInModal = function() {
 
         var _dueDate = new Date($scope.modalNode.due_date);
 
         NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,_dueDate.toJSON(),
-            $scope.newDes, function(_node, _node_list){
+            $scope.newDes, function(_node_idx, _node_list){
 
                 if($scope.modal_callback.updateNode)
-                    $scope.modal_callback.updateNode(_node, _node_list);
+                    $scope.modal_callback.updateNode(_node_idx, _node_list);
                 $scope.nodes = _node_list;
 
                 $modalInstance.close({
@@ -73,7 +73,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
                 console.log(idx);
                 $scope.modalNode.labels.splice(idx, 1);
                 console.log($scope.modalNode.labels);
-                if($scope.modal_callback.addLabel) $scope.modal_callback.removeLabel(_node_id,_node_list,_palette_id);
+                if($scope.modal_callback.removeLabel) $scope.modal_callback.removeLabel(_node_id,_node_list,_palette_id);
             });
     };
 
@@ -115,9 +115,10 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
 
     $scope.addLeafInModal = function(){
-        $scope.leafStateInModal = true;
-        NodeStore.addLeaf($scope.myFile, $scope.modalNode.node_idx , function(res) {
-            console.log(res);
+        console.log($scope.newLeaf);
+        NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx , function(_node_idx, _leaf) {
+            console.log(_node_idx, _leaf);
+            $scope.modalNode.labels.push(_leaf);
         });
     };
 
@@ -130,24 +131,24 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
         //$scope.selectedNode.leafs[_idx].file_path
     };
 
+    $scope.fileChanged = function(){
+        var filename = document.getElementById('leafName').value;
+        console.log(filename);
+    };
+
     function init_NodeViewModal(){
 
-        console.log('test');
-
         $scope.editPalette = new Object();
-
-        $scope.leafStateInModal = false;
         $scope.isEditmode = false;
         $scope.newDes = $scope.modalNode.description;
+        $scope.newLeaf = null;
 
-        if(!$scope.modalNode.due_date) $scope.modalNode.due_date = '2015-09-09';
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
         $scope.labelPalette = NodeStore.getLabelPalette();
-        
     }
 }]);
 
