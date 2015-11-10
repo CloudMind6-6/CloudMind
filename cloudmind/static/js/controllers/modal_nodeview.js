@@ -131,7 +131,9 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     $scope.addLeafInModal = function(){
         $scope.leafStateInModal = true;
-        // NodeStore.uploadLeaf();
+        NodeStore.addLeaf($scope.myFile, $scope.modalNode.node_idx , function(res) {
+            console.log(res);
+        });
     };
 
     $scope.removeLeafInModal = function(_idx){
@@ -158,6 +160,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
             $scope.editPalette[p] = false;
         }
         $scope.labelPalette = NodeStore.getLabelPalette();
+        
     }
 }]);
 
