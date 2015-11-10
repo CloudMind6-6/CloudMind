@@ -169,8 +169,6 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
 
     scope.onUpdateNode = function(model_idx, model_list)
     {
-        console.log("model_idx : " + model_idx);
-
         var node = scene_graph.node_map[model_idx];
 
         node.model = node_store.getNode(model_idx);
@@ -184,8 +182,6 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
 
         node.model = node_store.getNode(model_idx);
 
-        console.log("onAddLabel" + node.model);
-
         scene_graph_view.updateLabel(node);
     };
 
@@ -194,8 +190,6 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         var node = scene_graph.node_map[model_idx];
 
         node.model = node_store.getNode(model_idx);
-
-        console.log("onRemoveLabel" + node.model);
 
         scene_graph_view.updateLabel(node);
     };
@@ -206,8 +200,8 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         addNode : scope.onAddNode,
         updateNode : scope.onUpdateNode,
 
-        addLabel : scope.onAddLabel,
-        removeLabel : scope.onRemoveLabel,
+        addLabel : null,
+        removeLabel : null,
 
         addLeaf : null,
         removeLeaf : null,
@@ -216,7 +210,4 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         removePalette : null,
         updatePalette : null,
     };
-
-    console.log("modal ");
-    console.log($modal);
 }]);

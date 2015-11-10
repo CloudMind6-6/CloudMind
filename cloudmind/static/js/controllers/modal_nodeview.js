@@ -58,11 +58,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     /* label */
 
     $scope.addLabelInModal = function(_idx) {
-        console.log("scope : ");
-        console.log($scope);
-        console.log("modalInst : ");
-        console.log($modalInstance);
-
         NodeStore.addLabel($scope.modalNode.node_idx, _idx,
             function(_node_id, _node_list, _palette_id){
                 console.log('test label modal');
