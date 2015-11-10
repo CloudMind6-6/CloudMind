@@ -174,17 +174,6 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 })
             },
 
-            downloadLeaf: function (_node_idx, _palette_idx) {
-                return $http({
-                    url: urlBase + '/label/remove',
-                    method: "POST",
-                    data: {
-                        node_idx: _node_idx,
-                        palette_idx: _palette_idx
-                    }
-                });
-            },
-
             removeLeaf: function (_node_idx, _palette_idx) {
                 return $http({
                     url: urlBase + '/label/remove',

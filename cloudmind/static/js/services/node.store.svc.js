@@ -233,7 +233,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         removeLeaf : function(){
 
-        }
+        },
+        
     };
 }]);
 
