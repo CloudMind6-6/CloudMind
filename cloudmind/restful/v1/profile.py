@@ -8,7 +8,6 @@ from flask import send_file
 from flask import session
 from flask_restful import abort
 from flask_restful import Resource
-import imghdr
 import json
 import magic
 import os
@@ -29,7 +28,7 @@ def profile_download(user_id):
         return send_file(
             user.picture,
             as_attachment=True,
-            attachment_filename=quote(user.name) + '.' + imghdr.what(user.picture),
+            attachment_filename=quote(user.name),
             mimetype=magic.from_file(user.picture, mime=True).decode('utf-8')
         )
 
