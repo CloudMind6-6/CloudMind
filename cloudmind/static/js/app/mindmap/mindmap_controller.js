@@ -40,9 +40,6 @@ SceneGraph.prototype =
         {
             if(model.parent_idx == model.root_idx)
             {
-                console.log("odd : " + this.node_odd.bounding_height);
-                console.log("even : " + this.node_even.bounding_height);
-
                 if(this.node_odd.bounding_height <= this.node_even.bounding_height)
                     this.node_odd.attachChild(node_new);
                 else
@@ -56,9 +53,9 @@ SceneGraph.prototype =
     removeNode : function(idx)
     {
         var node = this.node_map[idx];
-        var parent = node.parent;
 
-        parent.detachChild(node);
+        if(node)
+            node.parent.detachChild(node);
 
         this.node_map[idx] = null;
     },
@@ -72,11 +69,31 @@ SceneGraph.prototype =
         this.node_even.arrangeHorizontal();
     },
 
-    onEventAdd : function(node_idx)
+    onEventAddPreliminary : function(node_idx)
     {
-        var root_idx = node_store.getNodeList()[0].root_idx;
+        var model_preliminary = {node_idx:-1, parent_idx:node_idx, root_idx:scene_graph.node_root.model.node_idx, leafs:{}, labels:[], assigned_users:[] };
 
-        node_store.addNode("테스트", node_idx, root_idx, scope.onAddNode);
+        scene_graph.removeNode(model_preliminary.node_idx);
+
+        scope.onAddNode(model_preliminary, node_store.getNodeList());
+
+        scene_graph_view.updateNodePosition(scene_graph.node_map[model_preliminary.node_idx]);
+        scene_graph_view.enableInputMode(scene_graph.node_map[model_preliminary.node_idx]);
+    },
+
+    onEventRemovePreliminary : function()
+    {
+        scene_graph_view.removeNode(-1);
+        scene_graph.removeNode(-1);
+    },
+
+    onEventAdd : function(node_idx, node_name)
+    {
+        var model = scene_graph.node_map[node_idx].model;
+
+        this.onEventRemovePreliminary();
+
+        node_store.addNode(node_name, model.parent_idx, model.root_idx, scope.onAddNode);
     },
 
     onEventRemove : function(node_idx)
@@ -104,6 +121,8 @@ SceneGraph.prototype =
 app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', function($scope, $modal, UserStore, NodeStore)
 {
     scope = $scope;
+
+    modal = $modal;
 
     user_store = UserStore;
     node_store = NodeStore;
@@ -200,8 +219,7 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         scene_graph_view.updateLabel(node);
     };
 
-    modal = $modal;
-    $scope.modal_callback =
+    scope.modal_callback =
     {
         addNode : scope.onAddNode,
         updateNode : scope.onUpdateNode,

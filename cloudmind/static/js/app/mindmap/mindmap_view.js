@@ -215,6 +215,7 @@ SceneGraphView = function()
     this.div_node_info_map = {};
     this.div_node_menu_map = {};
     this.svg_node_link_map = {};
+    this.input_name_map = {};
 
     this.class_map =
    {
@@ -255,6 +256,9 @@ SceneGraphView.prototype =
 
         // Info
 
+        this.canvas_node.selectAll("div[idx='"+model.node_idx+"']").remove();
+        this.canvas_node.selectAll("path[idx='"+model.node_idx+"']").remove();
+
         var div_node_info = this.canvas_node.append('div');
 
         this.div_node_info_map[model.node_idx] = div_node_info;
@@ -287,7 +291,8 @@ SceneGraphView.prototype =
         div_node_menu_side.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_add)
-            .on("click", function(){ scene_graph.onEventAdd(d3.select(this).attr("idx")) });
+            //.on("click", function(){ scene_graph.onEventAdd(d3.select(this).attr("idx")) });
+            .on("click", function(){ scene_graph.onEventAddPreliminary(d3.select(this).attr("idx")) });
 
         div_node_menu_side.append('div').append('i')
             .attr("idx", model.node_idx)
@@ -380,10 +385,23 @@ SceneGraphView.prototype =
 
         div_node_info.selectAll("div[id='name']").remove();
 
-        div_node_info.append('div')
+        var input_name = div_node_info.append('div')
             .attr("id", "name")
             .attr("class", "description")
-            .text(node.model.name);
+            .append('input');
+
+        input_name
+            .attr("idx", node.model.node_idx)
+            .attr("class", "input")
+            .attr("value", node.model.name)
+            .attr("placeholder", "노드 이름")
+            .on("keydown", function()
+            {
+                if(d3.event.keyCode == 13)
+                    scene_graph.onEventAdd(d3.select(this).attr("idx"), this.value)
+            });
+
+        this.input_name_map[node.model.node_idx] = input_name;
     },
 
     updateUsers : function(node)
@@ -414,5 +432,17 @@ SceneGraphView.prototype =
         this.updateLabel(node);
         this.updateName(node);
         this.updateUsers(node);
-    }
+    },
+
+    enableInputMode : function(node)
+    {
+        this.div_node_menu_map[node.model.node_idx].style("visibility", "hidden");
+        this.input_name_map[node.model.node_idx].select();
+    },
+
+    disableInputMode : function(node)
+    {
+        this.div_node_menu_map[node.model.node_idx].style("visibility", "visible");
+        this.input_name_map[node.model.node_idx].attr("autofocus", "false");
+    },
 }
