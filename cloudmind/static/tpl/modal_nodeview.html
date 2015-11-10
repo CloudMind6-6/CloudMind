@@ -1,74 +1,19 @@
-<style>
-	#list ul {
-		overflow-y : hidden ;
-	}
-	#list li {
-		display: inline;
-		list-style:none;
-		margin-top: 20px;
-		margin-right: 5px;
-	}
-	#list li:nth-child(2) {
-		margin-left: 7px;
-	}
-	#list li:nth-child(2) .w-xs {
-		width: 110px; 
-	}
-	#list li:nth-child(3) .w-xs {
-		width: 110px; 
-	}
-	#list li:last-child {
-		top: -20px;
-	    left: 560px;
-	    position: absolute;
-	}
-	.node_title {
-		font-size: 24px;
-		font-weight: bold;
-		max-width: 100px;
-		overflow-x : hidden;
-	}
-	.list_part li {
-		list-style: none;
-		display: inline;
-	}
-	.list-part li:last-child  span{
-		color : #FFF;
-	}
-	.list_part li:last-child i{
-		color : rgba(19, 86, 69, 0.34);
-	}
-	.list_part li span {
-		text-align : center;
-	}
-	.list_labels li{
-		width: 80px;
-		height : 30px;
-		list-style: none;
-		border-radius: 5px;
-		line-height: 30px;
-		text-align: center;
-		margin-right : 10px;
-		display:inline-block;
-		margin-bottom: 10px;
-	}
-</style>
 
 <div class="view_top"style="padding-left : 15px;">
 	<div  class="m-b-lg">
-	<ul id="list" class="m-t m-l-xs m-b-n" style="padding-left:5px; padding-top : 10px;">
-		<li class="node_title">{{ modalNode.name }}</li>
-		<li ng-controller="DatepickekCtrl">
-			<button class="btn m-b-xs w-xs btn-default btn-rounded" datepicker-popup="{{format}}" ng-model="dt"
+	<ul id="list ul-modal" class=" m-t-sm m-l-xs m-b-n-md" style="padding-left:5px; padding-top : 10px;">
+		<li class="node_title list-modal">{{ modalNode.name }}</li>
+		<li ng-controller="DatepickekCtrl" class="list-modal m-l-xsm">
+			<button class="btn m-b-xs w-xsm btn-default btn-rounded" datepicker-popup="{{format}}" ng-model="dt"
 					is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
-					ng-click="open($event)">
-				<i class="fa fa-calendar-o text m-l-xxs"></i>
+					show-button-bar="false" ng-click="open($event)">
+				<i class="fa fa-calendar-o text m-r-xs m-l-n-xxs"></i>
 				<span class="text margin-left">{{ modalNode.due_date }}</span>
 			</button>
 		</li>
-		<li ng-controller="DropdownCtrl" class="dropdown" o dropdown>
+		<li ng-controller="DropdownCtrl" class="dropdown list-modal" o dropdown>
 			<a href class="dropdown-toggle" dropdown-toggle>
-			<button class="btn m-b-xs w-xs btn-default btn-rounded">
+			<button class="btn m-b-xs w-xsm btn-default btn-rounded">
 				<i class="fa fa-chain-broken text"></i>
 				<span class="text m-l-xsm">Add Node</span>
 				<i class="fa fa-check text-active"></i>
@@ -85,7 +30,7 @@
 				</div>
 			</div>
 		</li>
-		<li ng-click="cancel()">
+		<li ng-click="cancel()" class="list-modal close-modal">
 			<span class="fa-stack fa-2x">
 				<i class="fa icon-close fa-stack-1.7x"></i>
 			</span>
@@ -98,12 +43,24 @@
 
 <div class="view_participants pos-rlt padder-l m-b-md ">
 	<span ng-repeat="user in modalNode.assigned_users">
-		<span class="thumb-sm avatar m-r-xs">
-			<img src="../img/a10.jpg">
-		</span>
+		<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
 	</span>
-	<span class="thumb-md avatar m-b-xs m-t">
-		<span class="panel-circle wrapper-xs-circle m-r-xs" ng-click="addParticipantInModal()">+</span>
+	<span ng-controller="DropdownCtrl" class="dropdown" o dropdown>
+		<a href class="dropdown-toggle" dropdown-toggle>
+			<span class="thumb-md avatar m-b-xs m-t">
+			<span class="panel-circle wrapper-xs-circle m-r-xs" ng-click="addParticipantInModal()">+</span>
+			</span>
+		</a>
+		<div class="dropdown-menu m-t-s w" >
+			<div class="wrapper-xs">
+				<span ng-click="toggleDropdown($event)">
+					<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
+					<hr class="m-b-sm m-t-sm hr-color">
+					<input class="form-control m-t-s" type="text" ng-model="newName" />
+				</span>
+				<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click=" addNodeInModal(newName); toggleDropdown($event, true);"> Add new node </button>
+			</div>
+		</div>
 	</span>
 </div>
 
@@ -175,18 +132,16 @@
 <hr class="m-b-sm m-t-sm hr-color">
 <div class="view_leafs" style="position: relative; padding-left : 15px; margin-bottom : 40px">
 	<h3>Leafs</h3>
-	<ul class="fa-ul">
-		<li><i class="fa-li fa fa-leaf" ng-click="downloadLeafInModal($index)"></i>List icons.jpg</li>
-		<li><i class="fa-li fa fa-leaf"></i>can be used.exe</li>
-		<li><i class="fa-li fa fa-leaf"></i>as bullets.pdf</li>
-		<li><i class="fa-li fa fa-leaf"></i>in lists.iso</li>
-		<li><i class="fa-li fa fa-plus-square-o"></i>
-			<input style="font-size: 12px" type="file" file-model="myFile"/>
-		</li>
-	</ul>
-</div>
+	<div class="fa-ul" ng-repeat="leaf in modalNode.leafs track by $index">
+		<span ng-click="downloadLeafInModal(leaf.id)" ><i class="fa fa-leaf"></i>{{leaf.name}}</span>
+	</div>
+	<span>
+		<i class="fa-li fa fa-plus-square-o"></i>
+		<input style="font-size: 12px" type="file" id="leafName" file-model="newLeaf"/>
+		<button class="btn btn-primary" ng-click="addLeafInModal()">Leaf Upload</button>
+	</span>
 
+</div>
 <div class="modal-footer" style="margin-top: 40px">
-	<button style="float:left; margin:0" class="btn btn-primary" ng-click="addLeafInModal()">Leaf Upload</button>
     <button class="btn btn-primary" ng-click="applyInModal(newDes)">Apply</button>
 </div>

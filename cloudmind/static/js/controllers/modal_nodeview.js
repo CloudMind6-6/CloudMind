@@ -1,5 +1,5 @@
 
-app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', function( $scope, $modalInstance, NodeStore){
+app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'UserStore', function( $scope, $modalInstance, NodeStore, UserStore){
 
     init_NodeViewModal();
 
@@ -9,15 +9,15 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
 
     /* Node */
 
-    $scope.applyInModal = function(_newDes) {
+    $scope.applyInModal = function() {
 
         var _dueDate = new Date($scope.modalNode.due_date);
 
         NodeStore.updateNode($scope.modalNode.node_idx, $scope.modalNode.name,_dueDate.toJSON(),
-            $scope.newDes, function(_node, _node_list){
+            $scope.newDes, function(_node_idx, _node_list){
 
                 if($scope.modal_callback.updateNode)
-                    $scope.modal_callback.updateNode(_node, _node_list);
+                    $scope.modal_callback.updateNode(_node_idx, _node_list);
                 $scope.nodes = _node_list;
 
                 $modalInstance.close({
@@ -73,7 +73,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
                 console.log(idx);
                 $scope.modalNode.labels.splice(idx, 1);
                 console.log($scope.modalNode.labels);
-                if($scope.modal_callback.addLabel) $scope.modal_callback.removeLabel(_node_id,_node_list,_palette_id);
+                if($scope.modal_callback.removeLabel) $scope.modal_callback.removeLabel(_node_id,_node_list,_palette_id);
             });
     };
 
@@ -83,7 +83,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
             $scope.addLabelInModal(_idx);
         }
         else  $scope.removeLabelInModal(_idx);
-
     };
 
     /* Participant */
@@ -93,11 +92,6 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
 
     /* label palette */
-    $scope.editPaletteMode = function(_idx){
-        $scope.editPalette[_idx] = true;
-        $scope.newPaletteName = $scope.labelPalette[_idx].name;
-    };
-
     $scope.updateLabelPalette = function(_palette, _newPaletteName){
 
         NodeStore.updateLabelPalette(_palette.palette_idx, _newPaletteName, _palette.color,
@@ -105,9 +99,15 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
                 $scope.labelPalette[_palette.palette_idx].name = _palette.name;
                 $scope.cancelEditPaletteMode(_palette.palette_idx);
                 $scope.modalNode.labels = $scope.modalNode.labels;
+
                 if($scope.modal_callback.updatePalette)
                     $scope.modal_callback.updatePalette(_palette);
             });
+    };
+
+    $scope.editPaletteMode = function(_idx){
+        $scope.editPalette[_idx] = true;
+        $scope.newPaletteName = $scope.labelPalette[_idx].name;
     };
 
     $scope.cancelEditPaletteMode = function(_idx){
@@ -115,9 +115,10 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
 
     $scope.addLeafInModal = function(){
-        $scope.leafStateInModal = true;
-        NodeStore.addLeaf($scope.myFile, $scope.modalNode.node_idx , function(res) {
-            console.log(res);
+
+        NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx , function(_node_idx, _leaf,_node_list) {
+            $scope.modalNode.leafs.push(_leaf);
+            console.log(_leaf);
         });
     };
 
@@ -126,28 +127,26 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', func
     };
 
     $scope.downloadLeafInModal = function(_idx){
-        //해당 경로 다운로드 요청
-        //$scope.selectedNode.leafs[_idx].file_path
+        var URL = "/api/v1/leaf/" + _idx;
+        window.open(URL,'_blank');
+        return URL + _idx;
     };
 
     function init_NodeViewModal(){
 
-        console.log('test');
-
         $scope.editPalette = new Object();
+        $scope.isEditmode  = false;
+        $scope.newDes      = $scope.modalNode.description;
+        $scope.newLeaf     = null;
 
-        $scope.leafStateInModal = false;
-        $scope.isEditmode = false;
-        $scope.newDes = $scope.modalNode.description;
-
-        if(!$scope.modalNode.due_date) $scope.modalNode.due_date = '2015-09-09';
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
+
         $scope.labelPalette = NodeStore.getLabelPalette();
-        
+        $scope.users = UserStore.syncUserList();
     }
 }]);
 
