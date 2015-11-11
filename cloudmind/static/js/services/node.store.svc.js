@@ -147,32 +147,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         },
 
         /* Palette */
-        addLabelPalette : function(_root_idx, _name, _color, callback){
-
-            HttpSvc.addLabelpalette(_root_idx, _name, _color)
-                .success(function (res) {
-                    if(res.success){
-                        callback(res.palette);
-                    }
-                    else throw new Error;
-                })
-                .error(function(err){
-                    console.log(err);
-                });
-        },
-
-        removeLabelPalette : function(_palette_id, callback){ /* 라벨 팔레트 또한 지울때 모든 라벨을 삭제해줘야함 */
-            HttpSvc.removeLabelpalette(_palette_id)
-                .success(function (res) {
-                    nodeList = res.node_list;
-
-                    if(res.success) callback(res.node_list, res.palette_list);
-                    else throw new Error;
-                })
-                .error(function(err){
-                    console.log(err);
-                });
-        },
 
         updateLabelPalette : function(_palette_id, _name, _color, callback){
             HttpSvc.updateLabelpalette(_palette_id, _name, _color)

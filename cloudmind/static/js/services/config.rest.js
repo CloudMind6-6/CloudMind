@@ -108,26 +108,6 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            addLabelpalette: function (_root_idx, _name, _color) {
-                return $http({
-                    url: urlBase + '/label_palette/add',
-                    method: "POST",
-                    data: {
-                        root_idx: _root_idx,
-                        name: _name,
-                        color: _color
-                    }
-                });
-            },
-
-            removeLabelpalette: function (_palette_idx) {
-                return $http({
-                    url: urlBase + '/label_palette/remove',
-                    method: "POST",
-                    data: {palette_idx: _palette_idx}
-                });
-            },
-
             updateLabelpalette: function (_palette_idx, _name, _color) {
                 return $http({
                     url: urlBase + '/label_palette/update',

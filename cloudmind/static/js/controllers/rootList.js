@@ -43,7 +43,7 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
         };
 
         $scope.getRootName = function(_idx){
-            var name = $scope.roots[_idx].node.name.length;
+            var name = $scope.roots[_idx].node.name;
             if($scope.roots[_idx].node.name.length > 12)
                 name = $scope.roots[_idx].node.name.substring(0,12) + '...';
             return name;

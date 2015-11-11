@@ -1,14 +1,22 @@
 
-app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'UserStore', function( $scope, $modalInstance, NodeStore, UserStore){
+app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'UserStore', 'HttpSvc' ,
+    function( $scope, $modalInstance, NodeStore, UserStore, HttpSvc){
 
     init_NodeViewModal();
+
+    $scope.searchingUser = [
+        {account_id: "1", name: "chorong", email: "chocho@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "2", name: "chorong2", email: "yaho@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "3", name: "chorong3", email: "coffee@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "4", name: "jinsil", email: "latte@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "5", name: "jinsil2", email: "true@gmail.com", profile_url:"../../img/a0.jpg"}
+    ];
 
     $scope.cancel = function() {
         $modalInstance.close();
     };
 
     /* Node */
-
     $scope.applyInModal = function() {
 
         var _dueDate = new Date($scope.modalNode.due_date);
@@ -87,9 +95,18 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
 
     /* Participant */
 
-    $scope.addParticipantInModal = function(){
+    $scope.inviteUserInModal = function(_user){
+        console.log(_user);
 
+        HttpSvc.inviteRoot($scope.modalNode.root_idx, _user.email)
+            .success(function(res){
+                console.log(res);
+            })
+            .error(function(err){
+                console.log(err);
+            });
     };
+
 
     /* label palette */
     $scope.updateLabelPalette = function(_palette, _newPaletteName){
@@ -140,12 +157,22 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
         $scope.isEditmode  = false;
         $scope.newDes      = $scope.modalNode.description;
         $scope.newLeaf     = null;
+        $scope.selectedPerson = null;
 
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
+
+        $scope.$watch('selectedPerson', function(){
+            console.log('test');
+            if(!$scope.selectedPerson) return;
+
+
+            $scope.inviteUserInModal($scope.selectedPerson);
+            $scope.selectedPerson = null;
+        });
 
         $scope.labelPalette = NodeStore.getLabelPalette();
         $scope.users = UserStore.syncUserList();
@@ -187,3 +214,4 @@ app.controller('DatepickekCtrl', ['$scope', function($scope) {
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[1];
 }]);
+

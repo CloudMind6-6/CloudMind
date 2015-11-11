@@ -1,4 +1,6 @@
 
+
+
 <div class="view_top"style="padding-left : 15px;">
 	<div  class="m-b-lg">
 	<ul id="list ul-modal" class=" m-t-sm m-l-xs m-b-n-md" style="padding-left:5px; padding-top : 10px;">
@@ -51,18 +53,24 @@
 			<span class="panel-circle wrapper-xs-circle m-r-xs">+</span>
 			</span>
 		</a>
-		<div class="dropdown-menu m-t-s w" >
-			<div class="wrapper-xs">
+		<div class="dropdown-menu m-t-s w">
+            <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
 					<hr class="m-b-sm m-t-sm hr-color">
 					<div ng-repeat="user in modalNode.assigned_users">
-						<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
-					</div>
-					<input class="form-control m-t-s" type="text" ng-model="keyword" />
+                        <img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
+                    </div>
+                    <angucomplete id="ex2" placeholder="Search people" pause="300"
+                                  selectedobject="selectedPerson" localdata="searchingUser"
+                                  searchfields="name,email"
+                                  titlefield="name" descriptionfield="email"
+                                  imagefield="profile_url" minlength="1"
+                                  inputclass="angucomplete-form-control"
+                                  matchclass=""/>
 				</span>
-			</div>
-		</div>
+            </div>
+        </div>
 	</span>
 </div>
 
