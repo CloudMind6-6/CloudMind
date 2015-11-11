@@ -48,7 +48,7 @@
           <li class="dropdown" dropdown ng-controller="UserCtrl">
             <a href class="dropdown-toggle clear" dropdown-toggle>
               <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img src="{{ profile_url }}" alt="...">
+                <img style="width:40px; height: 40px" src="{{ profile_url }}" alt="...">
               </span><span class="hidden-sm hidden-md">{{ username }}</span> <b class="caret"></b>
             </a>
             <!-- dropdown -->
@@ -62,18 +62,10 @@
                         <input type=file style='display: none;' id="fileBtn">
                     </div>
                       <div ng-show=!(isEditmode)>
-                        <span>{{ username }}</span>
-                        <i class="fa fa-pencil" ng-show=!(isEditmode) ng-click="clickEditName()"></i>
-                      </div>
-                      <div ng-show=isEditmode>
-                        <input type="text" class="form-control thumb-lgm m-l-n" ng-model="newName">
-                        <span class="m-l-xxs"></span>
-                        <i class="fa fa-check icon-submit" ng-click="updateName('{{ newName }}')"></i>
-                        <span class="m-l-xsm"></span>
-                        <i class="fa fa-times icon-cancel" ng-click="clickCancelBtn()"></i>
+                        <span style="font-weight: 400; font-size:18px">{{ username }}</span>
                       </div>
                     <p></p>
-                    <div class="m-b-sm">{{ useremail }}</div>
+                    <div class="m-b-sm" style="font-size:12px; margin-bottom:14px;">{{ useremail }}</div>
                   </div>
                 </div>
               </div>
