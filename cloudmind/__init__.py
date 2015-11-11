@@ -102,7 +102,10 @@ def authorized():
             picture=userinfo['picture']
             )
         db.session.add(user)
-        db.session.commit()
+    else:
+        user.name = (userinfo['given_name'] + ' ' + userinfo['family_name'])
+        user.picture = userinfo['picture']
+    db.session.commit()
     session['user_id'] = user.id
     return redirect(url_for('index'))
 
