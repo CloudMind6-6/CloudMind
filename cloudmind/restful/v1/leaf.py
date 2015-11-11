@@ -34,6 +34,26 @@ def leaf_download(leaf_id):
     return send_file(leaf.file_path, as_attachment=True, attachment_filename=leaf.name, mimetype=leaf.file_type)
 
 
+class LeafList(Resource):
+    def get(self):
+        root_id = request.args.get('root_idx')
+
+        if 'user_id' not in session:
+            abort(403, message="already logged out")
+
+        root_node = db.session.query(Node).filter(Node.id == root_id).first()
+        if root_node is None:
+            abort(404, message="Not found {}".format("Node"))
+        if root_node.check_member(session['user_id']) is False:
+            abort(404, message="노드멤버 아님")
+
+        leafs = db.session.query(Leaf).filter(Leaf.root_node_id == root_id).all()
+        return {
+            'success': True,
+            'leaf_list': [i.serialize for i in leafs]
+            }
+
+
 class LeafUpload(Resource):
     def post(self):
         userfile = request.files['userfile']
