@@ -94,7 +94,13 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
     };
 
     /* Participant */
+    $scope.addParticipantInModal = function(_user_idx) {
+        console.log($scope.users);
+        console.log(_user_idx);
+        $scope.modalNode.assigned_users.push(_user_idx);
 
+    };
+    
     $scope.inviteUserInModal = function(_user){
         console.log(_user);
 

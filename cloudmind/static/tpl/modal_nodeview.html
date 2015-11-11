@@ -1,4 +1,44 @@
+<style>
+	/*나중에 이 부분은 app.css 으로 넣어주심 감사..*/
+	.part_lists ul {
+		list-style: none;
+		padding:0;
+	}
+	.part_lists li {
+		margin-bottom: 6px;
+		-webkit-transition: background-color 0.5s; /* Safari */
+    	transition: background-color 0.5s;
+	}
+	.part_lists li div {
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
 
+		border-top-right-radius : 15px;
+		border-bottom-right-radius : 15px;
+	}
+	.part_lists li:hover div {
+		background-color : #F5F5F5;
+		-webkit-transition: background-color 0.2s; /* Safari */
+    	transition: background-color 0.2s;
+	}
+	#left_image {
+		margin-right: 8px;
+		width: 30px;
+	}
+	#left_image img {
+		border-radius: 4px;
+	}
+	#right_name {
+		line-height: 30px;
+		display:inline-block;
+		vertical-align: middle;
+	}
+	#right_name p {
+		margin : 0;
+		font-size: 13px;
+	}
+
+</style>
 
 
 <div class="view_top"style="padding-left : 15px;">
@@ -58,16 +98,41 @@
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
 					<hr class="m-b-sm m-t-sm hr-color">
-					<div ng-repeat="user in modalNode.assigned_users">
-                        <img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
-                    </div>
-                    <angucomplete id="ex2" placeholder="Search people" pause="300"
-                                  selectedobject="selectedPerson" localdata="searchingUser"
-                                  searchfields="name,email"
-                                  titlefield="name" descriptionfield="email"
-                                  imagefield="profile_url" minlength="1"
-                                  inputclass="angucomplete-form-control"
-                                  matchclass=""/>
+					<div class="part_lists">
+						<ul>
+							<li>
+								<div ng-click="addParticipantInModal(1)">
+									<span id="left_image"><img width="30" src="../img/a0.jpg"></span>
+									<span id="right_name"><p>RainC</p></span>
+								</div>
+							</li>
+							<li>
+								<div ng-click="addParticipantInModal(2)">
+									<span id="left_image"><img width="30" src="../img/a0.jpg"></span>
+									<span id="right_name"><p>RainC</p></span>
+								</div>
+							</li>
+							<li>
+								<div ng-click="addParticipantInModal(3)">
+									<span id="left_image"><img width="30" src="../img/a0.jpg"></span>
+									<span id="right_name"><p>RainC</p></span>
+								</div>
+							</li>
+							<li>
+								<div ng-click="addParticipantInModal(4)">
+									<span id="left_image"><img width="30" src="../img/a0.jpg"></span>
+									<span id="right_name"><p>RainC</p></span>
+								</div>
+							</li>
+							<li>
+								<div ng-click="addParticipantInModal(5)">
+									<span id="left_image"><img width="30" src="../img/a0.jpg"></span>
+									<span id="right_name"><p>RainC</p></span>
+								</div>
+							</li>
+
+						</ul>
+					</div>
 				</span>
             </div>
         </div>
