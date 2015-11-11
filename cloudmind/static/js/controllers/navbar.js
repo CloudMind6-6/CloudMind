@@ -58,8 +58,8 @@ app.controller('UserCtrl', ['$scope', 'HttpSvc', function($scope, HttpSvc) {
     };
 
     $scope.updatePicture = function($event){
-        angular.element('#fileBtn').trigger('click');
-
+        // angular.element('#fileBtn').trigger('click');
+        window.open("https://plus.google.com/me",'_blank');
 
     };
 
