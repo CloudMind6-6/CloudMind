@@ -243,6 +243,12 @@ SceneGraphView = function()
             portrait:"mindmap_node_portrait"
         },
     };
+
+    this.body.on("keydown", function()
+    {
+        if(d3.event.keyCode == 27)
+            scene_graph.onEventRemovePreliminary();
+    });
 }
 
 SceneGraphView.prototype =
@@ -437,7 +443,7 @@ SceneGraphView.prototype =
     enableInputMode : function(node)
     {
         this.div_node_menu_map[node.model.node_idx].style("visibility", "hidden");
-        this.input_name_map[node.model.node_idx].select();
+        this.input_name_map[node.model.node_idx].on("click")();
     },
 
     disableInputMode : function(node)

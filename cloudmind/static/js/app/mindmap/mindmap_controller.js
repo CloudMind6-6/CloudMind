@@ -83,15 +83,15 @@ SceneGraph.prototype =
 
     onEventRemovePreliminary : function()
     {
-        scene_graph_view.removeNode(-1);
-        scene_graph.removeNode(-1);
+        scope.onRemoveNode(-1, node_store.getNodeList());
     },
 
     onEventAdd : function(node_idx, node_name)
     {
         var model = scene_graph.node_map[node_idx].model;
 
-        this.onEventRemovePreliminary();
+        scene_graph_view.removeNode(-1);
+        scene_graph.removeNode(-1);
 
         node_store.addNode(node_name, model.parent_idx, model.root_idx, scope.onAddNode);
     },
