@@ -48,8 +48,8 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
             inviteRoot: function (_root_idx, _email) {
                 return $http({
                     url: urlBase + '/root/invite',
-                    method: "GET",
-                    params: {
+                    method: "POST",
+                    data: {
                         root_idx: _root_idx,
                         email: _email
                     }

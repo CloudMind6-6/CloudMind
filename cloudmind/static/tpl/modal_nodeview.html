@@ -61,13 +61,19 @@
 					<div ng-repeat="user in modalNode.assigned_users">
                         <img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
                     </div>
-                    <angucomplete id="ex2" placeholder="Search people" pause="300"
-                                  selectedobject="selectedPerson" localdata="searchingUser"
-                                  searchfields="name,email"
-                                  titlefield="name" descriptionfield="email"
-                                  imagefield="profile_url" minlength="1"
-                                  inputclass="angucomplete-form-control"
-                                  matchclass=""/>
+                    <div angucomplete-alt id="ex2"
+                         placeholder="Search people"
+                         pause="300"
+                         selected-object="inviteUserInModal"
+                         local-data="searchingUser"
+                         search-fields="name,email"
+                         title-field="name"
+                         description-field="email"
+                         image-field="profile_url"
+                         minlength="1"
+                         input-class="angucomplete-form-control">
+                    </div>
+
 				</span>
             </div>
         </div>

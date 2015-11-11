@@ -1,15 +1,14 @@
 
-app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'UserStore', 'HttpSvc' ,
-    function( $scope, $modalInstance, NodeStore, UserStore, HttpSvc){
+app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'UserStore', 'HttpSvc' , function( $scope, $modalInstance, NodeStore, UserStore, HttpSvc){
 
     init_NodeViewModal();
 
     $scope.searchingUser = [
-        {account_id: "1", name: "chorong", email: "chocho@gmail.com", profile_url:"../../img/a0.jpg"},
-        {account_id: "2", name: "chorong2", email: "yaho@gmail.com", profile_url:"../../img/a0.jpg"},
-        {account_id: "3", name: "chorong3", email: "coffee@gmail.com", profile_url:"../../img/a0.jpg"},
-        {account_id: "4", name: "jinsil", email: "latte@gmail.com", profile_url:"../../img/a0.jpg"},
-        {account_id: "5", name: "jinsil2", email: "true@gmail.com", profile_url:"../../img/a0.jpg"}
+        {account_id: "1", name: "chorong", email: "crjang91@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "2", name: "chorong2", email: "crjang91@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "3", name: "chorong3", email: "crjang91@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "4", name: "jinsil", email: "crjang91@gmail.com", profile_url:"../../img/a0.jpg"},
+        {account_id: "5", name: "jinsil2", email: "crjang91@gmail.com", profile_url:"../../img/a0.jpg"}
     ];
 
     $scope.cancel = function() {
@@ -98,7 +97,7 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
     $scope.inviteUserInModal = function(_user){
         console.log(_user);
 
-        HttpSvc.inviteRoot($scope.modalNode.root_idx, _user.email)
+        HttpSvc.inviteRoot($scope.modalNode.root_idx, _user.description)
             .success(function(res){
                 console.log(res);
             })
@@ -106,6 +105,15 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
                 console.log(err);
             });
     };
+
+    $scope.clearInput = function (id) {
+        if (id) {
+            $scope.$broadcast('angucomplete-alt:clearInput', id);
+        }
+        else{
+            $scope.$broadcast('angucomplete-alt:clearInput');
+        }
+    }
 
 
     /* label palette */
@@ -157,22 +165,13 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
         $scope.isEditmode  = false;
         $scope.newDes      = $scope.modalNode.description;
         $scope.newLeaf     = null;
-        $scope.selectedPerson = null;
+
 
         $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0,10);
 
         for(var p in $scope.labelPalette){
             $scope.editPalette[p] = false;
         }
-
-        $scope.$watch('selectedPerson', function(){
-            console.log('test');
-            if(!$scope.selectedPerson) return;
-
-
-            $scope.inviteUserInModal($scope.selectedPerson);
-            $scope.selectedPerson = null;
-        });
 
         $scope.labelPalette = NodeStore.getLabelPalette();
         $scope.users = UserStore.syncUserList();
@@ -182,15 +181,17 @@ app.controller('Modal_NodeView', [ '$scope', '$modalInstance', 'NodeStore', 'Use
 app.controller('DatepickekCtrl', ['$scope', function($scope) {
 
     $scope.$watch('dt', function () {
-            $scope.modalNode.due_date = ($scope.dt.getFullYear() + '-' + $scope.dt.getMonth()+'-'+ $scope.dt.getDate());
-            if($scope.modalNode.due_date.length == 9)
-                $scope.modalNode.due_date = $scope.modalNode.due_date.slice(0,8) + '0' +$scope.dt.getDate();
+            var year = $scope.dt.getFullYear();
+            var month = $scope.dt.getMonth()+1;
+            var date = $scope.dt.getDate();
+            $scope.modalNode.due_date = (year + '-' + month +'-'+ date);
         }
     );
 
     $scope.setDate = function(_date) {
         var date = _date.split('-');
-        $scope.dt = new Date(date[0], date[1], date[2]);
+        $scope.dt = new Date(date[0], date[1]-1, date[2]);
+        console.log($scope.dt);
     };
 
     $scope.open = function($event) {

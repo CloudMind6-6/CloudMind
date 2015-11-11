@@ -18,5 +18,5 @@ angular.module('app', [
     'oc.lazyLoad',
     'pascalprecht.translate',
     'ngMaterial',
-    'angucomplete'
+    'angucomplete-alt'
 ]);
