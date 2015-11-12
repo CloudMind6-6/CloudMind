@@ -136,7 +136,7 @@ class NodeUpdate(Resource):
         node_name = args['node_name']
         description = args['description']
         due_date = date_parser.parse(args['due_date'])
-        #  users = args['assigned_users']
+        users = args['assigned_users']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -155,7 +155,17 @@ class NodeUpdate(Resource):
         node.description = description
         node.due_date = due_date
 
-        db.session.add(node)
+        db.session.query(Participant).filter(Participant.own_node_id == node_id).delete()
+        for user_id in users:
+            participant = Participant(
+                is_accepted=True,
+                own_node_id=node_id,
+                user_id=user_id,
+                from_user_id=session['user_id']
+            )
+            db.session.add(participant)
+            pass
+
         db.session.commit()
 
         nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()

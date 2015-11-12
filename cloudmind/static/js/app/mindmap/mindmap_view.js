@@ -243,12 +243,6 @@ SceneGraphView = function()
             portrait:"mindmap_node_portrait"
         },
     };
-
-    this.body.on("keydown", function()
-    {
-        if(d3.event.keyCode == 27)
-            scene_graph.onEventRemovePreliminary();
-    });
 }
 
 SceneGraphView.prototype =
@@ -298,18 +292,18 @@ SceneGraphView.prototype =
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_add)
             //.on("click", function(){ scene_graph.onEventAdd(d3.select(this).attr("idx")) });
-            .on("click", function(){ scene_graph.onEventAddPreliminary(d3.select(this).attr("idx")) });
+            .on("click", function(){ scope.onEventAddPreliminary(d3.select(this).attr("idx")) });
 
         div_node_menu_side.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_remove)
-            .on("click", function(){ scene_graph.onEventRemove(d3.select(this).attr("idx")) });
+            .on("click", function(){ scope.onEventRemove(d3.select(this).attr("idx")) });
 
         div_node_menu.append('div').attr("class", "right")
             .append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_view)
-            .on("click", function(){ scene_graph.onEventView(d3.select(this).attr("idx")) });
+            .on("click", function(){ scope.onEventView(d3.select(this).attr("idx")) });
 
 
 
@@ -335,6 +329,8 @@ SceneGraphView.prototype =
     {
         this.canvas_node.selectAll("div[idx='" + node_idx +"']").remove();
         this.canvas_link.selectAll("path[idx='" + node_idx +"']").remove();
+
+        this.disableInputMode(node_idx);
 
         this.div_node_info_map[node_idx] = null;
         this.div_node_menu_map[node_idx] = null;
@@ -404,8 +400,8 @@ SceneGraphView.prototype =
             .attr("placeholder", "노드 이름")
             .on("keydown", function()
             {
-                if(d3.event.keyCode == 13)
-                    scene_graph.onEventAdd(d3.select(this).attr("idx"), this.value)
+                if(d3.event.keyCode == 13 && this.value != "")
+                    scope.onEventAdd(d3.select(this).attr("idx"), this.value)
             });
 
         this.input_name_map[node.model.node_idx] = input_name;
@@ -443,12 +439,33 @@ SceneGraphView.prototype =
 
     enableInputMode : function(node)
     {
-        this.div_node_menu_map[node.model.node_idx].style("visibility", "hidden");
-        document.getElementById("input_" + node.model.node_idx).focus();
+        var node_clicked = false;
+        var node_idx = node.model.node_idx;
+
+        this.div_node_menu_map[node_idx].style("visibility", "hidden");
+        this.input_name_map[node_idx].on("mousedown", function(){ node_clicked = true; });
+
+        this.body.on("mousedown", function()
+        {
+            if(node_clicked == false)
+                scope.onEventRemovePreliminary();
+
+            node_clicked = false;
+        });
+        this.body.on("keydown", function()
+        {
+            if(d3.event.keyCode == 27)
+                scope.onEventRemovePreliminary();
+        });
+
+        document.getElementById("input_" + node_idx).focus();
     },
 
-    disableInputMode : function(node)
+    disableInputMode : function(node_idx)
     {
-        this.div_node_menu_map[node.model.node_idx].style("visibility", "visible");
+        this.div_node_menu_map[node_idx].style("visibility", "visible");
+        this.input_name_map[node_idx].on("mousedown", null);
+        this.body.on("mousedown", null);
+        this.body.on("keydown", null);
     },
 }

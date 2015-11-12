@@ -68,50 +68,6 @@ SceneGraph.prototype =
         this.node_odd.arrangeHorizontal();
         this.node_even.arrangeHorizontal();
     },
-
-    onEventAddPreliminary : function(node_idx)
-    {
-        var model_preliminary = {node_idx:-1, parent_idx:node_idx, root_idx:scene_graph.node_root.model.node_idx, leafs:{}, labels:[], assigned_users:[] };
-
-        scene_graph.removeNode(model_preliminary.node_idx);
-
-        scope.onAddNode(model_preliminary, node_store.getNodeList());
-
-        scene_graph_view.updateNodePosition(scene_graph.node_map[model_preliminary.node_idx]);
-        scene_graph_view.enableInputMode(scene_graph.node_map[model_preliminary.node_idx]);
-    },
-
-    onEventRemovePreliminary : function()
-    {
-        scope.onRemoveNode(-1, node_store.getNodeList());
-    },
-
-    onEventAdd : function(node_idx, node_name)
-    {
-        var model = scene_graph.node_map[node_idx].model;
-
-        scene_graph_view.removeNode(-1);
-        scene_graph.removeNode(-1);
-
-        node_store.addNode(node_name, model.parent_idx, model.root_idx, scope.onAddNode);
-    },
-
-    onEventRemove : function(node_idx)
-    {
-        node_store.removeNode(node_idx, scope.onRemoveNode);
-    },
-
-    onEventView : function(node_idx)
-    {
-        scope.modalNode = JSON.parse(JSON.stringify( scene_graph.node_map[node_idx].model ));
-
-        modal.open
-        ({
-            templateUrl: 'tpl/modal_nodeview.html',
-            controller: 'Modal_NodeView',
-            scope: scope
-        });
-    }
 };
 
 
@@ -217,6 +173,52 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         node.model = node_store.getNode(model_idx);
 
         scene_graph_view.updateLabel(node);
+    };
+
+
+
+    scope.onEventAdd = function(node_idx, node_name)
+    {
+        var model = scene_graph.node_map[node_idx].model;
+
+        scene_graph_view.removeNode(-1);
+        scene_graph.removeNode(-1);
+
+        node_store.addNode(node_name, model.parent_idx, model.root_idx, scope.onAddNode);
+    };
+
+    scope.onEventRemove = function(node_idx)
+    {
+        node_store.removeNode(node_idx, scope.onRemoveNode);
+    };
+
+    scope.onEventAddPreliminary = function(node_idx)
+    {
+        var model_preliminary = {node_idx:-1, parent_idx:node_idx, root_idx:scene_graph.node_root.model.node_idx, leafs:{}, labels:[], assigned_users:[] };
+
+        scene_graph.removeNode(model_preliminary.node_idx);
+
+        scope.onAddNode(model_preliminary, node_store.getNodeList());
+
+        scene_graph_view.updateNodePosition(scene_graph.node_map[model_preliminary.node_idx]);
+        scene_graph_view.enableInputMode(scene_graph.node_map[model_preliminary.node_idx]);
+    };
+
+    scope.onEventRemovePreliminary = function()
+    {
+        scope.onRemoveNode(-1, node_store.getNodeList());
+    };
+
+    scope.onEventView = function(node_idx)
+    {
+        scope.modalNode = JSON.parse(JSON.stringify( scene_graph.node_map[node_idx].model ));
+
+        modal.open
+        ({
+            templateUrl: 'tpl/modal_nodeview.html',
+            controller: 'Modal_NodeView',
+            scope: scope
+        });
     };
 
     scope.modal_callback =

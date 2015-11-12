@@ -33,7 +33,10 @@ api.add_resource(label_palette.PaletteList, '/label_palette/list')
 api.add_resource(label_palette.PaletteAdd, '/label_palette/add')
 api.add_resource(label_palette.PaletteRemove, '/label_palette/remove')
 api.add_resource(label_palette.PaletteUpdate, '/label_palette/update')
-api.add_resource(leaf.LeafUpload, '/leaf/upload')
+api.add_resource(leaf.LeafList, '/leaf/list')
+api.add_resource(leaf.LeafUpload, '/leaf/upload', endpoint='leaf_upload')
+api.add_resource(leaf.LeafUpload, '/leaf/add', endpoint='leaf_add')
+api.add_resource(leaf.LeafRemove, '/leaf/remove')
 api.add_resource(node.NodeList, '/node/list')
 api.add_resource(node.NodeAdd, '/node/add')
 api.add_resource(node.NodeRemove, '/node/remove')
@@ -99,7 +102,10 @@ def authorized():
             picture=userinfo['picture']
             )
         db.session.add(user)
-        db.session.commit()
+    else:
+        user.name = (userinfo['given_name'] + ' ' + userinfo['family_name'])
+        user.picture = userinfo['picture']
+    db.session.commit()
     session['user_id'] = user.id
     return redirect(url_for('index'))
 
