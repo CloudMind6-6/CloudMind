@@ -44,7 +44,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
             if (!_nodename) return;
 
-            NodeStore.addNode(_nodename, $scope.modalNode.parent_idx,
+            NodeStore.addNode(_nodename, $scope.modalNode.node_idx,
                 $scope.modalNode.root_idx, function (_node, _node_list) {
 
                     if ($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
