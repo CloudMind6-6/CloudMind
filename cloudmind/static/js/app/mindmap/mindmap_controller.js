@@ -201,7 +201,7 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         scope.onAddNode(model_preliminary, node_store.getNodeList());
 
         scene_graph_view.updateNodePosition(scene_graph.node_map[model_preliminary.node_idx]);
-        scene_graph_view.enableInputMode(model_preliminary.node_idx);
+        scene_graph_view.enableEditMode(model_preliminary.node_idx);
     };
 
     scope.onEventRemovePreliminary = function()
