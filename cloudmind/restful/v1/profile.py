@@ -87,10 +87,21 @@ class ProfileSearch(Resource):
     def get(self):
         email = request.args.get('email', '')
         name = request.args.get('name', '')
-        user = db.session.query(User).\
-            filter(db.or_(User.name.like('%{0}%'.format(name)), User.email.like('%{0}%'.format(email))))\
-            .first()
+
+        users_query = User.query
+        not_null_filters = []
+        if email != '':
+            not_null_filters.append(User.email.like('{0}%'.format(email)))
+        if name != '':
+            not_null_filters.append(User.name.like('%{0}%'.format(name)))
+
+        if len(not_null_filters) > 0:
+            users_query = users_query.filter(db.or_(*not_null_filters))
+            users_serialize = [i.serialize for i in users_query.all()]
+        else:
+            users_serialize = []
+
         return {
             'success': True,
-            'profile': user.serialize
+            'profile': users_serialize
         }
