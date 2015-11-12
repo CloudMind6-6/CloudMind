@@ -50,6 +50,8 @@ class NodeAdd(Resource):
                 abort(404, message="노드멤버 아님")
 
         if root_id is not None:
+            if parent_node_id is None:
+                abort(404, message="일반 노드에서 parent_node_id는 필수입니다.")
             root_node = db.session.query(Node).filter(Node.id == root_id).first()
             if root_node is None:
                 abort(404, message="Not found {}".format("root_node"))
