@@ -23,7 +23,6 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
         $scope.eventSources = [$scope.events];
     }
 
-    /* alert on dayClick */
     $scope.precision = 400;
     $scope.lastClickTime = 0;
 

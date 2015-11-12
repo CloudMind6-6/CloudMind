@@ -5,14 +5,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
         init_NodeViewModal();
 
-        $scope.matchUserList = [
-            {account_id: "1", name: "chorong", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-            {account_id: "2", name: "chorong2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-            {account_id: "3", name: "chorong3", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-            {account_id: "4", name: "jinsil", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-            {account_id: "5", name: "jinsil2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"}
-        ];
-
         $scope.cancel = function () {
             $modalInstance.close();
         };
@@ -111,9 +103,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             var dueDate        = new Date(node.due_date);
             var assigned_users = JSON.parse(JSON.stringify(node.assigned_users));
 
-            console.log($scope.users);
-            console.log(_user_idx);
-
             assigned_users.assigned_users.push(_user_idx);
 
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
@@ -152,7 +141,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
                 isClear = false;
                 UserStore.searchProfile(_str, function(_result) {
                     console.log(_result);
-                    $scope.matchUserList = [];
+                    $scope.matchUserList = [_result];
                 });
             }
         };
