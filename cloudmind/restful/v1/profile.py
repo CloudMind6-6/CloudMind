@@ -85,10 +85,10 @@ class ProfileUpload(Resource):
 
 class ProfileSearch(Resource):
     def get(self):
-        email = request.args.get('email')
-        name = request.args.get('name')
+        email = request.args.get('email', '')
+        name = request.args.get('name', '')
         user = db.session.query(User).\
-            filter(db.or_(User.name == name, User.email == email))\
+            filter(db.or_(User.name.like('%{0}%'.format(name)), User.email.like('%{0}%'.format(email))))\
             .first()
         return {
             'success': True,
