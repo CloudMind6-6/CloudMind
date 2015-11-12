@@ -287,14 +287,14 @@ SceneGraphView.prototype =
                 d3.select(this).classed("over", true);
 
                 for(var parent = scene_graph.node_map[model.node_idx]; parent.model.node_idx != parent.model.root_idx; parent = scene_graph.node_map[parent.model.parent_idx])
-                    scene_graph_view.enableSelected(parent.model.node_idx);
+                    scene_graph_view.enableSelected(parent);
             })
             .on("mouseout", function()
             {
                 d3.select(this).classed("over", false);
 
                 for(var parent = scene_graph.node_map[model.node_idx]; parent.model.node_idx != parent.model.root_idx; parent = scene_graph.node_map[parent.model.parent_idx])
-                    scene_graph_view.disableSelected(parent.model.node_idx);
+                    scene_graph_view.disableSelected(parent);
             })
 
 
@@ -449,34 +449,46 @@ SceneGraphView.prototype =
         this.updateUsers(node);
     },
 
-    enableSelected : function(node_idx)
+    enableSelected : function(node)
     {
-        var div_node_info = this.div_node_info_map[node_idx];
-        var svg_node_link = this.svg_node_link_map[node_idx];
+        var div_node_info = this.div_node_info_map[node.model.node_idx];
+        var svg_node_link = this.svg_node_link_map[node.model.node_idx];
 
         div_node_info
             .transition()
-            .style("background-color", "#957acb");
+            .style("background-color", "#957acb")
+            .style("left", this.center_x + node.x - node.width/2 + "px")
+            .style("top", this.center_y + node.y - node.height/2 + "px")
 
         svg_node_link
             .transition()
             .style("stroke-width", "6px")
-            .style("stroke", "#957acb");
+            .style("stroke", "#957acb")
+            .attr("d", d3.svg.diagonal()
+                .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
+                .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; })
     },
 
-    disableSelected : function(node_idx)
+    disableSelected : function(node)
     {
-        var div_node_info = this.div_node_info_map[node_idx];
-        var svg_node_link = this.svg_node_link_map[node_idx];
+        var div_node_info = this.div_node_info_map[node.model.node_idx];
+        var svg_node_link = this.svg_node_link_map[node.model.node_idx];
 
         div_node_info
             .transition()
-            .style("background-color", "#219fcb");
+            .style("background-color", "#219fcb")
+            .style("left", this.center_x + node.x - node.width/2 + "px")
+            .style("top", this.center_y + node.y - node.height/2 + "px")
 
         svg_node_link
             .transition()
             .style("stroke-width", "2px")
-            .style("stroke", "#477499");
+            .style("stroke", "#477499")
+            .attr("d", d3.svg.diagonal()
+                .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
+                .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; })
     },
 
     enableInputMode : function(node_idx)
