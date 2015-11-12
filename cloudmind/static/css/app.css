@@ -1,4 +1,4 @@
-/* 
+/*
 
 */
 
@@ -5194,6 +5194,7 @@ a.text-#000000:hover {
 .bg-pl-card{
   background-color: rgb(254, 206, 205);
   color: ghostwhite;
+  text-shadow: 1px 1px 1px #888;
 }
 
 .bg-pl-pic{
