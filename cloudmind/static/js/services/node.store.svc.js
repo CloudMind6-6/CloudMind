@@ -52,7 +52,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .success(function (res) {
                     if (res.success) {
                         nodeList = res.node_list;
-                        console.log(nodeList);
                         callback('nodeList');
                     }
                     else throw new Error;

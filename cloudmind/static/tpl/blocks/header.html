@@ -13,30 +13,30 @@
       <div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}" >
 
         <!-- maps memu -->
-        <ul class="nav navbar-nav hidden-sm" ng-controller="NavBarCtrl">
+        <ul class="nav navbar-nav" ng-controller="NavBarCtrl">
           <li ui-sref-active="active">
             <a ui-sref="app.list">
               <i class="glyphicon glyphicon-th"></i>
-              <span class="font-bold"  translate="header.navbar.PROJECTS">Projects</span>
+              <span class="font-bold hidden-sm"   translate="header.navbar.PROJECTS">Projects</span>
             </a>
           </li>
 
           <li ui-sref-active="active">
             <a ui-sref="app.mindmap" ng-show=state>
               <i class="fa fa-lg fa-share-alt-square"></i>
-              <span class="font-bold"  translate="header.navbar.MINDMAP">MindMap</span>
+              <span class="font-bold hidden-sm"  translate="header.navbar.MINDMAP">MindMap</span>
             </a>
           </li>
           <li ui-sref-active="active">
             <a ui-sref="app.calendar" ng-show=state>
               <i class="glyphicon glyphicon-calendar icon"></i>
-              <span class="font-bold" translate="header.navbar.CALENDAR">Calendar</span>
+              <span class="font-bold hidden-sm" translate="header.navbar.CALENDAR">Calendar</span>
             </a>
           </li>
           <li ui-sref-active="active">
             <a ui-sref="app.table" ng-show=state>
               <i class="glyphicon glyphicon-list"></i>
-              <span class="font-bold"  translate="header.navbar.LIST">List</span>
+              <span class="font-bold hidden-sm"  translate="header.navbar.LIST">List</span>
             </a>
           </li>
         </ul>
@@ -82,15 +82,3 @@
         <!-- / navbar right -->
       </div>
       <!-- / navbar collapse -->
-
-      <!--
-      <button type="submit" class="btn btn-primary btn-sm-input" ng-click="updateName('{{ newName }}')">
-                              <span class="icon-sm-input-check"><i class="fa fa-check"></i></span>
-                          </button>
-                          <button type="button" class="btn btn-default btn-sm-input" ng-click="clickCancelBtn()">
-                              <span class="icon-sm-input-time"><i class="fa fa-times"></i></span>
-                          </button>
-       -->
-
-
-

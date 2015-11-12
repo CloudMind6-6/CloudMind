@@ -1,12 +1,5 @@
 app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $modal, $scope, NodeStore) {
 
-    var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
-
-
-
     initCalendar();
 
     function initCalendar(){
@@ -37,6 +30,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
     $scope.alertOnEventClick = function (node, jsEvent, view) {
 
         $scope.modalNode = JSON.parse(JSON.stringify( $scope.nodes[node.idx]));
+        $scope.modalIdx = node.idx;
 
         $scope.staticDate = node.due_date;
         $modal.open({
@@ -96,43 +90,52 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
     /* Modal Event Callback*/
     function eventOnModal_addNode(_node, _node_list){
 
-        $scope.nodes = _node_list;
         var length = $scope.nodes.length;
 
-        var source = {
+        $scope.events.push({
             idx      : length - 1,
             node_idx : _node.node_idx,
             title    : _node.name,
             start    : _node.due_date.substring(0,10),
             info     : _node.description
-        };
+        });
 
-        $('#calendar').fullCalendar( 'addEventSource', source );
+        $scope.nodes = _node_list;
     }
 
-    function eventOnModal_updateNode(){
+    function eventOnModal_updateNode(_node_idx, _node_list){
 
+        var node = $scope.modalNode;
+
+        $scope.events[$scope.modalIdx] = {
+            idx      : $scope.modalIdx,
+            node_idx : node.node_idx,
+            title    : node.name,
+            start    : node.due_date,
+            info     : node.description
+        };
+
+        $scope.nodes = _node_list;
     }
 
     function eventOnModal_otherEvents(){
-
+        $scope.nodes = NodeStore.getNodeList();
+        $scope.labelPalette = NodeStore.getLabelPalette();
     }
-
-
 
     $scope.modal_callback = {
         addNode       : eventOnModal_addNode,
-        updateNode    : null,
+        updateNode    : eventOnModal_updateNode,
 
-        addLabel      : null,
-        removeLabel   : null,
+        addLabel      : eventOnModal_otherEvents,
+        removeLabel   : eventOnModal_otherEvents,
 
-        addLeaf       : null,
-        removeLeaf    : null,
+        addLeaf       : eventOnModal_otherEvents,
+        removeLeaf    : eventOnModal_otherEvents,
 
-        addPalette    : null,
-        removePalette : null,
-        updatePalette : null
+        addPalette    : eventOnModal_otherEvents,
+        removePalette : eventOnModal_otherEvents,
+        updatePalette : eventOnModal_otherEvents
     };
 
     $scope.uiConfig = {
