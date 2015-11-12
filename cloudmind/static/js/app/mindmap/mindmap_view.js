@@ -282,8 +282,20 @@ SceneGraphView.prototype =
             .attr("idx", model.node_idx)
             .style("left", this.center_x + node.x - node.width/2 + "px")
             .style("top", this.center_y + node.y - node.height/2 + "px")
-            .on("mouseover", function(){d3.select(this).classed("over", true);})
-            .on("mouseout", function(){d3.select(this).classed("over", false);})
+            .on("mouseover", function()
+            {
+                d3.select(this).classed("over", true);
+
+                for(var parent = scene_graph.node_map[model.node_idx]; parent.model.node_idx != parent.model.root_idx; parent = scene_graph.node_map[parent.model.parent_idx])
+                    scene_graph_view.enableSelected(parent.model.node_idx);
+            })
+            .on("mouseout", function()
+            {
+                d3.select(this).classed("over", false);
+
+                for(var parent = scene_graph.node_map[model.node_idx]; parent.model.node_idx != parent.model.root_idx; parent = scene_graph.node_map[parent.model.parent_idx])
+                    scene_graph_view.disableSelected(parent.model.node_idx);
+            })
 
 
         var div_node_menu_side = div_node_menu.append('div').attr("class", "left");
@@ -437,10 +449,39 @@ SceneGraphView.prototype =
         this.updateUsers(node);
     },
 
-    enableInputMode : function(node)
+    enableSelected : function(node_idx)
+    {
+        var div_node_info = this.div_node_info_map[node_idx];
+        var svg_node_link = this.svg_node_link_map[node_idx];
+
+        div_node_info
+            .transition()
+            .style("background-color", "#957acb");
+
+        svg_node_link
+            .transition()
+            .style("stroke-width", "6px")
+            .style("stroke", "#957acb");
+    },
+
+    disableSelected : function(node_idx)
+    {
+        var div_node_info = this.div_node_info_map[node_idx];
+        var svg_node_link = this.svg_node_link_map[node_idx];
+
+        div_node_info
+            .transition()
+            .style("background-color", "#219fcb");
+
+        svg_node_link
+            .transition()
+            .style("stroke-width", "2px")
+            .style("stroke", "#477499");
+    },
+
+    enableInputMode : function(node_idx)
     {
         var node_clicked = false;
-        var node_idx = node.model.node_idx;
 
         this.div_node_menu_map[node_idx].style("visibility", "hidden");
         this.input_name_map[node_idx].on("mousedown", function(){ node_clicked = true; });
