@@ -28,8 +28,14 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
                 .error(function (err){
                     console.log(err);
                 });
+        },
+
+        searchProfile : function(_input, callback){
+            HttpSvc.searchProfile(_input, _input)
+                .success(function(res){
+                    console.log(res.profile);
+                    callback(res.profile);
+                })
         }
     }
-
-
 }]);

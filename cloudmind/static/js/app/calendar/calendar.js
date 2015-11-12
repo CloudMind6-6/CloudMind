@@ -5,46 +5,29 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
     var m = date.getMonth();
     var y = date.getFullYear();
 
-    $scope.className = 'b-1 b-2x b-info';
 
-    $scope.events = [];
-
-    $scope.modal_callback = {
-        addNode : function(){
-            console.log('test add node');
-        },
-        updateNode : null,
-
-        addLabel : function(){
-            console.log('test add label');
-        },
-        removeLabel : null,
-
-        addLeaf : null,
-        removeLeaf : null,
-
-        addPalette : null,
-        removePalette : null,
-        updatePalette : null
-    };
 
     initCalendar();
 
     function initCalendar(){
 
         var count = 0;
-        $scope.nodes =  NodeStore.getNodeList();
+        $scope.className = 'b-1 b-2x b-info';
+        $scope.events    = [];
+        $scope.nodes     =  NodeStore.getNodeList();
         $scope.labelPalette = NodeStore.getLabelPalette();
 
         angular.forEach($scope.nodes, function(value, key){
             $scope.events.push({
-                idx: count++,
-                node_idx: value.node_idx,
-                title: value.name,
-                start: value.due_date.substring(0,10),
-                info: value.description
+                idx      : count++,
+                node_idx : value.node_idx,
+                title    : value.name,
+                start    : value.due_date.substring(0,10),
+                info     : value.description
             });
         });
+
+        $scope.eventSources = [$scope.events];
     }
 
     /* alert on dayClick */
@@ -89,18 +72,67 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
             $scope.overlay.addClass('top').find('.arrow').removeClass('pull-up').addClass('pull-down')
         }
         (wrap.find('.fc-overlay').length == 0) && wrap.append($scope.overlay);
-    }
+    };
 
     $scope.updateDuedate = function (event, delta, revertFunc, jsEvent, ui, view) {
 
-        NodeStore.updateNode(event.node_idx, event.title, event.start.format(), event.info, function (_idx, _node_list) {
-            if (!_node_list) {
-                revertFunc();
-                return;
+        var node    = $scope.nodes[event.idx];
+        var newDate = event.start.format();
+
+        NodeStore.updateNode(node.node_idx, node.name, newDate,
+            node.description, node.assigned_users, function (_node_idx, _node_list) {
+
+                if (!_node_list) {
+                    revertFunc();
+                    return;
+                }
+
+                node.due_date = newDate;
+                $scope.nodes = _node_list;
             }
-            $scope.nodes[event.idx].due_date = event.start.format();
-            console.log($scope.nodes[event.idx]);
-        });
+        );
+    };
+
+    /* Modal Event Callback*/
+    function eventOnModal_addNode(_node, _node_list){
+
+        $scope.nodes = _node_list;
+        var length = $scope.nodes.length;
+
+        var source = {
+            idx      : length - 1,
+            node_idx : _node.node_idx,
+            title    : _node.name,
+            start    : _node.due_date.substring(0,10),
+            info     : _node.description
+        };
+
+        $('#calendar').fullCalendar( 'addEventSource', source );
+    }
+
+    function eventOnModal_updateNode(){
+
+    }
+
+    function eventOnModal_otherEvents(){
+
+    }
+
+
+
+    $scope.modal_callback = {
+        addNode       : eventOnModal_addNode,
+        updateNode    : null,
+
+        addLabel      : null,
+        removeLabel   : null,
+
+        addLeaf       : null,
+        removeLeaf    : null,
+
+        addPalette    : null,
+        removePalette : null,
+        updatePalette : null
     };
 
     $scope.uiConfig = {
@@ -123,11 +155,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
     $scope.today = function (calendar) {
         $('.calendar').fullCalendar('today');
     };
-
-    /* event sources array*/
-    $scope.eventSources = [$scope.events];
 }]);
-/* EOF */
 
 
 
