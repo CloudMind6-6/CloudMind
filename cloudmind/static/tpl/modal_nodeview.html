@@ -97,9 +97,9 @@
             <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
-                    <button ng-click="click_test()">test btn</button>
 					<hr class="m-b-sm m-t-sm hr-color">
-                    <div angucomplete-alt id="search_people"
+                    <div ng-show="isRoot"
+                         angucomplete-alt id="search_people"
                          placeholder="Search people"
                          pause="300"
                          selected-object="inviteUserInModal"
@@ -115,43 +115,12 @@
                          input-class="angucomplete-form-control">
                     </div>
 
-                    <div ng-repeat="user in modalNode.assigned_users">
-                        <img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
-                    </div>
-					<div class="part_lists">
-                        <ul>
-                            <li>
-                                <div ng-click="addParticipantInModal(1)">
-                                    <span id="left_image"><img width="30" src="../img/a0.jpg"></span>
-                                    <span id="right_name"><p>RainC</p></span>
-                                </div>
-                            </li>
-                            <li>
-                                <div ng-click="addParticipantInModal(2)">
-                                    <span id="left_image"><img width="30" src="../img/a0.jpg"></span>
-                                    <span id="right_name"><p>RainC</p></span>
-                                </div>
-                            </li>
-                            <li>
-                                <div ng-click="addParticipantInModal(3)">
-                                    <span id="left_image"><img width="30" src="../img/a0.jpg"></span>
-                                    <span id="right_name"><p>RainC</p></span>
-                                </div>
-                            </li>
-                            <li>
-                                <div ng-click="addParticipantInModal(4)">
-                                    <span id="left_image"><img width="30" src="../img/a0.jpg"></span>
-                                    <span id="right_name"><p>RainC</p></span>
-                                </div>
-                            </li>
-                            <li>
-                                <div ng-click="addParticipantInModal(5)">
-                                    <span id="left_image"><img width="30" src="../img/a0.jpg"></span>
-                                    <span id="right_name"><p>RainC</p></span>
-                                </div>
-                            </li>
-
-                        </ul>
+                    <div class="part_lists" ng-repeat="user in modalNode.assigned_users" ng-show="isRoot">
+                        <div ng-click="addParticipantInModal(user.account_id)">
+                            <img class="thumb-sm avatar m-r-xs" >
+                            <span id="left_image"><img width="30" ng-src={{users[user].profile_url}}"></span>
+                            <span id="right_name"><p>RainC</p></span>
+                        </div>
                     </div>
 				</span>
             </div>
