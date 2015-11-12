@@ -1,10 +1,18 @@
-app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeStore'  , '$state', '$filter', function($scope, $timeout, HttpSvc, $http, NodeStore, $state, $filter) {
+app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeStore'  , '$state', '$filter', '$modal' , function($scope, $timeout, HttpSvc, $http, NodeStore, $state, $filter, $modal) {
     $scope.nodes = [];
-    function Inittable() {
-        var node_list = NodeStore.getNodeList(); // nodelist
-        var labels = NodeStore.getLabelPalette();
-        $scope.Init1 = [];
+    $scope.nodes_notchange = [];
+    var tbody_count = 0 ;
+    $('#nodeTableView tbody').on( 'click', 'tr',function (){
+        console.log($(this).index());
+    });
 
+    $scope.InitTable = function () {
+        var node_list = NodeStore.getNodeList(); // nodelist
+        $scope.nodes_notchange = NodeStore.getNodeList();
+        var labels = NodeStore.getLabelPalette();
+
+        $scope.Init1 = [];
+        var count_idx = 0;
         for (var jsons in node_list) {
             var Nodename = node_list[jsons].name;
             var due_date = node_list[jsons].due_date;
@@ -15,6 +23,10 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
 
             $scope.UserEmail = [];
             $scope.Label_colors = [];
+            
+            $scope.Name = "<a onclick=\"angular.element(this).scope().load_modal( "  + count_idx  + " )\">" + Nodename + "</a>";
+        
+
 
             for (var n in labels_list) {
                 for (var s in labels) {
@@ -50,13 +62,28 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
             $scope.times = due_date;
             var time_format = $filter('date')(due_date,'yyyy-MM-dd'); // time format change
 
-            $scope.Init1.push({"name" : Nodename , "labels" : LabelList_join , "due_date" : time_format , "people" : "<div id='list-image' style='display:inline-block; float:left;'>" + UserList_join + "</div>"});
+            $scope.Init1.push({"name" : $scope.Name , "labels" : LabelList_join , "due_date" : time_format , "people" : "<div id='list-image' style='display:inline-block;'>" + UserList_join + "</div>" , "view_modal" : "<i class='fa fa-file-text-o'></i>"});
+            count_idx = count_idx + 1;
         }
         $scope.nodes = $scope.Init1;
+        
     }
 
-    Inittable();
     
+
+
+    $scope.load_modal  = function (idx_node) {
+        $scope.modalNode = JSON.parse(JSON.stringify($scope.nodes_notchange[idx_node]));
+        $scope.staticDate = $scope.nodes_notchange[idx_node].due_date;
+
+        $modal.open({
+            templateUrl: 'tpl/modal_nodeview.html',
+            controller: 'Modal_NodeView',
+            scope: $scope
+        });
+    }
+
+    $scope.InitTable();
 
 }]);
 

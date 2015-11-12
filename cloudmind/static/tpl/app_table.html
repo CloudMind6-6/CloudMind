@@ -2,6 +2,25 @@
   body {
     overflow-y: scroll;
   }
+  #nodeTableView tr td:nth-child(1){
+    text-align:center;
+  }
+
+  #nodeTableView tr td:nth-child(2){
+    text-align:center;
+  }
+  #nodeTableView tr td:nth-child(3){
+    text-align:center;
+  }
+  #nodeTableView tr td:nth-child(4) div p {
+    text-align:center;
+  }
+  
+  #nodeTableView tr td:nth-child(5){
+    text-align:center;
+  }
+  
+
 </style>
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3">List</h1>
@@ -12,7 +31,7 @@
       Node List
     </div>
     <div class="table-responsive" ng-controller="TableCtrl">
-      <table ui-jq="dataTable" ui-options="
+      <table id="nodeTableView" ui-jq="dataTable" ui-options="
       {
         bProcessing: true,
         aaData: {{nodes}},
@@ -20,16 +39,18 @@
             { mData: 'name' },
             { mData: 'labels' },
             { mData: 'due_date' },
-            { mData: 'people' }
+            { mData: 'people'},
+            { mData: 'view_modal' }
       ]
       }
      "class="table table-striped b-t b-b">
-        <thead>
+        <thead ng-controller="TableCtrl">
           <tr>
-            <th  style="width:20%; vertical-align:middle">노드 이름</th>
-            <th  style="width:25%; vertical-align:middle">라벨 상태</th>
-            <th  style="width:25%; vertical-align:middle">마감 날짜</th>
-            <th  style="width:15%; vertical-align:middle ">인원</th>
+            <th  style="width:20%; vertical-align:middle; text-align:center ">노드 이름</th>
+            <th  style="width:25%; vertical-align:middle; text-align:center ">라벨 상태</th>
+            <th  style="width:25%; vertical-align:middle; text-align:center ">마감 날짜</th>
+            <th  style="width:15%; vertical-align:middle;text-align:center ">인원</th>
+            <th  style="width:15%; vertical-align:middle; text-align:center ">자세히 보기</th>
           </tr>
         </thead>
         <tbody>
