@@ -76,6 +76,7 @@ class LeafUpload(Resource):
         leaf = Leaf(name=name, file_path=filepath)
         leaf.creator = creator
         leaf.parent_node = parent_node
+        leaf.root_node = parent_node.root_node
         db.session.add(leaf)
         db.session.commit()
 
