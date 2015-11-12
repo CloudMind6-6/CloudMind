@@ -227,6 +227,8 @@ SceneGraphView = function()
             menu_add:"fa fa-3x fa-plus-square",
             menu_remove:"fa fa-3x fa-minus-square",
             menu_view:"fa fa-5x fa-file-text",
+            menu_edit_name:"fa fa-3x fa-pencil-square",
+            menu_movable:"fa fa-3x fa-arrows-alt",
             link:"mindmap_root_link",
             portrait:"mindmap_root_portrait"
         },
@@ -236,14 +238,16 @@ SceneGraphView = function()
             node:"mindmap_node_info",
             label:"mindmap_node_label",
             menu:"mindmap_node_menu",
-            menu_add:"fa fa-lg fa-plus-square",
-            menu_remove:"fa fa-lg fa-minus-square",
-            menu_view:"fa fa-2x fa-file-text",
+            menu_add:"fa fa-1_5x fa-plus-square",
+            menu_remove:"fa fa-1_5x fa-minus-square",
+            menu_view:"fa fa-2_5x fa-file-text",
+            menu_edit_name:"fa fa-1_5x fa-pencil-square",
+            menu_movable:"fa fa-1_5x fa-arrows-alt",
             link:"mindmap_node_link",
             portrait:"mindmap_node_portrait"
         },
     };
-}
+};
 
 SceneGraphView.prototype =
 {
@@ -298,24 +302,37 @@ SceneGraphView.prototype =
             })
 
 
-        var div_node_menu_side = div_node_menu.append('div').attr("class", "left");
+        var div_node_menu_left = div_node_menu.append('div').attr("class", "left");
 
-        div_node_menu_side.append('div').append('i')
+        div_node_menu_left.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_add)
-            //.on("click", function(){ scene_graph.onEventAdd(d3.select(this).attr("idx")) });
             .on("click", function(){ scope.onEventAddPreliminary(d3.select(this).attr("idx")) });
 
-        div_node_menu_side.append('div').append('i')
+        div_node_menu_left.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_remove)
             .on("click", function(){ scope.onEventRemove(d3.select(this).attr("idx")) });
 
-        div_node_menu.append('div').attr("class", "right")
+        var div_node_menu_right = div_node_menu.append('div').attr("class", "right");
+
+        div_node_menu_right.append('div').append('i')
+            .attr("idx", model.node_idx)
+            .attr("class", class_info.menu_edit_name)
+            //.on("click", function(){ scene_graph_view.enableEditMode(d3.select(this).attr("idx")) });
+
+        div_node_menu_right.append('div').append('i')
+            .attr("idx", model.node_idx)
+            .attr("class", class_info.menu_movable)
+            //.on("click", function(){ scene_graph_view.enableEditMode(d3.select(this).attr("idx")) });
+
+
+        div_node_menu.append('div').attr("class", "center")
             .append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_view)
             .on("click", function(){ scope.onEventView(d3.select(this).attr("idx")) });
+
 
 
 
@@ -342,7 +359,7 @@ SceneGraphView.prototype =
         this.canvas_node.selectAll("div[idx='" + node_idx +"']").remove();
         this.canvas_link.selectAll("path[idx='" + node_idx +"']").remove();
 
-        this.disableInputMode(node_idx);
+        this.disableEditMode(node_idx);
 
         this.div_node_info_map[node_idx] = null;
         this.div_node_menu_map[node_idx] = null;
@@ -467,7 +484,7 @@ SceneGraphView.prototype =
             .attr("d", d3.svg.diagonal()
                 .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
                 .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; })
+                .projection(function(d) { return [d.y, d.x]; }))
     },
 
     disableSelected : function(node)
@@ -488,10 +505,10 @@ SceneGraphView.prototype =
             .attr("d", d3.svg.diagonal()
                 .source({x : this.center_y - 50 + node.link_src_y, y : this.center_x + node.link_src_x})
                 .target({x : this.center_y - 50 + node.link_dst_y, y : this.center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; })
+                .projection(function(d) { return [d.y, d.x]; }))
     },
 
-    enableInputMode : function(node_idx)
+    enableEditMode : function(node_idx)
     {
         var node_clicked = false;
 
@@ -514,11 +531,25 @@ SceneGraphView.prototype =
         document.getElementById("input_" + node_idx).focus();
     },
 
-    disableInputMode : function(node_idx)
+    disableEditMode : function(node_idx)
     {
         this.div_node_menu_map[node_idx].style("visibility", "visible");
         this.input_name_map[node_idx].on("mousedown", null);
         this.body.on("mousedown", null);
         this.body.on("keydown", null);
+    },
+
+    enableFloatingMode : function(node_idx)
+    {
+        this.body.on("mousemove", function()
+        {
+            if(d3.event.keyCode == 27)
+                scope.onEventRemovePreliminary();
+        });
+    },
+
+    disableFloatingMode : function(node_idx)
+    {
+
     },
 }

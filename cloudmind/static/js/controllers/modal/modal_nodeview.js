@@ -23,8 +23,12 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             var node = $scope.modalNode;
             var dueDate = new Date(node.due_date);
 
+            console.log(node.due_date);
+
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
                 $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
+
+                    $scope.modalNode.description = $scope.newDes;
 
                     if ($scope.modal_callback.updateNode)
                         $scope.modal_callback.updateNode(_node_idx, _node_list);
@@ -34,8 +38,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
                         groupType: $scope.groupType
                     });
                 });
-
-
         };
 
         $scope.addNodeInModal = function (_nodename) {
@@ -46,7 +48,9 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
                 $scope.modalNode.root_idx, function (_node, _node_list) {
 
                     if ($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
-                    $scope.clickChildNodeInModal(_node);
+
+                    $scope.modalIdx = _node_list.length - 1;
+                        $scope.clickChildNodeInModal(_node);
                 });
         };
 
@@ -103,23 +107,21 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         /* Participant */
         $scope.addParticipantInModal = function (_user_idx) {
 
-            var node = $scope.modalNode;
-            var dueDate = new Date(node);
+            var node           = $scope.modalNode;
+            var dueDate        = new Date(node.due_date);
+            var assigned_users = JSON.parse(JSON.stringify(node.assigned_users));
 
             console.log($scope.users);
             console.log(_user_idx);
-            node.assigned_users.push(_user_idx);
+
+            assigned_users.assigned_users.push(_user_idx);
 
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
                 $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
 
+                    node.assigned_users.push(_user_idx);
                     if ($scope.modal_callback.updateNode)
                         $scope.modal_callback.updateNode(_node_idx, _node_list);
-
-                    $modalInstance.close({
-                        name: $scope.name,
-                        groupType: $scope.groupType
-                    });
                 }
             );
         };
@@ -235,6 +237,9 @@ app.controller('DatepickekCtrl', ['$scope', function ($scope) {
             var year = $scope.dt.getFullYear();
             var month = $scope.dt.getMonth() + 1;
             var date = $scope.dt.getDate();
+
+            if(month.toString().length == 1) month = '0' + month;
+            if(date.toString().length == 1)  date  = '0' + date;
 
             $scope.modalNode.due_date = (year + '-' + month + '-' + date);
         }
