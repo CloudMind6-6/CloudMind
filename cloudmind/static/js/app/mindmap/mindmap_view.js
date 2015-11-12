@@ -398,6 +398,7 @@ SceneGraphView.prototype =
 
         input_name
             .attr("idx", node.model.node_idx)
+            .attr("id", "input_" + node.model.node_idx)
             .attr("class", "input")
             .attr("value", node.model.name)
             .attr("placeholder", "노드 이름")
@@ -443,12 +444,11 @@ SceneGraphView.prototype =
     enableInputMode : function(node)
     {
         this.div_node_menu_map[node.model.node_idx].style("visibility", "hidden");
-        this.input_name_map[node.model.node_idx].on("click")();
+        document.getElementById("input_" + node.model.node_idx).focus();
     },
 
     disableInputMode : function(node)
     {
         this.div_node_menu_map[node.model.node_idx].style("visibility", "visible");
-        this.input_name_map[node.model.node_idx].attr("autofocus", "false");
     },
 }
