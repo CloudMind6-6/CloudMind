@@ -6,6 +6,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
     var navbarCallback = null;
 
     var nodeList = [];
+    var leafList = [];
     var labelPalette;
 
     return {
@@ -23,31 +24,58 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         setNodeStore : function(_idx,  callback){
 
-            var isSet = {setNodeList : false, setPalette : false};
+            var isSet = {
+                nodeList : false,
+                palette  : false,
+                leafList : false
+            };
 
             this.setNodeList(_idx, null, function(_value){
                 isSet[_value] = true;
-                if(isSet.setNodeList && isSet.setPalette) callback();
+                if(isSet.nodeList && isSet.palette && isSet.leafList) callback();
             });
 
-            this.setLabelPalette(_idx,  function(_value){
+            this.setLabelPalette(_idx, function(_value){
                 isSet[_value] = true;
-                if(isSet.setNodeList && isSet.setPalette) callback();
+                if(isSet.nodeList && isSet.palette && isSet.leafList) callback();
             });
+
+            this.setLeafList(_idx, function(_value){
+                isSet[_value] = true;
+                console.log(leafList);
+                if(isSet.nodeList && isSet.palette && isSet.leafList) callback();
+            })
         },
 
         setNodeList : function (_idx, _null, callback) {
-             HttpSvc.getNodes(_idx)
-             .success(function (res){
-                     if(res.success) {
-                         nodeList = res.node_list;
-                         callback('setNodeList');
-                     }
-                     else throw new Error;
-                 })
-             .error(function (err){
-                     console.log(err);
-                 });
+            HttpSvc.getNodes(_idx)
+                .success(function (res) {
+                    if (res.success) {
+                        nodeList = res.node_list;
+                        console.log(nodeList);
+                        callback('nodeList');
+                    }
+                    else throw new Error;
+                })
+                .error(function (err) {
+                    console.log(err);
+                }
+            );
+        },
+
+        setLeafList: function (_idx, callback) {
+            HttpSvc.getLeafs(_idx)
+                .success(function (res) {
+                    if (res.success) {
+                        leafList = res.leaf_list;
+                        callback('leafList');
+                    }
+                    else throw new Error;
+                })
+                .error(function (err) {
+                    console.log(err);
+                });
+
         },
 
         setLabelPalette : function(_idx, callback){
@@ -57,15 +85,20 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                         var palette_list = res.label_palette_list;
 
                         labelPalette = new Object();
+
                         for(var i in palette_list){
+
+                            var temp;
                             var idx = palette_list[i].palette_idx;
                             labelPalette[idx] = palette_list[i];
 
-                            if(labelPalette[idx].color[0] == '#');
-                            else if(i==5) labelPalette[idx].color = '#00'+labelPalette[idx].color.toString(16).toUpperCase();
-                            else labelPalette[idx].color = '#'+labelPalette[idx].color.toString(16).toUpperCase();
+                            if(labelPalette[idx].color[0] == '#') temp = labelPalette[idx].color;
+                            else if(i==5) temp = '#00'+labelPalette[idx].color.toString(16).toUpperCase();
+                            else temp = '#'+labelPalette[idx].color.toString(16).toUpperCase();
+
+                            labelPalette[idx].color = temp;
                         }
-                        callback('setPalette');
+                        callback('palette');
 
                     }
                     else throw new Error;
@@ -81,6 +114,10 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         getLabelPalette : function(){
             return labelPalette;
+        },
+
+        getLeafList : function(){
+            return leafList;
         },
 
         /* Node */
@@ -116,9 +153,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 });
         },
 
-        updateNode : function (_idx, _node_name, _dueDate, _description, callback){
+        updateNode : function (_idx, _node_name, _dueDate, _description, assigned_users, callback){
 
-            HttpSvc.updateNode(_idx, _node_name, _dueDate, _description)
+            HttpSvc.updateNode(_idx, _node_name, _dueDate, _description, assigned_users)
                 .success(function (res) {
                     if (res.success) {
                         nodeList = res.node_list;
@@ -147,7 +184,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         },
 
         /* Palette */
-
         updateLabelPalette : function(_palette_id, _name, _color, callback){
             HttpSvc.updateLabelpalette(_palette_id, _name, _color)
                 .success(function (res) {
@@ -162,7 +198,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         },
 
         /* Label */
-
         addLabel : function(_node_id, _palette_id, callback){
             HttpSvc.addLabel(_node_id, _palette_id)
                 .success(function(res){
@@ -204,9 +239,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             });
         },
 
-        removeLeaf : function(){
-
-        },
         
     };
 }]);

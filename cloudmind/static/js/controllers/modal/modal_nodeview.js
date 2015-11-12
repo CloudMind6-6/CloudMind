@@ -1,9 +1,11 @@
-app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'UserStore', 'HttpSvc',
-    function ($scope, $modalInstance, NodeStore, UserStore, HttpSvc) {
+app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'UserStore',
+    function ($scope, $modalInstance, NodeStore, UserStore) {
+
+        var isClear;
 
         init_NodeViewModal();
 
-        $scope.searchingUser = [
+        $scope.matchUserList = [
             {account_id: "1", name: "chorong", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
             {account_id: "2", name: "chorong2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
             {account_id: "3", name: "chorong3", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
@@ -19,20 +21,21 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         $scope.applyInModal = function () {
 
             var node = $scope.modalNode;
-            var dueDate = new Date(node);
+            var dueDate = new Date(node.due_date);
 
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
-                $scope.newDes, function (_node_idx, _node_list) {
+                $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
 
                     if ($scope.modal_callback.updateNode)
                         $scope.modal_callback.updateNode(_node_idx, _node_list);
-                    $scope.nodes = _node_list;
 
                     $modalInstance.close({
                         name: $scope.name,
                         groupType: $scope.groupType
                     });
                 });
+
+
         };
 
         $scope.addNodeInModal = function (_nodename) {
@@ -58,8 +61,9 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             else return false;
         };
 
-        $scope.filterChildLeaf = function (leaf) {
-
+        $scope.filterChildLeaf = function (_leaf) {
+            if(_leaf.parent_idx == $scope.modalNode.node_idx) return true;
+            else return false;
         };
 
         /* label */
@@ -98,22 +102,35 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
         /* Participant */
         $scope.addParticipantInModal = function (_user_idx) {
+
+            var node = $scope.modalNode;
+            var dueDate = new Date(node);
+
             console.log($scope.users);
             console.log(_user_idx);
-            $scope.modalNode.assigned_users.push(_user_idx);
+            node.assigned_users.push(_user_idx);
+
+            NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
+                $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
+
+                    if ($scope.modal_callback.updateNode)
+                        $scope.modal_callback.updateNode(_node_idx, _node_list);
+
+                    $modalInstance.close({
+                        name: $scope.name,
+                        groupType: $scope.groupType
+                    });
+                }
+            );
         };
 
         $scope.inviteUserInModal = function (_user) {
-
-            HttpSvc.inviteRoot($scope.modalNode.root_idx, _user.description)
-                .success(function (res) {
-                    console.log(res);
-                })
-                .error(function (err) {
-                    console.log(err);
-                });
+            console.log(_user);
+            if(!_user.description) return;
+            UserStore.inviteUserToRoot($scope.modalNode.root_idx, _user.description);
         };
 
+        /* Override User Search Func */
         $scope.clearInput = function (id) {
             if (id) {
                 $scope.$broadcast('angucomplete-alt:clearInput', id);
@@ -123,6 +140,32 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             }
         };
 
+        $scope.inputChanged = function(_str) {
+
+            var len = _str.length;
+
+            if(len == 0) isClear = true;
+            else if(len == 1 && isClear == true) {
+
+                isClear = false;
+                UserStore.searchProfile(_str, function(_result) {
+                    console.log(_result);
+                    $scope.matchUserList = [];
+                });
+            }
+        };
+
+        $scope.click_test = function(){
+            $scope.matchUserList = [
+                {account_id: "1", name: "chorong", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
+                {account_id: "2", name: "chorong2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
+                {account_id: "3", name: "chorong3", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
+                {account_id: "4", name: "jinsil", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
+                {account_id: "5", name: "jinsil2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
+                {account_id: "6", name: "taein", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
+                {account_id: "7", name: "taein", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"}
+            ];
+        };
 
         /* label palette */
         $scope.updateLabelPalette = function (_palette, _newPaletteName) {
@@ -132,7 +175,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
                     $scope.cancelEditPaletteMode(_palette.palette_idx);
 
                     $scope.labelPalette[_palette.palette_idx].name = _palette.name;
-                    $scope.$apply();
 
                     if ($scope.modal_callback.updatePalette)
                         $scope.modal_callback.updatePalette(_palette);
@@ -169,14 +211,15 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         function init_NodeViewModal() {
-
+            $scope.nodes        = NodeStore.getNodeList();
+            $scope.users        = UserStore.syncUserList();
             $scope.labelPalette = NodeStore.getLabelPalette();
-            $scope.users = UserStore.syncUserList();
 
-            $scope.editPalette = new Object();
-            $scope.isEditmode = false;
-            $scope.newDes = $scope.modalNode.description;
-            $scope.newLeaf = null;
+            $scope.editPalette  = new Object();
+            $scope.newDes       = $scope.modalNode.description;
+            $scope.newLeaf      = null;
+            $scope.isEditmode   = false;
+            isClear             = true;
 
             $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0, 10);
 

@@ -19,22 +19,14 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            updatePic: function (_user_picture) {
-                return $http({
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    url: urlBase + '/profile/update_picture',
-                    method: "POST",
-                    data: {user_picture: _user_picture}
-                });
-            },
-
-            searchProfile: function (_email) {
+            searchProfile: function (_email, _name) {
                 return $http({
                     url: urlBase + '/profile/search',
                     method: "GET",
-                    params: {email: _email}
+                    params: {
+                        email: _email,
+                        name: _name
+                    }
                 });
             },
 
@@ -45,6 +37,7 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                     method: "GET"
                 });
             },
+
             inviteRoot: function (_root_idx, _email) {
                 return $http({
                     url: urlBase + '/root/invite',
@@ -85,15 +78,16 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            updateNode: function (_node_idx, _node_name, _dueDate, _description) {
+            updateNode: function (_node_idx, _node_name, _dueDate, _description, _assigned_users) {
                 return $http({
                     url: urlBase + '/node/update',
                     method: "POST",
                     data: {
-                        node_idx: _node_idx,
-                        node_name: _node_name,
-                        description: _description,
-                        due_date: _dueDate
+                        node_idx       : _node_idx,
+                        node_name      : _node_name,
+                        description    : _description,
+                        due_date       : _dueDate,
+                        assigned_users : _assigned_users
                     }
                 });
             },
@@ -143,7 +137,16 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            /* 수정해야함!!!!!!!!! */
+            /* Leaf REST API */
+
+            getLeafs :  function (_root_idx) {
+                return $http({
+                    url: urlBase + '/leaf/list',
+                    method: "GET",
+                    params: {root_idx: _root_idx}
+                });
+            },
+
             uploadLeaf: function (_file, _node_idx) {
                 var fd = new FormData();
                 fd.append('userfile' , _file);
@@ -167,5 +170,4 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
         }
     }]
 
-    /* RESOURCE REST API */
 );

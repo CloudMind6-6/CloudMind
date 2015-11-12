@@ -41,7 +41,7 @@
 </style>
 
 
-<div class="view_top"style="padding-left : 15px;">
+<div class="view_top" style="padding-left : 15px;">
 	<div  class="m-b-lg">
 	<ul id="list ul-modal" class=" m-t-sm m-l-xs m-b-n-md" style="padding-left:5px; padding-top : 10px;">
 		<li class="node_title list-modal">{{ modalNode.name }}</li>
@@ -97,24 +97,27 @@
             <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
+                    <button ng-click="click_test()">test btn</button>
 					<hr class="m-b-sm m-t-sm hr-color">
-                    <div angucomplete-alt id="ex2"
+                    <div angucomplete-alt id="search_people"
                          placeholder="Search people"
                          pause="300"
                          selected-object="inviteUserInModal"
-                         local-data="searchingUser"
+                         local-data="matchUserList"
                          search-fields="name,email"
                          title-field="name"
                          description-field="email"
                          image-field="profile_url"
                          minlength="1"
+                         override-suggestions="true"
+                         clear-selected="true"
+                         input-changed="inputChanged"
                          input-class="angucomplete-form-control">
                     </div>
 
                     <div ng-repeat="user in modalNode.assigned_users">
                         <img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
                     </div>
-                    
 					<div class="part_lists">
                         <ul>
                             <li>
