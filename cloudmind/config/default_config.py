@@ -4,6 +4,9 @@ import tempfile
 
 
 class Config(object):
+    # Server
+    SERVER_NAME = 'yourdomain.com'
+
     # Database
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(tempfile.gettempdir(), 'test.db')
 
