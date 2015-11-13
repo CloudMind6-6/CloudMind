@@ -8,13 +8,16 @@ from flask import session
 from flask_restful import abort
 from flask_restful import Resource
 import json
+from sqlalchemy.sql.expression import true
 
 
 class RootList(Resource):
     def get(self):
         if 'user_id' not in session:
             abort(403, message="already logged out")
-        participants = db.session.query(Participant).filter(Participant.user_id == session['user_id']).all()
+        participants = db.session.query(Participant).filter(Participant.user_id == session['user_id'])\
+            .filter(Participant.is_accepted == true())\
+            .all()
         node_list = []
         for item in participants:
             # if is root node
@@ -46,7 +49,9 @@ class RootInvite(Resource):
         if user is None:
             abort(404, message="Not found {}".format("User"))
 
-        participant_check = db.session.query(Participant).filter(Participant.user_id == user.id).first()
+        participant_check = db.session.query(Participant)\
+            .filter(Participant.own_node_id == root_id)\
+            .filter(Participant.user_id == user.id).first()
         if participant_check is not None:
             abort(403, message="이미 초대중이거나 멤버에 속해 있습니다.")
 
