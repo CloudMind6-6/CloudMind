@@ -119,7 +119,7 @@ class LeafUpdate(Resource):
     def post(self):
         args = json.loads(request.data.decode('utf-8'))
         leaf_id = args['leaf_idx']
-        node_parent_id = args['node_parent_idx']
+        node_parent_id = args['parent_node_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
