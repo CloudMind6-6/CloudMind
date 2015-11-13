@@ -112,6 +112,7 @@ SceneGraphNode.prototype =
         {
             if(this.children[i] == child)
             {
+                child.parent = null;
                 this.children.splice(i, 1);
                 break;
             }
@@ -321,22 +322,28 @@ SceneGraph.prototype =
 
         // Menu
 
+        var timer = null;
+
         node.view_menu = this.view_node.append('div');
 
         node.view_menu.attr("class", class_info.menu)
             .attr("idx", model.node_idx)
             .style("left", this.view_center_x + node.x - node.width/2 + "px")
             .style("top", this.view_center_y + node.y - node.height/2 + "px")
+            .style("z-index", "2")
             .on("mouseover", function()
             {
                 var node = scene_graph.getNode(model.node_idx);
 
-                scene_graph.enabledHighlighted(node);
+                scene_graph.enableHighlighted(node);
 
                 if(scene_graph.view_dragging_node)
                 {
-                    node.attachChild(scene_graph.view_dragging_node);
-                    scene_graph.arrangeHorizontal();
+                    timer = setTimeout(function()
+                    {
+                        node.attachChild(scene_graph.view_dragging_node);
+                        scene_graph.arrangeHorizontal();
+                    }, 250);
                 }
                 else
                     d3.select(this).classed("over", true);
@@ -347,7 +354,9 @@ SceneGraph.prototype =
 
                 scene_graph.disableHighlighted(node);
 
-                if(scene_graph.view_dragging_node)
+                clearTimeout(timer);
+
+                if(scene_graph.view_dragging_node && scene_graph.view_dragging_node.parent)
                 {
                     scene_graph.view_dragging_node.parent.detachChild(scene_graph.view_dragging_node);
                     scene_graph.arrangeHorizontal();
@@ -431,7 +440,7 @@ SceneGraph.prototype =
         return this.node_map[idx];
     },
 
-    arrangeHorizontal : function(duration)
+    arrangeHorizontal : function()
     {
         this.node_odd.x = -this.node_root.width/2;
         this.node_even.x = this.node_root.width/2;
@@ -439,7 +448,7 @@ SceneGraph.prototype =
         this.node_odd.arrangeHorizontal();
         this.node_even.arrangeHorizontal();
 
-        this.updateNodePosition(this.node_root, duration);
+        this.updateNodePosition(this.node_root);
     },
 
     updateNodePosition : function(node, duration)
@@ -548,9 +557,9 @@ SceneGraph.prototype =
         this.updateUsers(node);
     },
 
-    enabledHighlighted : function(node, duration)
+    enableHighlighted : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_transitioning == true || node.view_dragging == true)
+        if(node.type == 'null' || node.parent == null || node.view_dragging == true)
             return;
 
         var div_node_info = node.view_info;
@@ -574,12 +583,12 @@ SceneGraph.prototype =
             .style("stroke-width", "6px")
             .style("stroke", "#957acb")
 
-        this.enabledHighlighted(scene_graph.node_map[node.model.parent_idx], duration);
+        this.enableHighlighted(scene_graph.node_map[node.model.parent_idx], duration);
     },
 
     disableHighlighted : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_transitioning == true || node.view_dragging == true)
+        if(node.type == 'null' || node.parent == null || node.view_dragging == true)
             return;
 
         var div_node_info = node.view_info;
@@ -642,6 +651,7 @@ SceneGraph.prototype =
         var node = scene_graph.node_map[node_idx];
 
         node.view_dragging = true;
+        node.view_info.style("z-index", "0");
         node.view_menu.style("visibility", "hidden");
         node.updateDownward();
 
@@ -661,6 +671,9 @@ SceneGraph.prototype =
 
         this.view_body.on("mousemove", function()
         {
+            if(scene_graph.view_dragging_node.parent)
+                return;
+
             node.x = d3.mouse(this)[0] - scene_graph.view_center_x;
             node.y = d3.mouse(this)[1] - scene_graph.view_center_y;
 
@@ -679,6 +692,7 @@ SceneGraph.prototype =
         var node = this.getNode(node_idx);
 
         node.view_dragging = false;
+        node.view_info.style("z-index", "1");
         node.view_menu.style("visibility", "visible");
         node.updateDownward(false);
 
