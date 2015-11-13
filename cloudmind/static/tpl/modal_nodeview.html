@@ -45,13 +45,13 @@
 	<span ng-repeat="user in modalNode.assigned_users">
 		<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
 	</span>
-	<span ng-controller="DropdownCtrl" class="dropdown" o dropdown>
+	<span ng-controller="DropdownCtrl" class="dropdown" dropdown>
 		<a href class="dropdown-toggle" dropdown-toggle>
 			<span class="thumb-md avatar m-b-xs m-t">
 			<span class="panel-circle wrapper-xs-circle m-r-xs">+</span>
 			</span>
         </a>
-        <div class="dropdown-menu m-t-s w-lg" ng-show="isRoot">
+        <div class="dropdown-menu abs m-t-s w-lg" ng-show="isRoot">
             <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Add Members</div>

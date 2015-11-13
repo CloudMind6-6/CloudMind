@@ -568,6 +568,11 @@ pre {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.dropdown-menu.abs {
+  position: absolute;
+  left: 0px;
+}
+
 .dropdown-menu.pull-left {
   left: 100%;
 }
