@@ -113,3 +113,30 @@ class LeafRemove(Resource):
             'success': True,
             'node_list': [i.serialize for i in nodes]
             }
+
+
+class LeafUpdate(Resource):
+    def post(self):
+        args = json.loads(request.data.decode('utf-8'))
+        leaf_id = args['leaf_idx']
+        node_parent_id = args['node_parent_idx']
+
+        if 'user_id' not in session:
+            abort(403, message="already logged out")
+
+        leaf = db.session.query(Leaf).filter(Leaf.id == leaf_id).first()
+        if leaf is None:
+            abort(404, message="Not found {}".format("Leaf"))
+
+        root_node = leaf.root_node
+        if root_node is None:
+            abort(404, message="Not found {}".format("root_node"))
+        if root_node.check_member(session['user_id']) is False:
+            abort(404, message="노드멤버 아님")
+
+        leaf.parent_node_id = node_parent_id
+        db.session.commit()
+
+        return {
+            'success': True
+            }

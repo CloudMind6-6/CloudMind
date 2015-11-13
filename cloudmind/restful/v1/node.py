@@ -140,6 +140,7 @@ class NodeUpdate(Resource):
         description = args['description']
         due_date = date_parser.parse(args['due_date'])
         users = args['assigned_users']
+        parent_node_id = args['parent_node_idx']
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -154,9 +155,17 @@ class NodeUpdate(Resource):
         if root_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 
+        if parent_node_id is not None:
+            parent_node = db.session.query(Node).filter(Node.id == parent_node_id).first()
+            if parent_node is None:
+                abort(404, message="Not found {}".format("parent_node"))
+            if parent_node.check_member(session['user_id']) is False:
+                abort(404, message="노드멤버 아님")
+
         node.name = node_name
         node.description = description
         node.due_date = due_date
+        node.parent_node_id = parent_node_id
 
         db.session.query(Participant).filter(Participant.own_node_id == node_id).delete()
         for user_id in users:
