@@ -324,12 +324,17 @@ SceneGraph = function()
 
 SceneGraph.prototype =
 {
-    appendNode : function(model)
+    registerNode : function(model)
     {
         var node = new SceneGraphNode(model);
-        var node_parent = this.node_map[model.parent_idx];
 
         this.node_map[model.node_idx] = node;
+    },
+
+    appendNode : function(model)
+    {
+        var node = this.node_map[model.node_idx];
+        var node_parent = this.node_map[model.parent_idx];
 
         if (model.node_idx == model.root_idx)
         {
@@ -663,7 +668,7 @@ SceneGraph.prototype =
             .duration(duration)
             .style("left", this.view_center_x + node.x - node.width/2 + "px")
             .style("top", this.view_center_y + node.y - node.height/2 + "px")
-            .style("background-color", "#219fcb")
+            .style("background-color", "#82cadd")
 
         node.view_menu
             .transition()
@@ -679,7 +684,7 @@ SceneGraph.prototype =
                 .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
                 .projection(function(d) { return [d.y, d.x]; }))
             .style("stroke-width", "2px")
-            .style("stroke", "#477499")
+            .style("stroke", "#5aa0b3")
 
         this.disableHighlighted(node.parent, duration);
     },
@@ -768,10 +773,24 @@ SceneGraph.prototype =
 
         if(this.view_dragging_node.parent)
         {
-            /*
-            this.view_dragging_node.model.parent_idx = this.view_dragging_node.parent.model.node_idx;
-            node_store.updateNode(this.view_dragging_node.model);
-            */
+            var model = this.view_dragging_node.model;
+            var parent_model = this.view_dragging_node.parent.model;
+
+            console.log("model pre : ");
+            console.log(model);
+            console.log("parent_node_idx : " + parent_model.node_idx);
+
+            node_store.updateNode(model.node_idx, parent_model.node_idx, model.name, model.due_date, model.description, model.assigned_users, function(node_idx, node_list)
+            {
+                var node = scene_graph.getNode(node_idx);
+
+                node.model = node_store.getNode(node_idx);
+
+                console.log("model post: ");
+                console.log(node.model);
+
+                scene_graph.getNode(node.model.parent_idx).attachChild(node);
+            });
         }
         else
             this.view_dragging_node_parent.attachChild(this.view_dragging_node);

@@ -152,9 +152,9 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 });
         },
 
-        updateNode : function (_idx, _node_name, _dueDate, _description, assigned_users, callback){
+        updateNode : function (_idx, _parent_idx, _node_name, _dueDate, _description, assigned_users, callback){
 
-            HttpSvc.updateNode(_idx, _node_name, _dueDate, _description, assigned_users)
+            HttpSvc.updateNode(_idx, _parent_idx, _node_name, _dueDate, _description, assigned_users)
                 .success(function (res) {
                     if (res.success) {
                         nodeList = res.node_list;

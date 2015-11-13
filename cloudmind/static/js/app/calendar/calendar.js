@@ -71,7 +71,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
         var node    = $scope.nodes[event.idx];
         var newDate = event.start.format();
 
-        NodeStore.updateNode(node.node_idx, node.name, newDate,
+        NodeStore.updateNode(node.node_idx, node.parent_idx, node.name, newDate,
             node.description, node.assigned_users, function (_node_idx, _node_list) {
 
                 if (!_node_list) {
@@ -138,7 +138,7 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
 
     $scope.uiConfig = {
         calendar: {
-            height: 450,
+            height: 900,
             editable: true,
             header: {
                 left: 'prev',

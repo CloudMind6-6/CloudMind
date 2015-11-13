@@ -78,12 +78,13 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 });
             },
 
-            updateNode: function (_node_idx, _node_name, _dueDate, _description, _assigned_users) {
+            updateNode: function (_node_idx, _parent_node_idx, _node_name, _dueDate, _description, _assigned_users) {
                 return $http({
                     url: urlBase + '/node/update',
                     method: "POST",
                     data: {
                         node_idx       : _node_idx,
+                        parent_node_idx: _parent_node_idx,
                         node_name      : _node_name,
                         description    : _description,
                         due_date       : _dueDate,

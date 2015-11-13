@@ -22,12 +22,16 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
     scene_graph = new SceneGraph();
 
     for (var i = 0; i < node_list.length; ++i)
+        scene_graph.registerNode(node_list[i]);
+
+    for (var i = 0; i < node_list.length; ++i)
         scene_graph.appendNode(node_list[i]);
 
     scene_graph.arrangeHorizontal();
 
     scope.onAddNode = function(new_model, model_list)
     {
+        scene_graph.registerNode(new_model);
         scene_graph.appendNode(new_model);
         scene_graph.arrangeHorizontal();
     };

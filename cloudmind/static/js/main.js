@@ -12,7 +12,7 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'CLOUDMIND',
+        name: 'CloudMind',
         version: '0.0.1',
         // for chart colors
         color: {
