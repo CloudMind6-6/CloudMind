@@ -247,6 +247,9 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             $scope.modalNode.assigned_users.sort();
             $scope.modalNode.labels.sort();
 
+            console.log($scope.users[1].profile_url);
+
+            console.log($scope.modalNode.assigned_users);
             for (var p in $scope.labelPalette) {
                 $scope.editPalette[p] = false;
             }
