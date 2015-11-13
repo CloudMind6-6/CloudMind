@@ -42,11 +42,11 @@
 <hr class="m-b-sm m-t-sm hr-color">
 
 <div class="view_participants pos-rlt padder-l m-b-md font-middle" ng-controller="DropdownCtrl">
+    <h3>Participants</h3>
 	<span class="dropdown" dropdown>
     <span ng-repeat="user in modalNode.assigned_users">
 		<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
 	</span>
-
 		<a href class="dropdown-toggle" dropdown-toggle>
 			<span class="thumb-md avatar m-b-xs m-t">
 			<span class="panel-circle wrapper-xs-circle m-r-xs">+</span>
@@ -71,10 +71,9 @@
                          clear-selected="true"
                          input-changed="inputChanged"
                          input-class="angucomplete-form-control">
-                    </div>
-
+                        </div>
+                </span>
             </div>
-
         </div>
 
 		<div class="dropdown-menu m-t-s w" ng-hide="isRoot">
@@ -100,12 +99,17 @@
 <hr class="m-b-sm m-t-sm hr-color">
 
 <div class=" view_labels pos-rlt padder-l m-b-md m-t-md font-middle">
+    <h3>Labels</h3>
 	<span class="list_labels" ng-repeat="label in modalNode.labels track by $index" style="padding-left: 0;">
+        <div class="wrapper-xs-l dis-inline">
 		<span class="panel wrapper-xxxs m-r-xs font-white" style="background-color: {{labelPalette[label].color}}" >&nbsp;&nbsp;{{ labelPalette[label].name }}&nbsp;&nbsp;</span>
-	</span>
+	    </div>
+    </span>
 	<div class="dropdown inline"  ng-controller="DropdownCtrl" o dropdown>
 	<a href class="dropdown-toggle" dropdown-toggle>
+        <div class="wrapper-xs-l dis-inline">
 		<span class="panel wrapper-xs-pls" >+</span>
+        </div>
 	</a>
 	<div class="dropdown-menu m-t-sm w-lg" >
 		<div class="wrapper-xs">

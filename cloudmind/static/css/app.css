@@ -4247,6 +4247,10 @@ a.text-#000000:hover {
   margin: -10px -15px;
 }
 
+.wrapper-xs-l {
+  padding-top: 14px;
+}
+
 .wrapper-xs-pls {
   padding: 5px 15px 5px 15px;
   background-color :  #d0d0d0;
