@@ -213,6 +213,30 @@ a:hover .caret-white {
   border-color: #cfdadd;
 }
 
+.modal-dialog {
+  padding-top: 20px;
+}
+
+.modal-node {
+  margin-top: 20px;
+}
+
+.font-middle{
+  font-weight: 600;
+!important;
+}
+
+.font-middle button{
+  font-weight: 600;
+!important;
+}
+
+.font-middle h3{
+  font-weight: 500;
+!important;
+}
+
+
 .list-modal{
   display: inline;
   list-style:none;
@@ -4051,21 +4075,6 @@ a.text-#000000:hover {
 
 .font-bold {
   font-weight: 700;
-}
-
-.font-middle{
-  font-weight: 600;
-!important;
-}
-
-.font-middle button{
-  font-weight: 600;
-!important;
-}
-
-.font-middle h3{
-  font-weight: 500;
-!important;
 }
 
 

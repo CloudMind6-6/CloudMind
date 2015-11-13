@@ -64,11 +64,14 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         /* label */
         $scope.addLabelInModal = function (_idx) {
             var node = $scope.modalNode;
+            var labels = JSON.parse(JSON.stringify(node.labels));
+
+            labels.push(_idx);
+            labels.sort();
 
             NodeStore.addLabel(node.node_idx, _idx,
                 function (_node_id, _node_list, _palette_id) {
-                    $scope.modalNode.labels.push(_palette_id);
-                    $scope.modalNode.labels.sort();
+                    $scope.modalNode.labels = labels;
 
                     if ($scope.modal_callback.addLabel)
                         $scope.modal_callback.addLabel(_node_id, _node_list, _palette_id);
@@ -232,6 +235,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         function init_NodeViewModal() {
+
             $scope.nodes        = NodeStore.getNodeList();
             $scope.users        = UserStore.syncUserList();
             $scope.labelPalette = NodeStore.getLabelPalette();
@@ -245,7 +249,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
             $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0, 10);
             $scope.modalNode.assigned_users.sort();
-            $scope.modalNode.labels.sort();
 
             console.log($scope.users[1].profile_url);
 
