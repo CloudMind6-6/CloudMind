@@ -67,6 +67,8 @@ SceneGraphNode = function(model)
 
     this.bounding_width  = this.width  + scene_graph_form.margin_x;
     this.bounding_height = this.height + scene_graph_form.margin_y;
+    this.bounding_width_no_margin = this.width;
+    this.bounding_height_no_margin = this.height;
 
     this.link_src_x = 0;
     this.link_src_y = 0;
@@ -80,6 +82,7 @@ SceneGraphNode = function(model)
 
     this.view_dragging = false;
     this.view_transitioning = false;
+    this.view_highlighted = false;
 
     this.model = model;
 };
@@ -127,6 +130,8 @@ SceneGraphNode.prototype =
         {
             this.bounding_width  = 0;
             this.bounding_height = 0;
+            this.bounding_width_no_margin = 0;
+            this.bounding_height_no_margin = 0;
 
             for(var i = 0; i < this.children.length; ++i)
             {
@@ -134,12 +139,16 @@ SceneGraphNode.prototype =
 
                 this.bounding_width  += child.bounding_width;
                 this.bounding_height += child.bounding_height;
+                this.bounding_width_no_margin += child.bounding_width_no_margin;
+                this.bounding_height_no_margin += child.bounding_height_no_margin;
             }
         }
         else
         {
             this.bounding_width  = this.width  + scene_graph_form.margin_x;
             this.bounding_height = this.height + scene_graph_form.margin_y;
+            this.bounding_width_no_margin = this.width;
+            this.bounding_height_no_margin = this.height;
         }
 
         if(this.parent)
@@ -173,38 +182,72 @@ SceneGraphNode.prototype =
         }
     },
 
-    arrangeHorizontal : function()
+    arrangeHorizontal : function(no_margin)
     {
         var child_accum_pos = 0;
+
+        if(no_margin == null)
+            no_margin = false;
 
         for(var i = 0; i < this.children.length; ++i)
         {
             var child = this.children[i];
 
-            child.y = this.y - (this.bounding_height/2) + child_accum_pos + (child.bounding_height/2);
-
-            child_accum_pos += child.bounding_height;
-
-            if(child.spanning_odd)
+            if(no_margin == true)
             {
-                child.x = this.x - (scene_graph_form.stride_x + child.width/2 + this.width/2);
-
-                child.link_src_x = this.x - this.width/2;
-                child.link_src_y = this.y;
-                child.link_dst_x = child.x + child.width/2;
-                child.link_dst_y = child.y;
+                child.y = this.y - this.bounding_height_no_margin/2 + child_accum_pos + child.bounding_height_no_margin/2;
+                child_accum_pos += child.bounding_height_no_margin;
             }
             else
             {
-                child.x = this.x + (scene_graph_form.stride_x + child.width/2 + this.width/2);
-
-                child.link_src_x = this.x + this.width/2;
-                child.link_src_y = this.y;
-                child.link_dst_x = child.x - child.width/2;
-                child.link_dst_y = child.y;
+                child.y = this.y - this.bounding_height/2 + child_accum_pos + child.bounding_height/2;
+                child_accum_pos += child.bounding_height;
             }
 
-            child.arrangeHorizontal();
+            if(child.spanning_odd)
+            {
+                if(no_margin == true)
+                {
+                    child.x = this.x - (child.width/2 + this.width/2);
+
+                    child.link_src_x = child.x;
+                    child.link_src_y = child.y;
+                    child.link_dst_x = child.x;
+                    child.link_dst_y = child.y;
+                }
+                else
+                {
+                    child.x = this.x - (scene_graph_form.stride_x + child.width/2 + this.width/2);
+
+                    child.link_src_x = this.x - this.width/2;
+                    child.link_src_y = this.y;
+                    child.link_dst_x = child.x + child.width/2;
+                    child.link_dst_y = child.y;
+                }
+            }
+            else
+            {
+                if(no_margin == true)
+                {
+                    child.x = this.x + (child.width/2 + this.width/2);
+
+                    child.link_src_x = child.x;
+                    child.link_src_y = child.y;
+                    child.link_dst_x = child.x;
+                    child.link_dst_y = child.y;
+                }
+                else
+                {
+                    child.x = this.x + (scene_graph_form.stride_x + child.width/2 + this.width/2);
+
+                    child.link_src_x = this.x + this.width/2;
+                    child.link_src_y = this.y;
+                    child.link_dst_x = child.x - child.width/2;
+                    child.link_dst_y = child.y;
+                }
+            }
+
+            child.arrangeHorizontal(no_margin);
         }
     },
 }
@@ -427,6 +470,8 @@ SceneGraph.prototype =
         this.view_link.selectAll("path[idx='" + node_idx +"']").remove();
 
         this.disableEditMode(node);
+
+        console.log("disableHighllighted");
         this.disableHighlighted(node);
 
         if(node.parent)
@@ -562,28 +607,33 @@ SceneGraph.prototype =
         if(node.type == 'null' || node.parent == null || node.view_dragging == true)
             return;
 
-        var div_node_info = node.view_info;
-        var div_node_menu = node.view_menu;
-        var svg_node_link = node.view_link;
-
         if(duration == null)
             duration = 250;
 
-        if(duration > 0)
-        {
-            div_node_info = div_node_info.transition().duration(duration);
-            div_node_menu = div_node_menu.transition().duration(duration);
-            svg_node_link = svg_node_link.transition().duration(duration);
-        }
-
-        div_node_info
+        node.view_info
+            .transition()
+            .duration(duration)
+            .style("left", this.view_center_x + node.x - node.width/2 + "px")
+            .style("top", this.view_center_y + node.y - node.height/2 + "px")
             .style("background-color", "#957acb")
 
-        svg_node_link
+        node.view_menu
+            .transition()
+            .duration(duration)
+            .style("left", this.view_center_x + node.x - node.width/2 + "px")
+            .style("top", this.view_center_y + node.y - node.height/2 + "px")
+
+        node.view_link
+            .transition()
+            .duration(duration)
+            .attr("d", d3.svg.diagonal()
+                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
+                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; }))
             .style("stroke-width", "6px")
             .style("stroke", "#957acb")
 
-        this.enableHighlighted(scene_graph.node_map[node.model.parent_idx], duration);
+        this.enableHighlighted(node.parent, duration);
     },
 
     disableHighlighted : function(node, duration)
@@ -591,24 +641,29 @@ SceneGraph.prototype =
         if(node.type == 'null' || node.parent == null || node.view_dragging == true)
             return;
 
-        var div_node_info = node.view_info;
-        var div_node_menu = node.view_menu;
-        var svg_node_link = node.view_link;
-
         if(duration == null)
             duration = 250;
 
-        if(duration > 0)
-        {
-            div_node_info = div_node_info.transition().duration(duration);
-            div_node_menu = div_node_menu.transition().duration(duration);
-            svg_node_link = svg_node_link.transition().duration(duration);
-        }
-
-        div_node_info
+        node.view_info
+            .transition()
+            .duration(duration)
+            .style("left", this.view_center_x + node.x - node.width/2 + "px")
+            .style("top", this.view_center_y + node.y - node.height/2 + "px")
             .style("background-color", "#219fcb")
 
-        svg_node_link
+        node.view_menu
+            .transition()
+            .duration(duration)
+            .style("left", this.view_center_x + node.x - node.width/2 + "px")
+            .style("top", this.view_center_y + node.y - node.height/2 + "px")
+
+        node.view_link
+            .transition()
+            .duration(duration)
+            .attr("d", d3.svg.diagonal()
+                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
+                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; }))
             .style("stroke-width", "2px")
             .style("stroke", "#477499")
 
@@ -648,7 +703,14 @@ SceneGraph.prototype =
 
     enableDraggingMode : function(node_idx)
     {
+        console.log("enableDraggingMode");
+
         var node = scene_graph.node_map[node_idx];
+
+        console.log("disableHighllighted");
+        console.log("view_transitioning : " + node.view_transitioning);
+        console.log("view_dragging : " + node.view_dragging);
+        this.disableHighlighted(node, 0);
 
         node.view_dragging = true;
         node.view_info.style("z-index", "0");
@@ -657,8 +719,6 @@ SceneGraph.prototype =
 
         this.view_dragging_node = node;
         this.view_dragging_node_parent = node.parent;
-
-        this.disableHighlighted(node, 0);
 
         node.parent.detachChild(node);
 
@@ -680,14 +740,27 @@ SceneGraph.prototype =
             node.link_src_x = node.link_dst_x = node.x;
             node.link_src_y = node.link_dst_y = node.y;
 
-            node.arrangeHorizontal();
+            node.arrangeHorizontal(true);
             scene_graph.updateNodePosition(node, 0);
         });
     },
 
     disableDraggingMode : function(node_idx)
     {
+        console.log("disableDraggingMode");
+
         this.view_body.on("mousemove", null);
+        this.view_body.on("mouseup", null);
+
+        if(this.view_dragging_node.parent)
+        {
+            /*
+            this.view_dragging_node.model.parent_idx = this.view_dragging_node.parent.model.node_idx;
+            node_store.updateNode(this.view_dragging_node.model);
+            */
+        }
+        else
+            this.view_dragging_node_parent.attachChild(this.view_dragging_node);
 
         var node = this.getNode(node_idx);
 
@@ -696,10 +769,9 @@ SceneGraph.prototype =
         node.view_menu.style("visibility", "visible");
         node.updateDownward(false);
 
-        this.view_dragging_node_parent.attachChild(this.view_dragging_node);
+        this.arrangeHorizontal();
+
         this.view_dragging_node = null;
         this.view_dragging_node_parent = null;
-
-        this.arrangeHorizontal();
     },
 }
