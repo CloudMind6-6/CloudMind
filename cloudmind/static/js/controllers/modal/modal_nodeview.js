@@ -157,7 +157,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             console.log(assigned_users);
 
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
-                $scope.newDes,assigned_users , function (_node_idx, _node_list) {
+                $scope.newDes,assigned_users, function (_node_idx, _node_list) {
 
                     node.assigned_users.splice(ParticipantIdx, 1);
 
@@ -249,8 +249,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
             $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0, 10);
             $scope.modalNode.assigned_users.sort();
-
-            console.log($scope.users[1].profile_url);
 
             console.log($scope.modalNode.assigned_users);
             for (var p in $scope.labelPalette) {

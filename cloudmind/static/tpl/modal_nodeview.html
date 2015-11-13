@@ -41,11 +41,12 @@
 
 <hr class="m-b-sm m-t-sm hr-color">
 
-<div class="view_participants pos-rlt padder-l m-b-md font-middle">
-	<span ng-repeat="user in modalNode.assigned_users">
+<div class="view_participants pos-rlt padder-l m-b-md font-middle" ng-controller="DropdownCtrl">
+	<span class="dropdown" dropdown>
+    <span ng-repeat="user in modalNode.assigned_users">
 		<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
 	</span>
-	<span ng-controller="DropdownCtrl" class="dropdown" dropdown>
+
 		<a href class="dropdown-toggle" dropdown-toggle>
 			<span class="thumb-md avatar m-b-xs m-t">
 			<span class="panel-circle wrapper-xs-circle m-r-xs">+</span>
@@ -71,8 +72,9 @@
                          input-changed="inputChanged"
                          input-class="angucomplete-form-control">
                     </div>
-				</span>
+
             </div>
+
         </div>
 
 		<div class="dropdown-menu m-t-s w" ng-hide="isRoot">
@@ -91,6 +93,7 @@
 				</span>
             </div>
         </div>
+        </span>
 	</span>
 </div>
 
