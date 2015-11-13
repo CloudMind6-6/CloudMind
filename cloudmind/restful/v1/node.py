@@ -74,6 +74,7 @@ class NodeAdd(Resource):
         # 루트노드 일 경우에만 맴버로 등록 후 기본 팔레트 추가
         if root_id is None:
             participant = Participant(is_accepted=True)
+            participant.is_accepted = True
             participant.own_node = node
             participant.user = creator
             participant.from_user = creator
