@@ -46,6 +46,10 @@ class RootInvite(Resource):
         if user is None:
             abort(404, message="Not found {}".format("User"))
 
+        participant_check = db.session.query(Participant).filter(Participant.user_id == user.id).first()
+        if participant_check is not None:
+            abort(403, message="이미 초대중이거나 멤버에 속해 있습니다.")
+
         participant = Participant()
         participant.is_accepted = False
         participant.own_node = root_node
@@ -54,7 +58,7 @@ class RootInvite(Resource):
         db.session.add(participant)
         db.session.commit()
 
-        mail_send_invite(from_user, user, root_node)
+        mail_send_invite(participant)
 
         return {
             'success':  True

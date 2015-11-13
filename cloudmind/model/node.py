@@ -4,6 +4,7 @@ from cloudmind.model.label_palette import LabelPalette
 from cloudmind.model.participant import Participant
 from cloudmind.model.user import User
 import datetime
+from sqlalchemy.sql.expression import true
 
 
 class Node(db.Model):
@@ -42,7 +43,7 @@ class Node(db.Model):
         if(db.session.query(Participant).
                 filter(Participant.own_node_id == self.id).
                 filter(Participant.user_id == user_id).
-                filter(Participant.is_accepted is True)):
+                filter(Participant.is_accepted == true())):
             return True
         else:
             return False
@@ -75,6 +76,7 @@ class Node(db.Model):
     def serialize_member(self):
         members = db.session.query(Participant).\
             filter(Participant.own_node_id == self.id).\
+            filter(Participant.is_accepted == true()).\
             all()
         return [item.user_id for item in members]
 
@@ -82,6 +84,7 @@ class Node(db.Model):
     def serialize_member_detail(self):
         members = db.session.query(Participant).\
             filter(Participant.own_node_id == self.id).\
+            filter(Participant.is_accepted == true()).\
             all()
         return [db.session.query(User).filter(User.id == item.user_id).first().serialize for item in members]
 

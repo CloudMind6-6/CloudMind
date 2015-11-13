@@ -78,8 +78,8 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/oauth2callback')
-def authorized():
+@app.route('/oauth2callback', defaults={'participant_id': None})
+def authorized(participant_id):
     resp = google.authorized_response()
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
@@ -107,6 +107,25 @@ def authorized():
         user.picture = userinfo['picture']
     db.session.commit()
     session['user_id'] = user.id
+    if participant_id is None:
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('invite_ok', participant_id=participant_id))
+
+
+@app.route('/invite/<int:participant_id>')
+def invite_ok(participant_id):
+    if 'user_id' not in session:
+        return google.authorize(callback=url_for('authorized', participant_id=participant_id, _external=True))
+
+    from cloudmind.model.participant import Participant
+    participant = db.session.query(Participant).filter(Participant.id == participant_id).first()
+    if participant is None or participant.user_id != session['user_id']:
+        return redirect(url_for('index'))
+
+    participant.is_accepted = True
+    db.session.commit()
+
     return redirect(url_for('index'))
 
 
