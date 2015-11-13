@@ -277,7 +277,7 @@ SceneGraph = function()
     this.view_dragging_node_parent = null;
 
     this.view_class_map =
-   {
+    {
         root:
         {
             node:"mindmap_root_info",
@@ -306,6 +306,20 @@ SceneGraph = function()
             portrait:"mindmap_node_portrait"
         },
     };
+
+    this.view_body
+        .on("mousedown", function()
+        {
+            if(scene_graph.view_dragging_node == null)
+                scene_graph.enableSwipingMode()
+        })
+        .on("dblclick",function()
+        {
+            scene_graph.node_root.x = 0;
+            scene_graph.node_root.y = 0;
+
+            scene_graph.arrangeHorizontal();
+        });
 };
 
 SceneGraph.prototype =
@@ -485,46 +499,46 @@ SceneGraph.prototype =
         return this.node_map[idx];
     },
 
-    arrangeHorizontal : function()
+    arrangeHorizontal : function(duration)
     {
-        this.node_odd.x = -this.node_root.width/2;
-        this.node_even.x = this.node_root.width/2;
+        this.node_odd.x     = this.node_root.x - this.node_root.width/2;
+        this.node_odd.y     = this.node_root.y;
+        this.node_even.x    = this.node_root.x + this.node_root.width/2;
+        this.node_even.y    = this.node_root.y;
 
         this.node_odd.arrangeHorizontal();
         this.node_even.arrangeHorizontal();
 
-        this.updateNodePosition(this.node_root);
+        this.updateNodePosition(this.node_root, duration);
     },
 
     updateNodePosition : function(node, duration)
     {
-        var div_node_info = node.view_info;
-        var div_node_menu = node.view_menu;
-        var svg_node_link = node.view_link;
-
         if(node.type != 'null')
         {
             if(duration == null)
                 duration = 250;
 
-            if(duration > 0)
-            {
-                div_node_info = div_node_info.transition().duration(duration).each("end", function(){node.view_transitioning = false;});
-                div_node_menu = div_node_menu.transition().duration(duration).each("end", function(){node.view_transitioning = false;});
-                svg_node_link = svg_node_link.transition().duration(duration).each("end", function(){node.view_transitioning = false;});
+            node.view_transitioning = true;
 
-                node.view_transitioning = true;
-            }
-
-            div_node_info
+            node.view_info
+                .transition()
+                .duration(duration)
+                .each("end", function(){node.view_transitioning = false;})
                 .style("left", this.view_center_x + node.x - node.width/2 + "px")
                 .style("top", this.view_center_y + node.y - node.height/2 + "px")
 
-            div_node_menu
+            node.view_menu
+                .transition()
+                .duration(duration)
+                .each("end", function(){node.view_transitioning = false;})
                 .style("left", this.view_center_x + node.x - node.width/2 + "px")
                 .style("top", this.view_center_y + node.y - node.height/2 + "px")
 
-            svg_node_link
+            node.view_link
+                .transition()
+                .duration(duration)
+                .each("end", function(){node.view_transitioning = false;})
                 .attr("d", d3.svg.diagonal()
                     .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
                     .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
@@ -773,5 +787,40 @@ SceneGraph.prototype =
 
         this.view_dragging_node = null;
         this.view_dragging_node_parent = null;
+    },
+
+    enableSwipingMode : function()
+    {
+        var pre_x = null;
+        var pre_y = null;
+
+        this.view_body.on("mouseup", function()
+        {
+            pre_x = null;
+            pre_y = null;
+
+            scene_graph.disableSwipingMode();
+        });
+
+        this.view_body.on("mousemove", function()
+        {
+            var cur_x = d3.mouse(this)[0];
+            var cur_y = d3.mouse(this)[1];
+            var d_x = pre_x ? cur_x - pre_x : 0;
+            var d_y = pre_y ? cur_y - pre_y : 0;
+
+            scene_graph.node_root.x += d_x;
+            scene_graph.node_root.y += d_y;
+
+            scene_graph.arrangeHorizontal(0);
+
+            pre_x = cur_x;
+            pre_y = cur_y;
+        });
+    },
+
+    disableSwipingMode : function()
+    {
+        this.view_body.on("mousemove", null);
     },
 }
