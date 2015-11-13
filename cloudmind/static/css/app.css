@@ -4053,6 +4053,22 @@ a.text-#000000:hover {
   font-weight: 700;
 }
 
+.font-middle{
+  font-weight: 600;
+!important;
+}
+
+.font-middle button{
+  font-weight: 600;
+!important;
+}
+
+.font-middle h3{
+  font-weight: 500;
+!important;
+}
+
+
 .text-3x {
   font-size: 3em;
 }
@@ -4109,7 +4125,7 @@ a.text-#000000:hover {
 .text-active,
 .active > .text,
 .active > .auto .text {
-  display: none !important;
+  display: none font-middle
 }
 
 .active > .text-active,
@@ -5206,6 +5222,10 @@ a.text-#000000:hover {
   color: whitesmoke;
 }
 
+.font-white{
+  color: whitesmoke;
+}
+
 .hr-color{
   color : #e5e5e5;
 }
@@ -5219,6 +5239,8 @@ a.text-#000000:hover {
   background-color: white;
 }
 
+
+.
 /* Moving bar */
 
 @-webkit-keyframes movingbar {

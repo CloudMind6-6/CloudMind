@@ -1,6 +1,8 @@
 
-<div class="view_top" style="padding-left : 15px;">
-	<div  class="m-b-lg">
+
+<div class="view_top font-middle" style="padding-left : 15px;">
+
+	<div  class="m-b-lg ">
 	<ul id="list ul-modal" class=" m-t-sm m-l-xs m-b-n-md" style="padding-left:5px; padding-top : 10px;">
 		<li class="node_title list-modal">{{ modalNode.name }}</li>
 		<li ng-controller="DatepickekCtrl" class="list-modal m-l-xsm">
@@ -16,7 +18,6 @@
 			<button class="btn m-b-xs w-xsm btn-default btn-rounded">
 				<i class="fa fa-chain-broken text"></i>
 				<span class="text m-l-xsm">Add Node</span>
-				<i class="fa fa-check text-active"></i>
 			</button>
 			</a>
 			<div class="dropdown-menu m-t-s w">
@@ -41,7 +42,7 @@
 
 <hr class="m-b-sm m-t-sm hr-color">
 
-<div class="view_participants pos-rlt padder-l m-b-md ">
+<div class="view_participants pos-rlt padder-l m-b-md font-middle">
 	<span ng-repeat="user in modalNode.assigned_users">
 		<img class="thumb-sm avatar m-r-xs" ng-src={{users[user].profile_url}}>
 	</span>
@@ -96,9 +97,9 @@
 
 <hr class="m-b-sm m-t-sm hr-color">
 
-<div class=" view_labels pos-rlt padder-l m-b-md m-t-md">
+<div class=" view_labels pos-rlt padder-l m-b-md m-t-md font-middle">
 	<span class="list_labels" ng-repeat="label in modalNode.labels track by $index" style="padding-left: 0;">
-		<span class="panel wrapper-xxxs m-r-xs" style="background-color: {{labelPalette[label].color}}" >&nbsp;&nbsp;{{ labelPalette[label].name }}&nbsp;&nbsp;</span>
+		<span class="panel wrapper-xxxs m-r-xs font-white" style="background-color: {{labelPalette[label].color}}" >&nbsp;&nbsp;{{ labelPalette[label].name }}&nbsp;&nbsp;</span>
 	</span>
 	<div class="dropdown inline"  ng-controller="DropdownCtrl" o dropdown>
 	<a href class="dropdown-toggle" dropdown-toggle>
@@ -110,7 +111,7 @@
 				<div class="font-bold text-md m-t-n-xs m-l-xs">Label Palette</div>
 				<hr class="m-b-sm m-t-sm hr-color">
 				<div ng-repeat="lp in labelPalette track by $index">
-					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md" ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}" > &nbsp;{{ lp.name }}
+					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md icon-white" ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}" > &nbsp;{{ lp.name }}
                         <i class="fa fa-check icon-white" ng-show="checkLabel(lp.palette_idx)"></i>
                     </div>
                     <i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[lp.palette_idx])
@@ -131,12 +132,12 @@
 </div>
 
 <hr class="m-b-sm m-t-sm hr-color">
-<div class="view_description pos-rlt m-b-md" style="padding-left : 15px;">
+<div class="view_description pos-rlt m-b-md font-middle" style="padding-left : 15px;">
 	<h3>Description</h3>
 	<textarea  style="padding-left:0" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
 </div>
 <hr class="m-b-sm m-t-sm hr-color">
-<div class="view_subnodes m-b-xl pos-rlt" style="padding-left : 15px;">
+<div class="view_subnodes m-b-xl pos-rlt font-middle" style="padding-left : 15px;">
 	<h3>Subnodes</h3>
 	<div ng-repeat="node in nodes | filter:filterChildNode track by $index" class="fa-ul m-l-sm">
 		<span ng-click="clickChildNodeInModal(node)">
@@ -162,7 +163,7 @@
 	</div>
 </div>
 <hr class="m-b-sm m-t-sm hr-color">
-<div class="view_leafs m-l-md m-b-sm" style="position: relative;">
+<div class="view_leafs m-l-md m-b-sm font-middle" style="position: relative;">
 	<h3>Leafs</h3>
 	<div class="m-b-xs" ng-repeat="leaf in modalNode.leafs track by $index">
 		<span ng-click="downloadLeafInModal(leaf.id)" ><i class="fa fa-leaf m-r-xs"></i>{{leaf.name}}</span>
@@ -172,6 +173,6 @@
 	</span>
 	<button class="btn btn-modal btn-info no-padder" ng-click="addLeafInModal()">upload</button>
 </div>
-<div class="modal-footer" style="margin-top: 40px">
+<div class="modal-footer font-middle" style="margin-top: 40px">
     <button class="btn btn-primary" ng-click="applyInModal(newDes)">Apply</button>
 </div>
