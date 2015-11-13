@@ -78,6 +78,9 @@ SceneGraphNode = function(model)
     this.view_link = null;
     this.view_name = null;
 
+    this.view_dragging = false;
+    this.view_transitioning = false;
+
     this.model = model;
 };
 
@@ -142,9 +145,13 @@ SceneGraphNode.prototype =
             this.parent.updateUpward();
     },
 
-    updateDownward : function()
+    updateDownward : function(include)
     {
-        this.spanning_odd = this.parent.spanning_odd;
+        if(include == null || include == true)
+        {
+            this.spanning_odd = this.parent.spanning_odd;
+            this.view_dragging = this.parent.view_dragging;
+        }
 
         for(var i = 0; i < this.children.length; ++i)
         {
@@ -222,6 +229,9 @@ SceneGraph = function()
     this.view_center_x  = screen.width  / 2;
     this.view_center_y  = screen.height / 2 - 40;
 
+    this.view_dragging_node = null;
+    this.view_dragging_node_parent = null;
+
     this.view_class_map =
    {
         root:
@@ -291,8 +301,6 @@ SceneGraph.prototype =
 
 
 
-
-        var model = node.model;
         var class_info = this.view_class_map[node.type];
 
         // Info
@@ -321,15 +329,31 @@ SceneGraph.prototype =
             .style("top", this.view_center_y + node.y - node.height/2 + "px")
             .on("mouseover", function()
             {
-                d3.select(this).classed("over", true);
+                var node = scene_graph.getNode(model.node_idx);
 
-                scene_graph.enableSelected(scene_graph.node_map[model.node_idx]);
+                scene_graph.enabledHighlighted(node);
+
+                if(scene_graph.view_dragging_node)
+                {
+                    node.attachChild(scene_graph.view_dragging_node);
+                    scene_graph.arrangeHorizontal();
+                }
+                else
+                    d3.select(this).classed("over", true);
             })
             .on("mouseout", function()
             {
-                d3.select(this).classed("over", false);
+                var node = scene_graph.getNode(model.node_idx);
 
-                scene_graph.disableSelected(scene_graph.node_map[model.node_idx]);
+                scene_graph.disableHighlighted(node);
+
+                if(scene_graph.view_dragging_node)
+                {
+                    scene_graph.view_dragging_node.parent.detachChild(scene_graph.view_dragging_node);
+                    scene_graph.arrangeHorizontal();
+                }
+                else
+                    d3.select(this).classed("over", false);
             })
 
 
@@ -355,7 +379,7 @@ SceneGraph.prototype =
         div_node_menu_right.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_movable)
-            .on("mousedown", function(){ scene_graph.enableFloatingMode(d3.select(this).attr("idx")) });
+            .on("mousedown", function(){ scene_graph.enableDraggingMode(d3.select(this).attr("idx")) });
 
 
         node.view_menu.append('div').attr("class", "center")
@@ -394,7 +418,7 @@ SceneGraph.prototype =
         this.view_link.selectAll("path[idx='" + node_idx +"']").remove();
 
         this.disableEditMode(node);
-        this.disableSelected(node);
+        this.disableHighlighted(node);
 
         if(node.parent)
             node.parent.detachChild(node);
@@ -424,16 +448,18 @@ SceneGraph.prototype =
         var div_node_menu = node.view_menu;
         var svg_node_link = node.view_link;
 
-        if(div_node_info && div_node_menu && svg_node_link)
+        if(node.type != 'null')
         {
             if(duration == null)
                 duration = 250;
 
             if(duration > 0)
             {
-                div_node_info = div_node_info.transition().duration(duration);
-                div_node_menu = div_node_menu.transition().duration(duration);
-                svg_node_link = svg_node_link.transition().duration(duration);
+                div_node_info = div_node_info.transition().duration(duration).each("end", function(){node.view_transitioning = false;});
+                div_node_menu = div_node_menu.transition().duration(duration).each("end", function(){node.view_transitioning = false;});
+                svg_node_link = svg_node_link.transition().duration(duration).each("end", function(){node.view_transitioning = false;});
+
+                node.view_transitioning = true;
             }
 
             div_node_info
@@ -450,6 +476,7 @@ SceneGraph.prototype =
                     .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
                     .projection(function(d) { return [d.y, d.x]; })
             );
+
         }
 
         for(var i = 0; i < node.children.length; ++i)
@@ -521,50 +548,62 @@ SceneGraph.prototype =
         this.updateUsers(node);
     },
 
-    enableSelected : function(node)
+    enabledHighlighted : function(node, duration)
     {
-        if(node.model.node_idx == node.model.root_idx)
+        if(node.type == 'null' || node.parent == null || node.view_transitioning == true || node.view_dragging == true)
             return;
 
-        node.view_info
-            .transition()
-            .style("background-color", "#957acb")
-            .style("left", this.view_center_x + node.x - node.width/2 + "px")
-            .style("top", this.view_center_y + node.y - node.height/2 + "px")
+        var div_node_info = node.view_info;
+        var div_node_menu = node.view_menu;
+        var svg_node_link = node.view_link;
 
-        node.view_link
-            .transition()
+        if(duration == null)
+            duration = 250;
+
+        if(duration > 0)
+        {
+            div_node_info = div_node_info.transition().duration(duration);
+            div_node_menu = div_node_menu.transition().duration(duration);
+            svg_node_link = svg_node_link.transition().duration(duration);
+        }
+
+        div_node_info
+            .style("background-color", "#957acb")
+
+        svg_node_link
             .style("stroke-width", "6px")
             .style("stroke", "#957acb")
-            .attr("d", d3.svg.diagonal()
-                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
-                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; }))
 
-        this.enableSelected(scene_graph.node_map[node.model.parent_idx]);
+        this.enabledHighlighted(scene_graph.node_map[node.model.parent_idx], duration);
     },
 
-    disableSelected : function(node)
+    disableHighlighted : function(node, duration)
     {
-        if(node.model.node_idx == node.model.root_idx)
+        if(node.type == 'null' || node.parent == null || node.view_transitioning == true || node.view_dragging == true)
             return;
 
-        node.view_info
-            .transition()
-            .style("background-color", "#219fcb")
-            .style("left", this.view_center_x + node.x - node.width/2 + "px")
-            .style("top", this.view_center_y + node.y - node.height/2 + "px")
+        var div_node_info = node.view_info;
+        var div_node_menu = node.view_menu;
+        var svg_node_link = node.view_link;
 
-        node.view_link
-            .transition()
+        if(duration == null)
+            duration = 250;
+
+        if(duration > 0)
+        {
+            div_node_info = div_node_info.transition().duration(duration);
+            div_node_menu = div_node_menu.transition().duration(duration);
+            svg_node_link = svg_node_link.transition().duration(duration);
+        }
+
+        div_node_info
+            .style("background-color", "#219fcb")
+
+        svg_node_link
             .style("stroke-width", "2px")
             .style("stroke", "#477499")
-            .attr("d", d3.svg.diagonal()
-                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
-                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; }))
 
-        this.disableSelected(scene_graph.node_map[node.model.parent_idx]);
+        this.disableHighlighted(node.parent, duration);
     },
 
     enableEditMode : function(node)
@@ -598,37 +637,55 @@ SceneGraph.prototype =
         this.view_body.on("keydown", null);
     },
 
-    enableFloatingMode : function(node_idx)
+    enableDraggingMode : function(node_idx)
     {
-        var node_floating = scene_graph.node_map[node_idx];
+        var node = scene_graph.node_map[node_idx];
+
+        node.view_dragging = true;
+        node.view_menu.style("visibility", "hidden");
+        node.updateDownward();
+
+        this.view_dragging_node = node;
+        this.view_dragging_node_parent = node.parent;
+
+        this.disableHighlighted(node, 0);
+
+        node.parent.detachChild(node);
+
+        this.arrangeHorizontal();
 
         this.view_body.on("mouseup", function()
         {
-            scene_graph.disableFloatingMode(node_idx);
+            scene_graph.disableDraggingMode(node_idx);
         });
 
         this.view_body.on("mousemove", function()
         {
-            node_floating.x = d3.mouse(this)[0] - scene_graph.view_center_x;
-            node_floating.y = d3.mouse(this)[1] - scene_graph.view_center_y;
+            node.x = d3.mouse(this)[0] - scene_graph.view_center_x;
+            node.y = d3.mouse(this)[1] - scene_graph.view_center_y;
 
-            node_floating.link_src_x = node_floating.link_dst_x = node_floating.x;
-            node_floating.link_src_y = node_floating.link_dst_y = node_floating.y;
+            node.link_src_x = node.link_dst_x = node.x;
+            node.link_src_y = node.link_dst_y = node.y;
 
-            node_floating.arrangeHorizontal();
-            scene_graph.updateNodePosition(node_floating, 0);
+            node.arrangeHorizontal();
+            scene_graph.updateNodePosition(node, 0);
         });
     },
 
-    disableFloatingMode : function(node_idx)
+    disableDraggingMode : function(node_idx)
     {
         this.view_body.on("mousemove", null);
 
-        var node_floating = this.getNode(node_idx);
+        var node = this.getNode(node_idx);
 
-        if(node_floating.parent)
-            node_floating.parent.arrangeHorizontal();
+        node.view_dragging = false;
+        node.view_menu.style("visibility", "visible");
+        node.updateDownward(false);
 
-        this.updateNodePosition(node_floating);
+        this.view_dragging_node_parent.attachChild(this.view_dragging_node);
+        this.view_dragging_node = null;
+        this.view_dragging_node_parent = null;
+
+        this.arrangeHorizontal();
     },
 }
