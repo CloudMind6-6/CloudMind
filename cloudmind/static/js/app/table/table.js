@@ -10,6 +10,35 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
         var data_idx = $(inner).attr("data-nodeidx");
         $scope.load_modal(data_idx);
     });
+    /* Modal Event Callback*/
+    function eventOnModal_addNode(_node, _node_list){
+
+        var length = $scope.nodes.length;
+
+        $scope.events.push({
+            idx      : length - 1,
+            node_idx : _node.node_idx,
+            title    : _node.name,
+            start    : _node.due_date.substring(0,10),
+            info     : _node.description
+        });
+
+        $scope.nodes = _node_list;
+    }
+
+    function eventOnModal_updateNode(_node_idx, _node_list){
+
+        
+    }
+
+   
+
+    $scope.modal_callback = {
+        updateNode    : eventOnModal_updateNode,
+
+    };
+
+
     $scope.InitTable = function () {
         var node_list = NodeStore.getNodeList(); // nodelist
         $scope.nodes_notchange = NodeStore.getNodeList();
@@ -26,7 +55,7 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
             $scope.UserEmail = [];
             $scope.Label_colors = [];
 
-            $scope.Name = "<a data-nodeidx='" + node_list[jsons].node_idx + "' onclick=\"angular.element(this).scope().load_modal("+ node_list[jsons].node_idx + ")\">" + Nodename + "</a>";
+            $scope.Name = "<a data-nodeidx='" + node_list[jsons].node_idx + "'>" + Nodename + "</a>";
 
             for (var n in labels_list) {
                 for (var s in labels) {
@@ -66,13 +95,12 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
     }
 
     $scope.load_modal  = function (idx_node) {
-        console.log("load_modal");
-        console.log(idx_node);
         for (var n in $scope.nodes_notchange) {
-            
             if ($scope.nodes_notchange[n].node_idx == idx_node) {
                 $scope.modalNode = JSON.parse(JSON.stringify($scope.nodes_notchange[n]));
                 $scope.staticDate = $scope.nodes_notchange[n].due_date;
+                $scope.modalIdx = idx_node;
+
                 $modal.open({
                     templateUrl: 'tpl/modal_nodeview.html',
                     controller: 'Modal_NodeView',

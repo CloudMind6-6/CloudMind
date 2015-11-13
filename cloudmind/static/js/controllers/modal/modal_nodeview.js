@@ -19,7 +19,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
                 $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
-
                     $scope.modalNode.description = $scope.newDes;
 
                     if ($scope.modal_callback.updateNode)
