@@ -50,13 +50,28 @@
     <title>CloudMind Login</title>
 </head>
 
-<body>
-    <div id="logindiv" style="margin-top : 50px; margin-left: auto; margin-right : auto; width : 800px;">
-        <div id="logindiv_top" style="text-align : center; font-size : 20px; ">
-            <a href="#" class="fa fa-lg fa-cloud"> CloudMind</a>
+<body style="overflow: hidden; margin:0px;  background-image : url('img/login-background.jpg');
+                                            background-size:cover;
+                                            background-repeat: no-repeat;
+                                            background-attachment: fixed;
+                                            background-position: center;">
+    <div id="logindiv" style="margin-top : auto; margin-left: auto; margin-right : auto; width:100%; height:9000px">
+        <div id="logindiv_top" style="padding-top: 300px; text-align : center; font-size : 20px; ">
+            <a href="#" style="color:#FFFFFF">
+                <i class="fa fa-5x fa-cloud"></i>
+                <span style="font-size:90px; font-family:NanumGothic; font-weight:bold; margin-left:10px;">
+                    CloudMind
+                </span>
+            </a>
         </div>
         <div id="sign" style="text-align : center; margin-top : 100px; ">
-            <button id="signinButton" onclick="location.href='/login'">Signin with Google</button>
+            <a href="/login">
+                <div style="display:inline-block; width:330px; height:50px; border-radius:4px; color:#FFFFFF; background-color:rgba(255, 8, 8, 0.3); border-color:rgba(0,0,0,0); font-family:NanumGothic;" onclick="location.href='/login'">
+                <span style="padding-top:5px; font-size:20px; font-family:NanumGothic; font-weight:bold;">
+                    <p style="margin:0; padding-top:10px;">Sign in with Google</p>
+                </span>
+                </div>
+            </a>
         </div>
     </div>
     <script src="./libs/jquery/jquery/dist/jquery.js"></script>
