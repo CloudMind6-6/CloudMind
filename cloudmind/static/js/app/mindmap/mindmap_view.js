@@ -607,9 +607,8 @@ SceneGraph.prototype =
             var user = user_store.syncUserList()[node.model.assigned_users[i]];
 
             div_node_assigned_container
-                .append('span')
-                .attr("class", "thumb-xxxs avatar-pl " + class_info.portrait)
                 .append('img')
+                .attr("class", class_info.portrait)
                 .attr("src", user.profile_url)
         }
     },
