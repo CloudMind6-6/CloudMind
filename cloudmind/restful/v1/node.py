@@ -140,7 +140,7 @@ class NodeUpdate(Resource):
         description = args['description']
         due_date = date_parser.parse(args['due_date'])
         users = args['assigned_users']
-        parent_node_id = args['parent_node_idx']
+        parent_node_id = args.get('parent_node_idx', None)
 
         if 'user_id' not in session:
             abort(403, message="already logged out")
@@ -165,7 +165,8 @@ class NodeUpdate(Resource):
         node.name = node_name
         node.description = description
         node.due_date = due_date
-        node.parent_node_id = parent_node_id
+        if parent_node_id is not None:
+            node.parent_node_id = parent_node_id
 
         db.session.query(Participant).filter(Participant.own_node_id == node_id).delete()
         for user_id in users:
