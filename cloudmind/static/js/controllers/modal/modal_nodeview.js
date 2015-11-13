@@ -41,7 +41,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
                     if ($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
 
                     $scope.modalIdx = _node_list.length - 1;
-                        $scope.clickChildNodeInModal(_node);
+                    $scope.clickChildNodeInModal(_node);
                 });
         };
 
@@ -68,6 +68,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             NodeStore.addLabel(node.node_idx, _idx,
                 function (_node_id, _node_list, _palette_id) {
                     $scope.modalNode.labels.push(_palette_id);
+                    $scope.modalNode.labels.sort();
 
                     if ($scope.modal_callback.addLabel)
                         $scope.modal_callback.addLabel(_node_id, _node_list, _palette_id);
@@ -89,25 +90,74 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         $scope.hasLabel = function (_idx) {
 
             var labelIdx = $scope.modalNode.labels.indexOf(_idx);
+
             if (labelIdx == -1) {
                 $scope.addLabelInModal(_idx);
             }
             else  $scope.removeLabelInModal(_idx);
         };
 
+        $scope.checkLabel = function(_idx){
+            var labelIdx = $scope.modalNode.labels.indexOf(_idx);
+
+            if (labelIdx == -1) return false;
+            else return true;
+        };
+
         /* Participant */
+        $scope.filterParticipant = function(_user_idx){
+
+            var users = $scope.modalNode.assigned_users;
+
+            if(users.indexOf(_user_idx) ==  -1) return false;
+            else return true;
+        };
+
+        $scope.participatedInNode = function(_user_idx){
+
+            var users = $scope.modalNode.assigned_users;
+            if(users.indexOf(_user_idx) == -1)
+                $scope.addParticipantInModal(_user_idx);
+            else $scope.removeParticipantInModal(_user_idx);
+
+        };
+
         $scope.addParticipantInModal = function (_user_idx) {
 
             var node           = $scope.modalNode;
             var dueDate        = new Date(node.due_date);
             var assigned_users = JSON.parse(JSON.stringify(node.assigned_users));
 
-            assigned_users.assigned_users.push(_user_idx);
+            assigned_users.push(_user_idx);
 
             NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
                 $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
 
                     node.assigned_users.push(_user_idx);
+                    node.assigned_users.sort();
+
+                    if ($scope.modal_callback.updateNode)
+                        $scope.modal_callback.updateNode(_node_idx, _node_list);
+                }
+            );
+        };
+
+        $scope.removeParticipantInModal = function (_user_idx) {
+
+            var node           = $scope.modalNode;
+            var dueDate        = new Date(node.due_date);
+            var assigned_users = JSON.parse(JSON.stringify(node.assigned_users));
+            var ParticipantIdx = assigned_users.indexOf(_user_idx);
+
+            assigned_users.splice(ParticipantIdx, 1);
+
+            console.log(assigned_users);
+
+            NodeStore.updateNode(node.node_idx, node.name, dueDate.toJSON(),
+                $scope.newDes, node.assigned_users, function (_node_idx, _node_list) {
+
+                    node.assigned_users.splice(ParticipantIdx, 1);
+
                     if ($scope.modal_callback.updateNode)
                         $scope.modal_callback.updateNode(_node_idx, _node_list);
                 }
@@ -115,19 +165,13 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         $scope.inviteUserInModal = function (_user) {
-            console.log(_user);
             if(!_user.description) return;
             UserStore.inviteUserToRoot($scope.modalNode.root_idx, _user.description);
         };
 
         /* Override User Search Func */
-        $scope.clearInput = function (id) {
-            if (id) {
-                $scope.$broadcast('angucomplete-alt:clearInput', id);
-            }
-            else {
-                $scope.$broadcast('angucomplete-alt:clearInput');
-            }
+        $scope.clearInput = function () {
+            $scope.$broadcast('angucomplete-alt:clearInput');
         };
 
         $scope.inputChanged = function(_str) {
@@ -139,22 +183,9 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
                 isClear = false;
                 UserStore.searchProfile(_str, function(_result) {
-                    console.log(_result);
-                    $scope.matchUserList = [_result];
+                    $scope.matchUserList = _result;
                 });
             }
-        };
-
-        $scope.click_test = function(){
-            $scope.matchUserList = [
-                {account_id: "1", name: "chorong", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-                {account_id: "2", name: "chorong2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-                {account_id: "3", name: "chorong3", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-                {account_id: "4", name: "jinsil", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-                {account_id: "5", name: "jinsil2", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-                {account_id: "6", name: "taein", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"},
-                {account_id: "7", name: "taein", email: "crjang91@gmail.com", profile_url: "../../img/a0.jpg"}
-            ];
         };
 
         /* label palette */
@@ -209,9 +240,12 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             $scope.newDes       = $scope.modalNode.description;
             $scope.newLeaf      = null;
             $scope.isEditmode   = false;
+            $scope.isRoot       = ($scope.modalNode.node_idx == $scope.modalNode.root_idx) ? true : false;
             isClear             = true;
 
             $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0, 10);
+            $scope.modalNode.assigned_users.sort();
+            $scope.modalNode.labels.sort();
 
             for (var p in $scope.labelPalette) {
                 $scope.editPalette[p] = false;

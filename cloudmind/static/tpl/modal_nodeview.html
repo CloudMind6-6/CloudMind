@@ -1,45 +1,3 @@
-<style>
-	/*나중에 이 부분은 app.css 으로 넣어주심 감사..*/
-	.part_lists ul {
-		list-style: none;
-		padding:0;
-	}
-	.part_lists li {
-		margin-bottom: 6px;
-		-webkit-transition: background-color 0.5s; /* Safari */
-    	transition: background-color 0.5s;
-	}
-	.part_lists li div {
-		border-top-left-radius: 4px;
-		border-bottom-left-radius: 4px;
-
-		border-top-right-radius : 15px;
-		border-bottom-right-radius : 15px;
-	}
-	.part_lists li:hover div {
-		background-color : #F5F5F5;
-		-webkit-transition: background-color 0.2s; /* Safari */
-    	transition: background-color 0.2s;
-	}
-	#left_image {
-		margin-right: 8px;
-		width: 30px;
-	}
-	#left_image img {
-		border-radius: 4px;
-	}
-	#right_name {
-		line-height: 30px;
-		display:inline-block;
-		vertical-align: middle;
-	}
-	#right_name p {
-		margin : 0;
-		font-size: 13px;
-	}
-
-</style>
-
 
 <div class="view_top" style="padding-left : 15px;">
 	<div  class="m-b-lg">
@@ -93,13 +51,12 @@
 			<span class="panel-circle wrapper-xs-circle m-r-xs">+</span>
 			</span>
         </a>
-		<div class="dropdown-menu m-t-s w">
+        <div class="dropdown-menu m-t-s w-lg" ng-show="isRoot">
             <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
-					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
+					<div class="font-bold text-md m-t-n-xs m-l-xs">Add Members</div>
 					<hr class="m-b-sm m-t-sm hr-color">
-                    <div ng-show="isRoot"
-                         angucomplete-alt id="search_people"
+                    <div angucomplete-alt id="search_people"
                          placeholder="Search people"
                          pause="300"
                          selected-object="inviteUserInModal"
@@ -114,12 +71,21 @@
                          input-changed="inputChanged"
                          input-class="angucomplete-form-control">
                     </div>
+				</span>
+            </div>
+        </div>
 
-                    <div class="part_lists" ng-repeat="user in modalNode.assigned_users" ng-show="isRoot">
-                        <div ng-click="addParticipantInModal(user.account_id)">
-                            <img class="thumb-sm avatar m-r-xs" >
-                            <span id="left_image"><img width="30" ng-src={{users[user].profile_url}}"></span>
-                            <span id="right_name"><p>RainC</p></span>
+		<div class="dropdown-menu m-t-s w" ng-hide="isRoot">
+            <div class="wrapper-xs">
+                <span ng-click="toggleDropdown($event)">
+					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
+					<hr class="m-b-xs m-t-sm hr-color">
+                    <div ng-repeat="user in users">
+                        <div class="part_lists panel.no-borders wrapper-xxxs bg-pl-pic"
+                             ng-click="participatedInNode(user.account_id)" align="left">
+                            <img class="thumb-xxs m-t-xxs" ng-src={{user.profile_url}}>
+                            <span>{{user.name}}</span>
+                            <i ng-show="filterParticipant(user.account_id)" class="fa fa-check m-l-lg"></i>
                         </div>
                     </div>
 				</span>
@@ -144,8 +110,10 @@
 				<div class="font-bold text-md m-t-n-xs m-l-xs">Label Palette</div>
 				<hr class="m-b-sm m-t-sm hr-color">
 				<div ng-repeat="lp in labelPalette track by $index">
-					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md" ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}" > &nbsp;{{ lp.name }}</div>
-					<i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[lp.palette_idx])
+					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md" ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}" > &nbsp;{{ lp.name }}
+                        <i class="fa fa-check icon-white" ng-show="checkLabel(lp.palette_idx)"></i>
+                    </div>
+                    <i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[lp.palette_idx])
 					   ng-click="editPaletteMode(lp.palette_idx)"></i>
 					<div class="m-b-xs m-l-xsm" ng-show=editPalette[lp.palette_idx]>
 						<input type="text" class="form-control thumb-xlg" ng-model="newPaletteName">

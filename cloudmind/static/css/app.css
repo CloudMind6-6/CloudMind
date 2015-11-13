@@ -4714,6 +4714,22 @@ a.text-#000000:hover {
   margin-bottom: -50px;
 }
 
+.part_lists:hover {
+  background-color : #ddefff;
+  -webkit-transition: background-color 0.2s; /* Safari */
+  transition: background-color 0.2s;
+}
+
+.part_lists img{
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  border-radius: 3px;
+  margin-top: -4px;
+  margin-right: 5px;
+}
+
+
 .avatar {
   position: relative;
   display: block;
@@ -5184,6 +5200,10 @@ a.text-#000000:hover {
 
 .icon-pencil {
   color: #787878;
+}
+
+.icon-white{
+  color: whitesmoke;
 }
 
 .hr-color{
