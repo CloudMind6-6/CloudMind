@@ -1,5 +1,5 @@
 
-app.controller('NavBarCtrl', ['$scope', 'NodeStore', function($scope, NodeStore) {
+app.controller('NavBarCtrl', ['$scope', '$state', 'NodeStore', function($scope, $state, NodeStore) {
 
     initNavBarCtrl();
 
@@ -9,6 +9,12 @@ app.controller('NavBarCtrl', ['$scope', 'NodeStore', function($scope, NodeStore)
         };
         $scope.state = false;
         NodeStore.registerNavbarCallback($scope.navBarCallback);
+    }
+
+    $scope.goRootList = function(){
+        NodeStore.setRootList(function(){
+            $state.go('app.list');
+        });
     }
 }]);
 

@@ -154,8 +154,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
             assigned_users.splice(ParticipantIdx, 1);
 
-            console.log(assigned_users);
-
             NodeStore.updateNode(node.node_idx, node.parent_idx, node.name, dueDate.toJSON(),
                 $scope.newDes,assigned_users, function (_node_idx, _node_list) {
 
@@ -214,8 +212,13 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             $scope.editPalette[_idx] = false;
         };
 
+        /* leaf */
         $scope.addLeafInModal = function () {
-            NodeStore.addLeaf($scope.newLeaf, $scope.modalNode.node_idx, function (_node_idx, _leaf, _node_list) {
+
+            var file = document.getElementById('leafName').value;
+            console.log(file);
+
+            NodeStore.addLeaf(file, $scope.modalNode.node_idx, function (_node_idx, _leaf, _node_list) {
 
                 document.getElementById('leafName').value = null;
                 $scope.modalNode.leafs.push(_leaf);
@@ -234,6 +237,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             return URL + _idx;
         };
 
+
         function init_NodeViewModal() {
 
             $scope.nodes        = NodeStore.getNodeList();
@@ -250,10 +254,13 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             $scope.modalNode.due_date = $scope.modalNode.due_date.substring(0, 10);
             $scope.modalNode.assigned_users.sort();
 
-            console.log($scope.modalNode.assigned_users);
             for (var p in $scope.labelPalette) {
                 $scope.editPalette[p] = false;
             }
+
+            $scope.$watch('l', function(_leaf){
+                console.log(_leaf);
+            })
         }
     }]);
 

@@ -5,6 +5,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
     var navbarCallback = null;
 
+    var rootList = null;
+
     var nodeList = [];
     var leafList = [];
     var labelPalette;
@@ -29,6 +31,8 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 palette  : false,
                 leafList : false
             };
+
+            rootList = null;
 
             this.setNodeList(_idx, null, function(_value){
                 isSet[_value] = true;
@@ -74,7 +78,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
                 .error(function (err) {
                     console.log(err);
                 });
-
         },
 
         setLabelPalette : function(_idx, callback){
@@ -117,6 +120,25 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
 
         getLeafList : function(){
             return leafList;
+        },
+
+        setRootList : function(callback){
+            HttpSvc.getRoots()
+                .success(function (res) {
+                    if (res.success) {
+                        rootList = res.node_list;
+                        callback();
+                    }
+                    else throw new Error;
+                })
+                .error(function (err) {
+                    console.log(err);
+                }
+            );
+        },
+
+        getRootList : function(){
+            return rootList;
         },
 
         /* Node */

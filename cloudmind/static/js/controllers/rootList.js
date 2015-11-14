@@ -54,16 +54,15 @@ app.controller('RootListCtrl', ['$modal', '$scope', '$state', 'NodeStore', 'User
 
             NodeStore.setNavbarState(false);
 
-            HttpSvc.getRoots()
-                .success(function (res) {
-                    if (res.success) {
-                        $scope.roots = res.node_list;
+            $scope.roots = NodeStore.getRootList();
+
+            if(! $scope.roots){
+                NodeStore.setRootList(
+                    function(){
+                        $scope.roots = NodeStore.getRootList();
                     }
-                    else throw new Error;
-                })
-                .error(function (err) {
-                    console.log(err);
-                });
+                );
+            }
         }
 
     /* REST API TEST CODE */

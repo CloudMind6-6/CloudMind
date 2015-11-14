@@ -221,8 +221,35 @@ a:hover .caret-white {
   margin-top: 20px;
 }
 
+.modal-left{
+  width: 75%;
+  float: left;
+}
+
+.modal-right{
+  width: 25%;
+  float: left;
+  margin-top: 61px;
+
+}
+.modal-add-menu{
+  padding-left: 25px;
+  padding-top: 20px;
+}
+
+.modal-add-menu button{
+  width: 110px;
+  margin-bottom: 7px;
+}
+
+
+.modal-footer{
+  opacity: 0;
+}
+
 .font-middle{
   font-weight: 600;
+  color: grey;
 !important;
 }
 
@@ -4236,6 +4263,9 @@ a.text-#000000:hover {
 
 .no-padder {
   padding: 0 !important;
+}
+.padder-b-m{
+  padding-bottom: 20px;
 }
 
 .pull-in {
