@@ -518,40 +518,44 @@ SceneGraph.prototype =
         this.updateNodePosition(this.node_root, duration);
     },
 
+    updateNodeTransition : function(node, duration)
+    {
+        if(duration == null)
+            duration = 250;
+
+        node.view_transitioning = true;
+
+        node.view_info
+            .transition()
+            .duration(duration)
+            .each("end", function(){node.view_transitioning = false;})
+            .style("left", this.view_center_x + node.x - node.width/2 + "px")
+            .style("top", this.view_center_y + node.y - node.height/2 + "px")
+            .style("background-color", node.view_editing ? "#E9EA7A" : node.view_highlighted == true ? "#957acb" : node.model.node_idx == node.model.root_idx ? "#7FD6BA" : "#82cadd")
+
+        node.view_menu
+            .transition()
+            .duration(duration)
+            .each("end", function(){node.view_transitioning = false;})
+            .style("left", this.view_center_x + node.x - node.width/2 + "px")
+            .style("top", this.view_center_y + node.y - node.height/2 + "px")
+
+        node.view_link
+            .transition()
+            .duration(duration)
+            .each("end", function(){node.view_transitioning = false;})
+            .attr("d", d3.svg.diagonal()
+                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
+                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; }))
+            .style("stroke-width",  node.view_editing ? "4px"     : node.view_highlighted == true ? "6px" : "2px")
+            .style("stroke",        node.view_editing ? "#D5D66B" : node.view_highlighted == true ? "#957acb" : "#5aa0b3")
+    },
+
     updateNodePosition : function(node, duration)
     {
         if(node.type != 'null')
-        {
-            if(duration == null)
-                duration = 250;
-
-            node.view_transitioning = true;
-
-            node.view_info
-                .transition()
-                .duration(duration)
-                .each("end", function(){node.view_transitioning = false;})
-                .style("left", this.view_center_x + node.x - node.width/2 + "px")
-                .style("top", this.view_center_y + node.y - node.height/2 + "px")
-
-            node.view_menu
-                .transition()
-                .duration(duration)
-                .each("end", function(){node.view_transitioning = false;})
-                .style("left", this.view_center_x + node.x - node.width/2 + "px")
-                .style("top", this.view_center_y + node.y - node.height/2 + "px")
-
-            node.view_link
-                .transition()
-                .duration(duration)
-                .each("end", function(){node.view_transitioning = false;})
-                .attr("d", d3.svg.diagonal()
-                    .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
-                    .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
-                    .projection(function(d) { return [d.y, d.x]; })
-            );
-
-        }
+            this.updateNodeTransition(node, duration);
 
         for(var i = 0; i < node.children.length; ++i)
             this.updateNodePosition(node.children[i], duration);
@@ -644,31 +648,9 @@ SceneGraph.prototype =
         if(node.type == 'null' || node.parent == null || node.view_dragging == true)
             return;
 
-        if(duration == null)
-            duration = 250;
+        node.view_highlighted = true;
 
-        node.view_info
-            .transition()
-            .duration(duration)
-            .style("left", this.view_center_x + node.x - node.width/2 + "px")
-            .style("top", this.view_center_y + node.y - node.height/2 + "px")
-            .style("background-color", "#957acb")
-
-        node.view_menu
-            .transition()
-            .duration(duration)
-            .style("left", this.view_center_x + node.x - node.width/2 + "px")
-            .style("top", this.view_center_y + node.y - node.height/2 + "px")
-
-        node.view_link
-            .transition()
-            .duration(duration)
-            .attr("d", d3.svg.diagonal()
-                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
-                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; }))
-            .style("stroke-width", "6px")
-            .style("stroke", "#957acb")
+        this.updateNodeTransition(node, duration);
 
         this.enableHighlighted(node.parent, duration);
     },
@@ -678,31 +660,9 @@ SceneGraph.prototype =
         if(node.type == 'null' || node.parent == null || node.view_dragging == true)
             return;
 
-        if(duration == null)
-            duration = 250;
+        node.view_highlighted = false;
 
-        node.view_info
-            .transition()
-            .duration(duration)
-            .style("left", this.view_center_x + node.x - node.width/2 + "px")
-            .style("top", this.view_center_y + node.y - node.height/2 + "px")
-            .style("background-color", "#82cadd")
-
-        node.view_menu
-            .transition()
-            .duration(duration)
-            .style("left", this.view_center_x + node.x - node.width/2 + "px")
-            .style("top", this.view_center_y + node.y - node.height/2 + "px")
-
-        node.view_link
-            .transition()
-            .duration(duration)
-            .attr("d", d3.svg.diagonal()
-                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
-                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; }))
-            .style("stroke-width", "2px")
-            .style("stroke", "#5aa0b3")
+        this.updateNodeTransition(node, duration);
 
         this.disableHighlighted(node.parent, duration);
     },
@@ -710,6 +670,10 @@ SceneGraph.prototype =
     enableEditMode : function(node)
     {
         node.view_menu.style("visibility", "hidden");
+
+        node.view_editing = true;
+        this.updateNodeTransition(node);
+
         node.view_name.on("mousedown.edit", function(){ node.view_editing = true; });
 
         this.view_body.on("mousedown.edit", function()
@@ -738,6 +702,11 @@ SceneGraph.prototype =
 
     disableEditMode : function(node)
     {
+        document.getElementById("input_" + node.model.node_idx).blur();
+
+        node.view_editing = false;
+        this.updateNodeTransition(node);
+
         node.view_menu.style("visibility", "visible");
         node.view_editing = false;
         node.view_name.on("mousedown.edit", null);
