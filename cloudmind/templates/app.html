@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="libs/jquery/bootstrap/dist/css/bootstrap.css" type="text/css" />
   <link rel="stylesheet" href="css/font.css" type="text/css" />
   <link rel="stylesheet" href="css/app.css" type="text/css" />
+  <link rel="stylesheet" href="libs/jquery/plugins/integration/bootstrap/3/dataTables.bootstrap.css" type="text/css" />
 </head>
 <body ng-controller="AppCtrl" style="overflow-x:hidden; overflow-y:hidden">
   <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'container':app.settings.container}" ui-view></div>
@@ -69,5 +70,10 @@
 
 
   <!-- Lazy loading -->
+
+
+  <!-- Error fix -->
+  <script src="libs/jquery/plugins/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
 </body>
 </html>
