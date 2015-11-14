@@ -107,6 +107,8 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             else return true;
         };
 
+
+
         /* Participant */
         $scope.filterParticipant = function(_user_idx){
 

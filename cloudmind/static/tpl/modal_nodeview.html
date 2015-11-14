@@ -23,7 +23,7 @@
     <hr class="m-b-sm m-t-sm hr-color">
     <div class="view_description pos-rlt m-b-md font-middle" style="padding-left : 15px;">
         <h3>Description</h3>
-        <textarea style="padding-left:0" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
+        <textarea style="padding-left:0; max-width: 434px" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
     </div>
     <hr class="m-b-sm m-t-sm hr-color">
     <div class="view_participants pos-rlt padder-l m-b-md font-middle">
@@ -68,20 +68,19 @@
 
 </div>
 
-<div class="modal-right" ng-controller="DropdownCtrl">
+<div class="modal-right font-middle" ng-controller="DropdownCtrl">
     <hr class="m-b-sm m-t-sm hr-color">
-
-    ADD
     <div class="modal-add-menu">
+        <div class="head"> Add Other </div>
         <span class="dropdown" dropdown ng-show="isRoot">
         <a href class="dropdown-toggle" dropdown-toggle>
-            <button class="btn m-b-xs w-xs btn-default">
-                <i class="icon-user"></i>Member</button>
+            <button class="btn btn-default">
+                <i class="icon-user menu-btn"></i>Member</button>
         </a>
-        <div class="dropdown-menu abs m-t-s w-lg">
+        <div class="dropdown-menu box abs w-lg">
             <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
-					<div class="font-bold text-md m-t-n-xs m-l-xs">Add Members</div>
+					<div class="font-bold text-md title">Add Members</div>
 					<hr class="m-b-sm m-t-sm hr-color">
                     <div angucomplete-alt id="search_people"
                          placeholder="Search people"
@@ -104,13 +103,13 @@
     </span>
         <span class="dropdown" dropdown ng-hide="isRoot">
         <a href class="dropdown-toggle" dropdown-toggle>
-            <button class="btn m-b-xs w-xs btn-default">
-                <i class="icon-user"></i>Participant</button>
+            <button class="btn btn-default">
+                <i class="icon-user menu-btn"></i>Member</button>
         </a>
-        <div class="dropdown-menu m-t-s w">
+        <div class="dropdown-menu box w">
             <div class="wrapper-xs">
                 <span ng-click="toggleDropdown($event)">
-					<div class="font-bold text-md m-t-n-xs m-l-xs">Participants</div>
+					<div class="font-bold text-md title">Members</div>
 					<hr class="m-b-xs m-t-sm hr-color">
                     <div ng-repeat="user in users">
                         <div class="part_lists panel.no-borders wrapper-xxxs bg-pl-pic"
@@ -126,28 +125,26 @@
     </span>
         <span class="dropdown" dropdown>
         <a href class="dropdown-toggle" dropdown-toggle>
-            <button class="btn m-b-xs w-xs btn-default">
-                <i class="icon-tag"></i> Label</button>
+            <button class="btn btn-default">
+                <i class="icon-tag menu-btn"></i> Label</button>
         </a>
-        <div class="dropdown-menu m-t-sm w-lg">
+        <div class="dropdown-menu box w-lg">
             <div class="wrapper-xs">
 			    <span ng-click="toggleDropdown($event)">
-				<div class="font-bold text-md m-t-n-xs m-l-xs">Label Palette</div>
+				<div class="font-bold text-md title">Label Palette</div>
 				<hr class="m-b-sm m-t-sm hr-color">
 				<div ng-repeat="lp in labelPalette track by $index">
                     <div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md icon-white"
                          ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}"> &nbsp;{{ lp.name }}
-                        <i class="fa fa-check icon-white" ng-show="checkLabel(lp.palette_idx)"></i>
                     </div>
+                    <i class="fa fa-check icon-white m-l-n-lg m-rs" ng-show="checkLabel(lp.palette_idx)"></i>
                     <i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[lp.palette_idx])
                        ng-click="editPaletteMode(lp.palette_idx)"></i>
-
                     <div class="m-b-xs m-l-xsm" ng-show=editPalette[lp.palette_idx]>
-                        <input type="text" class="form-control thumb-xlg" ng-model="newPaletteName">
-                        <span class="m-l-xs"></span>
-                        <i class="fa fa-check icon-submit" ng-click="updateLabelPalette(lp,newPaletteName)"></i>
-                        <span class="m-l-xs"></span>
-                        <i class="fa fa-times icon-cancel" ng-click="cancelEditPaletteMode(lp.palette_idx)"></i>
+                        <input type="text" class="form-control thumb-xlg" ng-model="newPaletteName"
+                               ng-keypress="($event.which==13)?updateLabelPalette(lp,newPaletteName):0">
+                        <i class="fa fa-check icon-submit m-l-xs" ng-click="updateLabelPalette(lp,newPaletteName)"></i>
+                        <i class="fa fa-times icon-cancel m-l-xs" ng-click="cancelEditPaletteMode(lp.palette_idx)"></i>
                     </div>
                 </div>
 			    </span>
@@ -156,13 +153,13 @@
     </span>
         <span class="dropdown" dropdown>
         <a href class="dropdown-toggle" dropdown-toggle>
-            <button class="btn m-b-xs w-xs btn-default">
-                <i class="fa fa-folder-o m-r-xs"></i>Node</button>
+            <button class="btn btn-default">
+                <i class="fa fa-folder-o menu-btn"></i>Node</button>
         </a>
-        <div class="dropdown-menu m-t-s w">
+        <div class="dropdown-menu box w">
             <div class="wrapper-xs">
 					<span ng-click="toggleDropdown($event)">
-						<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
+						<div class="font-bold text-md title">Name</div>
 						<hr class="m-b-sm m-t-sm hr-color">
 						<input class="form-control m-t-s" type="text" ng-model="newName"/>
 					</span>
@@ -175,14 +172,14 @@
     </span>
         <span class="dropdown" dropdown>
         <a href class="dropdown-toggle" dropdown-toggle>
-            <button class="btn m-b-xs w-xs btn-default">
-                <i class="fa fa-file-text-o"></i>
+            <button class="btn btn-default">
+                <i class="fa fa-file-text-o menu-btn"></i>
                 Leaf</button>
         </a>
-         <div class="dropdown-menu m-t-sm padder-b-m w-lg">
+         <div class="dropdown-menu box padder-b-m w-lg">
              <div class="wrapper-xs">
                  <span ng-click="toggleDropdown($event)">
-                     <div class="font-bold text-md m-t-n-xs m-l-xs">Add Leaf</div>
+                     <div class="font-bold text-md title">Add Leaf</div>
                      <hr class="m-b-sm m-t-sm hr-color">
                      <span style="width:250px; float: left">
                          <input class="text-base" file-model="newLeaf" type="file" id="leafName" />

@@ -234,18 +234,41 @@ a:hover .caret-white {
 }
 .modal-add-menu{
   padding-left: 25px;
-  padding-top: 20px;
+  padding-top: 10px;
+}
+
+.modal-add-menu .head{
+  margin-right: 16px;
+  padding-bottom: 10px;
+  font-size: 17px;
+  text-align: right;
+}
+
+.modal-add-menu .title{
+  text-align: center;
+  margin: -5px 0 0 0;
 }
 
 .modal-add-menu button{
   width: 110px;
   margin-bottom: 7px;
+  text-align: left;
 }
+
+.menu-btn{
+  margin-left: 2px;
+  margin-right: 6px;
+}
+
+.modal-add-menu .box{
+  margin-left: 110px;
+  margin-top: -28px;
+}
+
 .modal-apply {
   margin-left: 107%;
   margin-bottom: 5%;
 }
-
 
 .modal-footer{
   opacity: 0;
@@ -4656,7 +4679,9 @@ a.text-#000000:hover {
 .m-r-sm {
   margin-right: 10px;
 }
-
+.m-rs {
+  margin-right: 13px;
+}
 .m-r {
   margin-right: 15px;
 }
