@@ -784,12 +784,14 @@ SceneGraph.prototype =
                 node_updated.model = model_updated;
 
                 scene_graph.getNode(model_updated.parent_idx).attachChild(node_updated);
+                scene_graph.disableHighlighted(node, 0);
                 scene_graph.arrangeHorizontal();
             });
         }
         else
         {
             this.view_dragging_node_parent.attachChild(this.view_dragging_node);
+            this.disableHighlighted(this.view_dragging_node, 0);
             this.arrangeHorizontal();
         }
 
