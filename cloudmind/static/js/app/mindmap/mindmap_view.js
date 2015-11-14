@@ -47,6 +47,7 @@ SceneGraphNode = function(model)
         }
         else
         {
+            /*
             if (model.leafs.node_idx)
             {
                 this.width = scene_graph_form.leaf_width;
@@ -55,6 +56,7 @@ SceneGraphNode = function(model)
                 this.type = 'leaf';
             }
             else
+             */
             {
                 this.width = scene_graph_form.node_width;
                 this.height = scene_graph_form.node_height;
@@ -83,6 +85,7 @@ SceneGraphNode = function(model)
     this.view_dragging = false;
     this.view_transitioning = false;
     this.view_highlighted = false;
+    this.view_editing = false;
 
     this.model = model;
 };
@@ -445,12 +448,12 @@ SceneGraph.prototype =
         div_node_menu_right.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_edit_name)
-            //.on("click", function(){ scene_graph.enableEditMode(d3.select(this).attr("idx")) });
+            .on("click", function(){ scene_graph.enableEditMode(scene_graph.getNode(d3.select(this).attr("idx"))) });
 
         div_node_menu_right.append('div').append('i')
             .attr("idx", model.node_idx)
             .attr("class", class_info.menu_movable)
-            .on("mousedown", function(){ scene_graph.enableDraggingMode(d3.select(this).attr("idx")) });
+            .on("mousedown", function(){ scene_graph.enableDraggingMode(scene_graph.getNode(d3.select(this).attr("idx"))) });
 
 
         node.view_menu.append('div').attr("class", "center")
@@ -485,16 +488,14 @@ SceneGraph.prototype =
         for(var i = 0; i < node.children.length; ++i)
             this.removeNode(node.children[i].model.node_idx);
 
-        this.view_node.selectAll("div[idx='" + node_idx +"']").remove();
-        this.view_link.selectAll("path[idx='" + node_idx +"']").remove();
-
         this.disableEditMode(node);
-
-        console.log("disableHighllighted");
         this.disableHighlighted(node);
 
         if(node.parent)
             node.parent.detachChild(node);
+
+        this.view_node.selectAll("div[idx='" + node_idx +"']").remove();
+        this.view_link.selectAll("path[idx='" + node_idx +"']").remove();
 
         this.node_map[node_idx] = null;
     },
@@ -588,7 +589,25 @@ SceneGraph.prototype =
             .on("keydown", function()
             {
                 if(d3.event.keyCode == 13 && this.value != "")
-                    scope.onEventAdd(d3.select(this).attr("idx"), this.value)
+                {
+                    var model = node.model;
+
+                    if(model.node_idx == -1)
+                    {
+                        scope.onEventAdd(d3.select(this).attr("idx"), this.value)
+                        scope.onEventRemovePreliminary();
+                    }
+                    else
+                        node_store.updateNode(model.node_idx, model.parent_idx, this.value, model.due_date, model.description, model.assigned_users, function(node_idx, node_list)
+                        {
+                            var node = scene_graph.getNode(node_idx);
+
+                            node.model = node_store.getNode(node_idx);
+
+                            scene_graph.disableEditMode(node);
+                            scene_graph.updateName(node);
+                        });
+                }
             });
     },
 
@@ -690,22 +709,28 @@ SceneGraph.prototype =
 
     enableEditMode : function(node)
     {
-        var node_clicked = false;
-
         node.view_menu.style("visibility", "hidden");
-        node.view_name.on("mousedown", function(){ node_clicked = true; });
+        node.view_name.on("mousedown.edit", function(){ node.view_editing = true; });
 
-        this.view_body.on("mousedown", function()
+        this.view_body.on("mousedown.edit", function()
         {
-            if(node_clicked == false)
-                scope.onEventRemovePreliminary();
-
-            node_clicked = false;
+            if(node.view_editing == false)
+            {
+                if(node.model.node_idx == -1)
+                    scope.onEventRemovePreliminary();
+                else
+                    scene_graph.disableEditMode(node);
+            }
         });
-        this.view_body.on("keydown", function()
+        this.view_body.on("keydown.edit", function()
         {
             if(d3.event.keyCode == 27)
-                scope.onEventRemovePreliminary();
+            {
+                if(node.model.node_idx == -1)
+                    scope.onEventRemovePreliminary();
+                else
+                    scene_graph.disableEditMode(node);
+            }
         });
 
         document.getElementById("input_" + node.model.node_idx).focus();
@@ -714,20 +739,16 @@ SceneGraph.prototype =
     disableEditMode : function(node)
     {
         node.view_menu.style("visibility", "visible");
-        node.view_name.on("mousedown", null);
-        this.view_body.on("mousedown", null);
-        this.view_body.on("keydown", null);
+        node.view_editing = false;
+        node.view_name.on("mousedown.edit", null);
+        this.view_body.on("mousedown.edit", null);
+        this.view_body.on("keydown.edit", null);
     },
 
-    enableDraggingMode : function(node_idx)
+    enableDraggingMode : function(node)
     {
         console.log("enableDraggingMode");
 
-        var node = scene_graph.node_map[node_idx];
-
-        console.log("disableHighllighted");
-        console.log("view_transitioning : " + node.view_transitioning);
-        console.log("view_dragging : " + node.view_dragging);
         this.disableHighlighted(node, 0);
 
         node.view_dragging = true;
@@ -742,12 +763,12 @@ SceneGraph.prototype =
 
         this.arrangeHorizontal();
 
-        this.view_body.on("mouseup", function()
+        this.view_body.on("mouseup.drag", function()
         {
-            scene_graph.disableDraggingMode(node_idx);
+            scene_graph.disableDraggingMode(node);
         });
 
-        this.view_body.on("mousemove", function()
+        this.view_body.on("mousemove.drag", function()
         {
             if(scene_graph.view_dragging_node.parent)
                 return;
@@ -763,38 +784,30 @@ SceneGraph.prototype =
         });
     },
 
-    disableDraggingMode : function(node_idx)
+    disableDraggingMode : function(node)
     {
         console.log("disableDraggingMode");
 
-        this.view_body.on("mousemove", null);
-        this.view_body.on("mouseup", null);
+        this.view_body.on("mousemove.drag", null);
+        this.view_body.on("mouseup.drag", null);
 
         if(this.view_dragging_node.parent)
         {
             var model = this.view_dragging_node.model;
             var parent_model = this.view_dragging_node.parent.model;
 
-            console.log("model pre : ");
-            console.log(model);
-            console.log("parent_node_idx : " + parent_model.node_idx);
-
             node_store.updateNode(model.node_idx, parent_model.node_idx, model.name, model.due_date, model.description, model.assigned_users, function(node_idx, node_list)
             {
-                var node = scene_graph.getNode(node_idx);
+                var node_updated = scene_graph.getNode(node_idx);
+                var model_updated = node_store.getNode(node_idx);
 
-                node.model = node_store.getNode(node_idx);
+                node_updated.model = model_updated;
 
-                console.log("model post: ");
-                console.log(node.model);
-
-                scene_graph.getNode(node.model.parent_idx).attachChild(node);
+                scene_graph.getNode(model_updated.parent_idx).attachChild(node_updated);
             });
         }
         else
             this.view_dragging_node_parent.attachChild(this.view_dragging_node);
-
-        var node = this.getNode(node_idx);
 
         node.view_dragging = false;
         node.view_info.style("z-index", "1");
@@ -812,7 +825,7 @@ SceneGraph.prototype =
         var pre_x = null;
         var pre_y = null;
 
-        this.view_body.on("mouseup", function()
+        this.view_body.on("mouseup.swipe", function()
         {
             pre_x = null;
             pre_y = null;
@@ -820,7 +833,7 @@ SceneGraph.prototype =
             scene_graph.disableSwipingMode();
         });
 
-        this.view_body.on("mousemove", function()
+        this.view_body.on("mousemove.swipe", function()
         {
             var cur_x = d3.mouse(this)[0];
             var cur_y = d3.mouse(this)[1];
@@ -839,6 +852,7 @@ SceneGraph.prototype =
 
     disableSwipingMode : function()
     {
-        this.view_body.on("mousemove", null);
+        this.view_body.on("mouseup.swipe", null);
+        this.view_body.on("mousemove.swipe", null);
     },
 }

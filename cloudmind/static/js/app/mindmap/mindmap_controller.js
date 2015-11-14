@@ -67,8 +67,7 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
 
     scope.onEventAdd = function(node_idx, node_name)
     {
-        var model = scene_graph.node_map[node_idx].model;
-        scene_graph.removeNode(-1);
+        var model = scene_graph.getNode(node_idx).model;
         node_store.addNode(node_name, model.parent_idx, model.root_idx, scope.onAddNode);
     };
 
@@ -79,15 +78,15 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
 
     scope.onEventAddPreliminary = function(node_idx)
     {
-        var model_preliminary = {node_idx:-1, parent_idx:node_idx, root_idx:scene_graph.node_root.model.node_idx, leafs:{}, labels:[], assigned_users:[] };
+        var model_preliminary = {node_idx:-1, parent_idx:node_idx, root_idx:scene_graph.node_root.model.node_idx, labels:[], assigned_users:[] };
 
-        if(scene_graph.getNode(model_preliminary.node_idx))
-            scene_graph.removeNode(model_preliminary.node_idx);
+        if(scene_graph.getNode(-1))
+            scene_graph.removeNode(-1);
 
         scope.onAddNode(model_preliminary, node_store.getNodeList());
 
-        scene_graph.updateNodePosition(scene_graph.node_map[model_preliminary.node_idx]);
-        scene_graph.enableEditMode(scene_graph.node_map[model_preliminary.node_idx]);
+        scene_graph.updateNodePosition(scene_graph.getNode(-1));
+        scene_graph.enableEditMode(scene_graph.getNode(-1));
     };
 
     scope.onEventRemovePreliminary = function()
