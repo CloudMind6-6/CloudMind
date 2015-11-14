@@ -12,12 +12,15 @@ from flask_restful import Resource
 import json
 import os
 import time
+from urllib.parse import quote
 import uuid
 from werkzeug import secure_filename
 
 
 @apiv1.route('/leaf/<int:leaf_id>')
 def leaf_download(leaf_id):
+    is_thumbnail = request.args.get('t', None)
+
     if 'user_id' not in session:
         return "already logged out"
 
@@ -31,7 +34,19 @@ def leaf_download(leaf_id):
     if parent_node.check_member(session['user_id']) is False:
         return "노드멤버 아님"
 
-    return send_file(leaf.file_path, as_attachment=True, attachment_filename=leaf.name, mimetype=leaf.file_type)
+    if is_thumbnail == 'true' and leaf.file_type[:5] == 'image':
+        return send_file(
+            leaf.file_path + ".thumbnail",
+            as_attachment=True,
+            attachment_filename='thumbnail.jpg',
+            mimetype='image/jpeg'
+        )
+    return send_file(
+        leaf.file_path,
+        as_attachment=True,
+        attachment_filename=quote(leaf.name),
+        mimetype=leaf.file_type
+    )
 
 
 class LeafList(Resource):
