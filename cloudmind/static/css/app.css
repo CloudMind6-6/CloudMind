@@ -241,6 +241,10 @@ a:hover .caret-white {
   width: 110px;
   margin-bottom: 7px;
 }
+.modal-apply {
+  margin-left: 107%;
+  margin-bottom: 5%;
+}
 
 
 .modal-footer{

@@ -21,7 +21,11 @@
         </div>
     </div>
     <hr class="m-b-sm m-t-sm hr-color">
-
+    <div class="view_description pos-rlt m-b-md font-middle" style="padding-left : 15px;">
+        <h3>Description</h3>
+        <textarea style="padding-left:0" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
+    </div>
+    <hr class="m-b-sm m-t-sm hr-color">
     <div class="view_participants pos-rlt padder-l m-b-md font-middle">
         <h3>Participants</h3>
         <span ng-repeat="user in modalNode.assigned_users">
@@ -30,7 +34,6 @@
     </div>
 
     <hr class="m-b-sm m-t-sm hr-color">
-
     <div class=" view_labels pos-rlt padder-l m-b-md m-t-md font-middle">
         <h3>Labels</h3>
 	<span class="list_labels" ng-repeat="label in modalNode.labels track by $index" style="padding-left: 0;">
@@ -40,11 +43,7 @@
     </span>
     </div>
 
-    <hr class="m-b-sm m-t-sm hr-color">
-    <div class="view_description pos-rlt m-b-md font-middle" style="padding-left : 15px;">
-        <h3>Description</h3>
-        <textarea style="padding-left:0" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
-    </div>
+
     <hr class="m-b-sm m-t-sm hr-color">
     <div class="view_subnodes m-b-xl pos-rlt font-middle" style="padding-left : 15px;">
         <h3>Subnodes</h3>
@@ -65,37 +64,16 @@
         </div>
     </div>
 
-    <button class="btn btn-primary" ng-click="applyInModal(newDes)">Apply</button>
+    <button class="btn btn-primary w-xs modal-apply" ng-click="applyInModal(newDes)">Apply</button>
 
 </div>
 
 <div class="modal-right" ng-controller="DropdownCtrl">
-
     <hr class="m-b-sm m-t-sm hr-color">
 
     ADD
     <div class="modal-add-menu">
-    <span class="dropdown" dropdown>
-        <a href class="dropdown-toggle" dropdown-toggle>
-            <button class="btn m-b-xs w-xs btn-default">
-                <i class="fa fa-folder-o m-r-xs"></i>Node</button>
-        </a>
-        <div class="dropdown-menu m-t-s w">
-            <div class="wrapper-xs">
-					<span ng-click="toggleDropdown($event)">
-						<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
-						<hr class="m-b-sm m-t-sm hr-color">
-						<input class="form-control m-t-s" type="text" ng-model="newName"/>
-					</span>
-                <button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs"
-                        ng-click=" addNodeInModal(newName); toggleDropdown($event, true);">
-                    Add new node
-                </button>
-            </div>
-        </div>
-    </span>
-
-    <span class="dropdown" dropdown ng-show="isRoot">
+        <span class="dropdown" dropdown ng-show="isRoot">
         <a href class="dropdown-toggle" dropdown-toggle>
             <button class="btn m-b-xs w-xs btn-default">
                 <i class="icon-user"></i>Member</button>
@@ -124,8 +102,7 @@
             </div>
         </div>
     </span>
-
-    <span class="dropdown" dropdown ng-hide="isRoot">
+        <span class="dropdown" dropdown ng-hide="isRoot">
         <a href class="dropdown-toggle" dropdown-toggle>
             <button class="btn m-b-xs w-xs btn-default">
                 <i class="icon-user"></i>Participant</button>
@@ -147,9 +124,7 @@
             </div>
         </div>
     </span>
-
-
-    <span class="dropdown" dropdown>
+        <span class="dropdown" dropdown>
         <a href class="dropdown-toggle" dropdown-toggle>
             <button class="btn m-b-xs w-xs btn-default">
                 <i class="icon-tag"></i> Label</button>
@@ -179,8 +154,26 @@
             </div>
         </div>
     </span>
-
-    <span class="dropdown" dropdown>
+        <span class="dropdown" dropdown>
+        <a href class="dropdown-toggle" dropdown-toggle>
+            <button class="btn m-b-xs w-xs btn-default">
+                <i class="fa fa-folder-o m-r-xs"></i>Node</button>
+        </a>
+        <div class="dropdown-menu m-t-s w">
+            <div class="wrapper-xs">
+					<span ng-click="toggleDropdown($event)">
+						<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
+						<hr class="m-b-sm m-t-sm hr-color">
+						<input class="form-control m-t-s" type="text" ng-model="newName"/>
+					</span>
+                <button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs"
+                        ng-click=" addNodeInModal(newName); toggleDropdown($event, true);">
+                    Add new node
+                </button>
+            </div>
+        </div>
+    </span>
+        <span class="dropdown" dropdown>
         <a href class="dropdown-toggle" dropdown-toggle>
             <button class="btn m-b-xs w-xs btn-default">
                 <i class="fa fa-file-text-o"></i>
@@ -188,21 +181,21 @@
         </a>
          <div class="dropdown-menu m-t-sm padder-b-m w-lg">
              <div class="wrapper-xs">
-                    <span ng-click="toggleDropdown($event)">
-                        <div class="font-bold text-md m-t-n-xs m-l-xs">Add Leaf</div>
-				        <hr class="m-b-sm m-t-sm hr-color">
-				        <span style="width:250px; float: left">
-                            <input class="text-base" type="file" id="leafName" onchange="angular.element(this).scope().addLeafInModal()"/>
-                        </span>
-                    </span>
+                 <span ng-click="toggleDropdown($event)">
+                     <div class="font-bold text-md m-t-n-xs m-l-xs">Add Leaf</div>
+                     <hr class="m-b-sm m-t-sm hr-color">
+                     <span style="width:250px; float: left">
+                         <input class="text-base" file-model="newLeaf" type="file" id="leafName" />
+                     </span>
+                     <button class="btn btn-modal btn-info no-padder" ng-click="addLeafInModal(newLeaf)">upload</button>
+                 </span>
              </div>
          </div>
     </span>
-        </div>
-
+    </div>
 </div>
 
-<div class="modal-footer font-middle" style="margin-top: 100%">
+<div class="modal-footer font-middle" style="margin-top: 100%; margin-right: 99%;">
 </div>
 
 

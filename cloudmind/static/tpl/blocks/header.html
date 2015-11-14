@@ -1,8 +1,8 @@
       <!-- navbar header -->
       <div class="navbar-header {{app.settings.navbarHeaderColor}}"> </div>
       <!-- / navbar header -->
-      <div class="collapse pos-abt navbar-collapse bg-z-index">
-        <a ui-sref="app.list" class="navbar-brand">
+      <div class="collapse pos-abt navbar-collapse bg-z-index" ng-controller="NavBarCtrl">
+        <a class="navbar-brand" ng-click="goRootList()">
           <i class="fa fa-lg fa-cloud"></i>
           <img src="img/logo.png" alt="." class="hide">
           <span class="hidden-folded m-l-xs">{{app.name}}</span>

@@ -178,12 +178,19 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         $scope.inputChanged = function(_str) {
 
             var len = _str.length;
+            var users = $scope.users;
 
             if(len == 0) isClear = true;
             else if(len == 1 && isClear == true) {
 
                 isClear = false;
+
                 UserStore.searchProfile(_str, function(_result) {
+                    for(var i in _result){
+                        if(users.hasOwnProperty(_result[i].account_id) == true ){
+                            _result.splice(i,1);
+                        }
+                    }
                     $scope.matchUserList = _result;
                 });
             }
@@ -213,14 +220,12 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         /* leaf */
-        $scope.addLeafInModal = function () {
-
-            var file = document.getElementById('leafName').value;
-            console.log(file);
-
-            NodeStore.addLeaf(file, $scope.modalNode.node_idx, function (_node_idx, _leaf, _node_list) {
-
+        $scope.addLeafInModal = function (_newLeaf) {
+           // onchange="angular.element(this).scope().addLeafInModal()"
+            console.log($scope.newLeaf);
+            NodeStore.addLeaf(_newLeaf, $scope.modalNode.node_idx, function (_node_idx, _leaf, _node_list) {
                 document.getElementById('leafName').value = null;
+                $scope.newLeaf = null;
                 $scope.modalNode.leafs.push(_leaf);
                 if ($scope.modal_callback.addLeaf)
                     $scope.modal_callback.addLeaf(_node_idx, _leaf, _node_list);
@@ -237,16 +242,15 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             return URL + _idx;
         };
 
-
         function init_NodeViewModal() {
 
             $scope.nodes        = NodeStore.getNodeList();
             $scope.users        = UserStore.syncUserList();
             $scope.labelPalette = NodeStore.getLabelPalette();
-
+            $scope.newLeaf      = null;
             $scope.editPalette  = new Object();
             $scope.newDes       = $scope.modalNode.description;
-            $scope.newLeaf      = null;
+
             $scope.isEditmode   = false;
             $scope.isRoot       = ($scope.modalNode.node_idx == $scope.modalNode.root_idx) ? true : false;
             isClear             = true;
@@ -257,10 +261,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             for (var p in $scope.labelPalette) {
                 $scope.editPalette[p] = false;
             }
-
-            $scope.$watch('l', function(_leaf){
-                console.log(_leaf);
-            })
         }
     }]);
 
@@ -304,4 +304,5 @@ app.controller('DatepickekCtrl', ['$scope', function ($scope) {
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[1];
 }]);
+
 
