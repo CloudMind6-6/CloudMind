@@ -674,17 +674,21 @@ SceneGraph.prototype =
         node.view_editing = true;
         this.updateNodeTransition(node);
 
-        node.view_name.on("mousedown.edit", function(){ node.view_editing = true; });
+        var node_clicked = false;
+
+        node.view_name.on("mousedown.edit", function(){ node_clicked = true; });
 
         this.view_body.on("mousedown.edit", function()
         {
-            if(node.view_editing == false)
+            if(node_clicked == false)
             {
                 if(node.model.node_idx == -1)
                     scope.onEventRemovePreliminary();
                 else
                     scene_graph.disableEditMode(node);
             }
+
+            node_clicked = false;
         });
         this.view_body.on("keydown.edit", function()
         {
@@ -705,6 +709,8 @@ SceneGraph.prototype =
         document.getElementById("input_" + node.model.node_idx).blur();
 
         node.view_editing = false;
+
+        this.updateName(node);
         this.updateNodeTransition(node);
 
         node.view_menu.style("visibility", "visible");
