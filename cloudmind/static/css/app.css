@@ -3059,7 +3059,7 @@ fieldset[disabled] .i-checks input + i:before {
 
 .bg-black {
   color: #7793a7;
-  background-color: #2A4A61;
+  background-color: #32668C;
 }
 
 .bg-black.lt,
@@ -3104,16 +3104,16 @@ fieldset[disabled] .i-checks input + i:before {
 .bg-black .nav > li:focus > a,
 .bg-black .nav > li.active > a {
   color: #ffffff;
-  background-color: #131e26;
+  background-color: #2D4E67;
 }
 
 .bg-black .nav > li > a {
-  color: #869fb1;
+  color: #C9E1F3;
 }
 
 .bg-black .nav > li > a:hover,
 .bg-black .nav > li > a:focus {
-  background-color: #16232d;
+  background-color: #2D4E67;
 }
 
 .bg-black .nav .open > a {
