@@ -84,6 +84,7 @@ SceneGraphNode = function(model)
 
     this.view_dragging = false;
     this.view_transitioning = false;
+    this.view_positioning = false;
     this.view_highlighted = false;
     this.view_editing = false;
 
@@ -528,7 +529,7 @@ SceneGraph.prototype =
         node.view_info
             .transition()
             .duration(duration)
-            .each("end", function(){node.view_transitioning = false;})
+            .each("end", function(){node.view_transitioning = false; node.view_positioning = false;})
             .style("left", this.view_center_x + node.x - node.width/2 + "px")
             .style("top", this.view_center_y + node.y - node.height/2 + "px")
             .style("background-color", node.view_editing ? "#E9EA7A" : node.view_highlighted == true ? "#957acb" : node.model.node_idx == node.model.root_idx ? "#7FD6BA" : "#82cadd")
@@ -536,14 +537,14 @@ SceneGraph.prototype =
         node.view_menu
             .transition()
             .duration(duration)
-            .each("end", function(){node.view_transitioning = false;})
+            .each("end", function(){node.view_transitioning = false; node.view_positioning = false;})
             .style("left", this.view_center_x + node.x - node.width/2 + "px")
             .style("top", this.view_center_y + node.y - node.height/2 + "px")
 
         node.view_link
             .transition()
             .duration(duration)
-            .each("end", function(){node.view_transitioning = false;})
+            .each("end", function(){node.view_transitioning = false; node.view_positioning = false;})
             .attr("d", d3.svg.diagonal()
                 .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
                 .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
@@ -555,7 +556,10 @@ SceneGraph.prototype =
     updateNodePosition : function(node, duration)
     {
         if(node.type != 'null')
+        {
+            node.view_positioning = true;
             this.updateNodeTransition(node, duration);
+        }
 
         for(var i = 0; i < node.children.length; ++i)
             this.updateNodePosition(node.children[i], duration);
@@ -645,7 +649,7 @@ SceneGraph.prototype =
 
     enableHighlighted : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_dragging == true)
+        if(node.type == 'null' || node.parent == null || node.view_positioning == true || node.view_dragging == true)
             return;
 
         node.view_highlighted = true;
@@ -657,7 +661,7 @@ SceneGraph.prototype =
 
     disableHighlighted : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_dragging == true)
+        if(node.type == 'null' || node.parent == null || node.view_positioning == true || node.view_dragging == true)
             return;
 
         node.view_highlighted = false;
@@ -722,8 +726,6 @@ SceneGraph.prototype =
 
     enableDraggingMode : function(node)
     {
-        console.log("enableDraggingMode");
-
         this.disableHighlighted(node, 0);
 
         node.view_dragging = true;
@@ -761,10 +763,13 @@ SceneGraph.prototype =
 
     disableDraggingMode : function(node)
     {
-        console.log("disableDraggingMode");
-
         this.view_body.on("mousemove.drag", null);
         this.view_body.on("mouseup.drag", null);
+
+        node.view_dragging = false;
+        node.view_info.style("z-index", "1");
+        node.view_menu.style("visibility", "visible");
+        node.updateDownward(false);
 
         if(this.view_dragging_node.parent)
         {
@@ -779,17 +784,14 @@ SceneGraph.prototype =
                 node_updated.model = model_updated;
 
                 scene_graph.getNode(model_updated.parent_idx).attachChild(node_updated);
+                scene_graph.arrangeHorizontal();
             });
         }
         else
+        {
             this.view_dragging_node_parent.attachChild(this.view_dragging_node);
-
-        node.view_dragging = false;
-        node.view_info.style("z-index", "1");
-        node.view_menu.style("visibility", "visible");
-        node.updateDownward(false);
-
-        this.arrangeHorizontal();
+            this.arrangeHorizontal();
+        }
 
         this.view_dragging_node = null;
         this.view_dragging_node_parent = null;
