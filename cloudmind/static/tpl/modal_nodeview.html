@@ -1,42 +1,43 @@
-
-
 <div class="view_top font-middle" style="padding-left : 15px;">
-	<div  class="m-b-lg ">
-	<ul id="list ul-modal" class=" m-t-sm m-l-xs m-b-n-md" style="padding-left:5px; padding-top : 10px;">
-		<li class="node_title list-modal">{{ modalNode.name }}</li>
-		<li ng-controller="DatepickekCtrl" class="list-modal m-l-xsm">
-			<button class="btn m-b-xs w-xsm btn-default btn-rounded" datepicker-popup="{{format}}" ng-model="dt"
-					is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
-					show-button-bar="false" ng-click="open($event)">
-				<i class="fa fa-calendar-o text m-r-xs m-l-n-xxs"></i>
-				<span class="text margin-left">{{ modalNode.due_date }}</span>
-			</button>
-		</li>
-		<li ng-controller="DropdownCtrl" class="dropdown list-modal" o dropdown>
-			<a href class="dropdown-toggle" dropdown-toggle>
-			<button class="btn m-b-xs w-xsm btn-default btn-rounded">
-				<i class="fa fa-chain-broken text"></i>
-				<span class="text m-l-xsm">Add Node</span>
-			</button>
-			</a>
-			<div class="dropdown-menu m-t-s w">
-				<div class="wrapper-xs">
+    <div class="m-b-lg ">
+        <ul id="list ul-modal" class=" m-t-sm m-l-xs m-b-n-md" style="padding-left:5px; padding-top : 10px;">
+            <li class="node_title list-modal">{{ modalNode.name }}</li>
+            <li ng-controller="DatepickekCtrl" class="list-modal m-l-xsm">
+                <button class="btn m-b-xs w-xsm btn-default btn-rounded" datepicker-popup="{{format}}" ng-model="dt"
+                        is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"
+                        show-button-bar="false" ng-click="open($event)">
+                    <i class="fa fa-calendar-o text m-r-xs m-l-n-xxs"></i>
+                    <span class="text margin-left">{{ modalNode.due_date }}</span>
+                </button>
+            </li>
+            <li ng-controller="DropdownCtrl" class="dropdown list-modal" o dropdown>
+                <a href class="dropdown-toggle" dropdown-toggle>
+                    <button class="btn m-b-xs w-xsm btn-default btn-rounded">
+                        <i class="fa fa-chain-broken text"></i>
+                        <span class="text m-l-xsm">Add Node</span>
+                    </button>
+                </a>
+
+                <div class="dropdown-menu m-t-s w">
+                    <div class="wrapper-xs">
 					<span ng-click="toggleDropdown($event)">
 						<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
 						<hr class="m-b-sm m-t-sm hr-color">
 						<input class="form-control m-t-s" type="text" ng-model="newName"/>
 					</span>
-					<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click=" addNodeInModal(newName); toggleDropdown($event, true);"> Add new node </button>
-				</div>
-			</div>
-		</li>
-		<li ng-click="cancel()" class="list-modal close-modal">
+                        <button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs"
+                                ng-click=" addNodeInModal(newName); toggleDropdown($event, true);"> Add new node
+                        </button>
+                    </div>
+                </div>
+            </li>
+            <li ng-click="cancel()" class="list-modal close-modal">
 			<span class="fa-stack fa-2x">
 				<i class="fa icon-close fa-stack-1.7x"></i>
 			</span>
-		</li>
-	</ul>
-	</div>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <hr class="m-b-sm m-t-sm hr-color">
@@ -71,7 +72,7 @@
                          clear-selected="true"
                          input-changed="inputChanged"
                          input-class="angucomplete-form-control">
-                        </div>
+                    </div>
                 </span>
             </div>
         </div>
@@ -93,7 +94,7 @@
             </div>
         </div>
         </span>
-	</span>
+    </span>
 </div>
 
 <hr class="m-b-sm m-t-sm hr-color">
@@ -102,82 +103,91 @@
     <h3>Labels</h3>
 	<span class="list_labels" ng-repeat="label in modalNode.labels track by $index" style="padding-left: 0;">
         <div class="wrapper-xs-l dis-inline">
-		<span class="panel wrapper-xxxs m-r-xs font-white" style="background-color: {{labelPalette[label].color}}" >&nbsp;&nbsp;{{ labelPalette[label].name }}&nbsp;&nbsp;</span>
-	    </div>
-    </span>
-	<div class="dropdown inline"  ng-controller="DropdownCtrl" o dropdown>
-	<a href class="dropdown-toggle" dropdown-toggle>
-        <div class="wrapper-xs-l dis-inline">
-		<span class="panel wrapper-xs-pls" >+</span>
+            <span class="panel wrapper-xxxs m-r-xs font-white" style="background-color: {{labelPalette[label].color}}">&nbsp;&nbsp;{{ labelPalette[label].name }}&nbsp;&nbsp;</span>
         </div>
-	</a>
-	<div class="dropdown-menu m-t-sm w-lg" >
-		<div class="wrapper-xs">
+    </span>
+
+    <div class="dropdown inline" ng-controller="DropdownCtrl" o dropdown>
+        <a href class="dropdown-toggle" dropdown-toggle>
+            <div class="wrapper-xs-l dis-inline">
+                <span class="panel wrapper-xs-pls">+</span>
+            </div>
+        </a>
+
+        <div class="dropdown-menu m-t-sm w-lg">
+            <div class="wrapper-xs">
 			<span ng-click="toggleDropdown($event)">
 				<div class="font-bold text-md m-t-n-xs m-l-xs">Label Palette</div>
 				<hr class="m-b-sm m-t-sm hr-color">
 				<div ng-repeat="lp in labelPalette track by $index">
-					<div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md icon-white" ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}" > &nbsp;{{ lp.name }}
+                    <div class="panel inline wrapper-xxxs m-l-xxsm m-r-xs m-b-xs w-md icon-white"
+                         ng-click="hasLabel(lp.palette_idx)" style="background-color: {{lp.color}}"> &nbsp;{{ lp.name }}
                         <i class="fa fa-check icon-white" ng-show="checkLabel(lp.palette_idx)"></i>
                     </div>
                     <i class="glyphicon glyphicon-pencil icon-pencil" ng-show=!(editPalette[lp.palette_idx])
-					   ng-click="editPaletteMode(lp.palette_idx)"></i>
-					<div class="m-b-xs m-l-xsm" ng-show=editPalette[lp.palette_idx]>
-						<input type="text" class="form-control thumb-xlg" ng-model="newPaletteName">
-						<span class="m-l-xs"></span>
-						<i class="fa fa-check icon-submit" ng-click="updateLabelPalette(lp,newPaletteName)"></i>
-						<span class="m-l-xs"></span>
-						<i class="fa fa-times icon-cancel" ng-click="cancelEditPaletteMode(lp.palette_idx)"></i>
-					</div>
-				</div>
+                       ng-click="editPaletteMode(lp.palette_idx)"></i>
+
+                    <div class="m-b-xs m-l-xsm" ng-show=editPalette[lp.palette_idx]>
+                        <input type="text" class="form-control thumb-xlg" ng-model="newPaletteName">
+                        <span class="m-l-xs"></span>
+                        <i class="fa fa-check icon-submit" ng-click="updateLabelPalette(lp,newPaletteName)"></i>
+                        <span class="m-l-xs"></span>
+                        <i class="fa fa-times icon-cancel" ng-click="cancelEditPaletteMode(lp.palette_idx)"></i>
+                    </div>
+                </div>
 			</span>
-		</div>
-		</div>
-	</div>
-	</div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 <hr class="m-b-sm m-t-sm hr-color">
 <div class="view_description pos-rlt m-b-md font-middle" style="padding-left : 15px;">
-	<h3>Description</h3>
-	<textarea  style="padding-left:0" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
+    <h3>Description</h3>
+    <textarea style="padding-left:0" class="form-control no-border" rows="3" ng-model="newDes"></textarea>
 </div>
 <hr class="m-b-sm m-t-sm hr-color">
 <div class="view_subnodes m-b-xl pos-rlt font-middle" style="padding-left : 15px;">
-	<h3>Subnodes</h3>
-	<div ng-repeat="node in nodes | filter:filterChildNode track by $index" class="fa-ul m-l-sm">
+    <h3>Subnodes</h3>
+
+    <div ng-repeat="node in nodes | filter:filterChildNode track by $index" class="fa-ul m-l-sm">
 		<span ng-click="clickChildNodeInModal(node)">
 			<i class="fa fa-folder-o m-r-xs"></i>
 			{{node.name}}
 		</span>
-	</div>
-	<div ng-controller="DropdownCtrl" class="dropdown" o dropdown>
-		<a href class="dropdown-toggle" dropdown-toggle>
-			<i class="fa fa-plus-square-o m-r-xs"></i>
-			Add Node
-		</a>
-		<div class="dropdown-menu m-t-s w" >
-			<div class="wrapper-xs">
+    </div>
+    <div ng-controller="DropdownCtrl" class="dropdown" o dropdown>
+        <a href class="dropdown-toggle" dropdown-toggle>
+            <i class="fa fa-plus-square-o m-r-xs"></i>
+            Add Node
+        </a>
+
+        <div class="dropdown-menu m-t-s w">
+            <div class="wrapper-xs">
 				<span ng-click="toggleDropdown($event)">
 					<div class="font-bold text-md m-t-n-xs m-l-xs">Name</div>
 					<hr class="m-b-sm m-t-sm hr-color">
-					<input class="form-control m-t-s" type="text" ng-model="newName" />
+					<input class="form-control m-t-s" type="text" ng-model="newName"/>
 				</span>
-				<button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs" ng-click=" addNodeInModal(newName); toggleDropdown($event, true);"> Add new node </button>
-			</div>
-		</div>
-	</div>
+                <button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs"
+                        ng-click=" addNodeInModal(newName); toggleDropdown($event, true);"> Add new node
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <hr class="m-b-sm m-t-sm hr-color">
 <div class="view_leafs m-l-md m-b-sm font-middle" style="position: relative;">
-	<h3>Leafs</h3>
-	<div class="m-b-xs" ng-repeat="leaf in modalNode.leafs track by $index">
-		<span ng-click="downloadLeafInModal(leaf.id)" ><i class="fa fa-leaf m-r-xs"></i>{{leaf.name}}</span>
-	</div>
+    <h3>Leafs</h3>
+
+    <div class="m-b-xs" ng-repeat="leaf in modalNode.leafs track by $index">
+        <span ng-click="downloadLeafInModal(leaf.id)"><i class="fa fa-leaf m-r-xs"></i>{{leaf.name}}</span>
+    </div>
 	<span style="width:250px; float: left">
 		<input class="text-base" type="file" id="leafName" file-model="newLeaf"/>
 	</span>
-	<button class="btn btn-modal btn-info no-padder" ng-click="addLeafInModal()">upload</button>
+    <button class="btn btn-modal btn-info no-padder" ng-click="addLeafInModal()">upload</button>
 </div>
 <div class="modal-footer font-middle" style="margin-top: 40px">
     <button class="btn btn-primary" ng-click="applyInModal(newDes)">Apply</button>
