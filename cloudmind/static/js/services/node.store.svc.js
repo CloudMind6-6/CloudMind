@@ -275,7 +275,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
         },
 
         updateLeaf: function (_leaf_idx, _node_parent_idx, callback) {
-            HttpSvc.removeLeaf(_leaf_idx, _node_parent_idx)
+            HttpSvc.updateLeaf(_leaf_idx, _node_parent_idx)
                 .success(function(res){
                     if(res.success) {
                         callback(res.leaf, res.leaf_list);
