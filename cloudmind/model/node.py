@@ -1,6 +1,7 @@
 from cloudmind import db
 from cloudmind.model.label import Label
 from cloudmind.model.label_palette import LabelPalette
+from cloudmind.model.leaf import Leaf
 from cloudmind.model.participant import Participant
 from cloudmind.model.user import User
 import datetime
@@ -101,5 +102,6 @@ class Node(db.Model):
         db.session.query(Label).filter(Label.own_node_id == self.id).delete()
         db.session.query(LabelPalette).filter(LabelPalette.root_node_id == self.id).delete()
         db.session.query(Participant).filter(Participant.own_node_id == self.id).delete()
+        db.session.query(Leaf).filter(Leaf.own_node_id == self.id).delete()
         db.session.delete(self)
         db.session.commit()
