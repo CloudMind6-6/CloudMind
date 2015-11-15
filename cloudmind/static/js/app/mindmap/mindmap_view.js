@@ -579,12 +579,6 @@ SceneGraph.prototype =
     {
         var node = this.node_map[node_idx];
 
-        this.disableEditMode(node);
-        this.disableHighlightedParent(node);
-
-        if(node.parent)
-            node.parent.detachChild(node);
-
         if(node.children != null)
         {
             var children_clone = node.children.splice(0);
@@ -592,6 +586,13 @@ SceneGraph.prototype =
             for(var j = 0; j < children_clone.length; ++j)
                 this.removeNode(this.getNodeIdxFromModel(children_clone[j].model));
         }
+
+        this.disableEditMode(node);
+        this.disableHighlightedParent(node);
+        this.disableHighlightedChildren(node);
+
+        if(node.parent)
+            node.parent.detachChild(node);
 
         this.view_node.selectAll("div[idx='" + node_idx +"']").remove();
         this.view_link.selectAll("path[idx='" + node_idx +"']").remove();
@@ -864,6 +865,7 @@ SceneGraph.prototype =
     enableDraggingMode : function(node)
     {
         this.disableHighlightedParent(node, 0);
+        this.disableHighlightedChildren(node, 0);
 
         node.view_dragging = true;
         node.view_info.style("z-index", "0");
@@ -915,15 +917,17 @@ SceneGraph.prototype =
 
             if(node.type == 'leaf')
             {
-                node_store.updateLeaf(model.id, parent_model.node_idx, function(leaf_idx, leaf_list)
+                node_store.updateLeaf(model.id, parent_model.node_idx, function(leaf_model, leaf_list)
                 {
-                    var node_updated = scene_graph.getNode("leaf_" + leaf_idx);
-                    var model_updated = node_store.getLeaf(leaf_idx);
+                    console.log(leaf_model);
 
-                    node_updated.model = model_updated;
+                    var node_updated = scene_graph.getNode("leaf_" + leaf_model.id);
 
-                    scene_graph.getParentNodeFromModel(model_updated).attachChild(node_updated);
+                    node_updated.model = leaf_model;
+
+                    scene_graph.getParentNodeFromModel(leaf_model).attachChild(node_updated);
                     scene_graph.disableHighlightedParent(node, 0);
+                    scene_graph.disableHighlightedChildren(node, 0);
                     scene_graph.arrangeHorizontal();
                 });
             }
@@ -938,6 +942,7 @@ SceneGraph.prototype =
 
                     scene_graph.getParentNodeFromModel(model_updated).attachChild(node_updated);
                     scene_graph.disableHighlightedParent(node, 0);
+                    scene_graph.disableHighlightedChildren(node, 0);
                     scene_graph.arrangeHorizontal();
                 });
             }
@@ -946,6 +951,7 @@ SceneGraph.prototype =
         {
             this.view_dragging_node_parent.attachChild(this.view_dragging_node);
             this.disableHighlightedParent(this.view_dragging_node, 0);
+            this.disableHighlightedChildren(this.view_dragging_node, 0);
             this.arrangeHorizontal();
         }
 
