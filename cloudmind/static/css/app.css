@@ -232,6 +232,15 @@ a:hover .caret-white {
   margin-top: 61px;
 
 }
+.upbtn{
+  margin-left: 78%;
+  margin-top: 7px;
+  width: 55px; ! important;
+  text-align: center;
+  background-color: #23b7e5;
+  padding: 3px 5px 3px 5px;
+}
+
 .modal-add-menu{
   padding-left: 25px;
   padding-top: 10px;
@@ -253,12 +262,6 @@ a:hover .caret-white {
   width: 110px;
   margin-bottom: 7px;
   text-align: left;
-}
-
-.upbtn{
-  margin-left: 80%;
-  margin-top: 7px;
-  width: 40px; ! important;
 }
 
 .menu-btn{
@@ -4297,9 +4300,7 @@ a.text-#000000:hover {
 .no-padder {
   padding: 0 !important;
 }
-.padder-b-m{
-  padding-bottom: 20px;
-}
+
 
 .pull-in {
   margin-right: -15px;

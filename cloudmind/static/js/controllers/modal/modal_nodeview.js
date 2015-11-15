@@ -45,6 +45,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
                     if ($scope.modal_callback.addNode) $scope.modal_callback.addNode(_node, _node_list);
 
+                    $scope.nodeName = null;
                     $scope.modalIdx = _node_list.length - 1;
                     $scope.clickChildNodeInModal(_node);
                 });

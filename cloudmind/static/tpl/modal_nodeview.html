@@ -92,7 +92,8 @@
                          override-suggestions="true"
                          clear-selected="true"
                          input-changed="inputChanged"
-                         input-class="angucomplete-form-control">
+                         input-class="angucomplete-form-control"
+                            autofocus>
                     </div>
                 </span>
             </div>
@@ -158,10 +159,11 @@
 					<span ng-click="toggleDropdown($event)">
 						<div class="font-bold text-md title">Name</div>
 						<hr class="m-b-sm m-t-sm hr-color">
-						<input class="form-control m-t-s" type="text" ng-model="newName"/>
+						<input class="form-control m-t-s" type="text" ng-model="nodeName"
+                               ng-keypress="($event.which==13)?addNodeInModal(nodeName):0"/>
 					</span>
                 <button class="btn btn-dark pull-right m-t-s m-r-xxs m-b-xxs"
-                        ng-click=" addNodeInModal(newName); toggleDropdown($event, true);">
+                        ng-click="addNodeInModal(nodeName); toggleDropdown($event, true);">
                     Add new node
                 </button>
             </div>
@@ -173,15 +175,15 @@
                 <i class="fa fa-file-text-o menu-btn"></i>
                 Leaf</button>
         </a>
-         <div class="dropdown-menu box padder-b-m w-lg">
+         <div class="dropdown-menu box w-lg"  style="height:130px;">
              <div class="wrapper-xs">
                  <span ng-click="toggleDropdown($event)">
                      <div class="font-bold text-md title">Add Leaf</div>
                      <hr class="m-b-sm m-t-sm hr-color">
-                     <span style="width:250px; float: left">
+                     <span class="m-t-sm" style="width:250px; float: left">
                          <input class="text-base" file-model="newLeaf" type="file" id="leafName" />
                      </span>
-                     <button class="upbtn btn btn-info no-padder " ng-click="addLeafInModal(newLeaf)">upload</button>
+                     <div class="panel inline upbtn icon-white" ng-click="addLeafInModal(newLeaf)">upload</div>
                  </span>
              </div>
          </div>

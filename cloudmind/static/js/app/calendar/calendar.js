@@ -38,11 +38,6 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
         });
     };
 
-    /* alert on Resize */
-    $scope.alertOnResize = function (event, delta, revertFunc, jsEvent, ui, view) {
-        $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
-    };
-
     $scope.overlay = $('.fc-overlay');
     $scope.alertOnMouseOver = function (event, jsEvent, view) {
 
@@ -64,6 +59,10 @@ app.controller('FullcalendarCtrl', ['$modal','$scope', 'NodeStore', function ( $
             $scope.overlay.addClass('top').find('.arrow').removeClass('pull-up').addClass('pull-down')
         }
         (wrap.find('.fc-overlay').length == 0) && wrap.append($scope.overlay);
+    };
+
+    $scope.alertOnResize = function (event, delta, revertFunc, jsEvent, ui, view) {
+        $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
     };
 
     $scope.updateDuedate = function (event, delta, revertFunc, jsEvent, ui, view) {

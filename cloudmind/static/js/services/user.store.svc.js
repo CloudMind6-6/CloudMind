@@ -15,11 +15,9 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
             }
             selectedRootIdx = _selectedRootIdx;
         },
-
         syncUserList : function(){
             return userList;
         },
-
         inviteUserToRoot : function(_rootIdx, _email){
             HttpSvc.inviteRoot(_rootIdx, _email)
                 .success(function (res){
@@ -29,7 +27,6 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
                     console.log(err);
                 });
         },
-
         searchProfile : function(_input, callback){
             HttpSvc.searchProfile(_input, _input)
                 .success(function(res){
@@ -39,3 +36,6 @@ app.service('UserStore', ['HttpSvc', function(HttpSvc){
         }
     }
 }]);
+
+
+
