@@ -255,6 +255,12 @@ a:hover .caret-white {
   text-align: left;
 }
 
+.upbtn{
+  margin-left: 80%;
+  margin-top: 7px;
+  width: 40px; ! important;
+}
+
 .menu-btn{
   margin-left: 2px;
   margin-right: 6px;

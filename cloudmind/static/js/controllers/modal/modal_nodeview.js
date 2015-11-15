@@ -3,6 +3,11 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
         var isClear;
 
+        var reduCheck = {
+            label: false,
+            member: false
+        };
+
         init_NodeViewModal();
 
         $scope.cancel = function () {
@@ -63,6 +68,9 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
         /* label */
         $scope.addLabelInModal = function (_idx) {
+
+            reduCheck.label = true;
+
             var node = $scope.modalNode;
             var labels = JSON.parse(JSON.stringify(node.labels));
 
@@ -72,6 +80,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             NodeStore.addLabel(node.node_idx, _idx,
                 function (_node_id, _node_list, _palette_id) {
                     $scope.modalNode.labels = labels;
+                    reduCheck.label = false;
 
                     if ($scope.modal_callback.addLabel)
                         $scope.modal_callback.addLabel(_node_id, _node_list, _palette_id);
@@ -79,10 +88,15 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         $scope.removeLabelInModal = function (_idx) {
+
+            reduCheck.label = true;
+
             NodeStore.removeLabel($scope.modalNode.node_idx, _idx,
                 function (_node_id, _node_list, _palette_id) {
 
                     var idx = $scope.modalNode.labels.indexOf(_palette_id);
+
+                    reduCheck.label = false;
                     $scope.modalNode.labels.splice(idx, 1);
                     if ($scope.modal_callback.removeLabel) {
                         $scope.modal_callback.removeLabel(_node_id, _node_list, _palette_id);
@@ -91,6 +105,8 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         $scope.hasLabel = function (_idx) {
+
+            if(reduCheck.label) return;
 
             var labelIdx = $scope.modalNode.labels.indexOf(_idx);
 
@@ -107,8 +123,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             else return true;
         };
 
-
-
         /* Participant */
         $scope.filterParticipant = function(_user_idx){
 
@@ -120,6 +134,8 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
         $scope.participatedInNode = function(_user_idx){
 
+            if(reduCheck.member) return;
+
             var users = $scope.modalNode.assigned_users;
             if(users.indexOf(_user_idx) == -1)
                 $scope.addParticipantInModal(_user_idx);
@@ -128,6 +144,8 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         };
 
         $scope.addParticipantInModal = function (_user_idx) {
+
+            reduCheck.member = true;
 
             var node           = $scope.modalNode;
             var dueDate        = new Date(node.due_date);
@@ -138,6 +156,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             NodeStore.updateNode(node.node_idx, node.parent_idx, node.name, dueDate.toJSON(),
                 $scope.newDes, assigned_users, function (_node_idx, _node_list) {
 
+                    reduCheck.member = false;
                     node.assigned_users.push(_user_idx);
                     node.assigned_users.sort();
 
@@ -149,6 +168,8 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
 
         $scope.removeParticipantInModal = function (_user_idx) {
 
+            reduCheck.member = true;
+
             var node           = $scope.modalNode;
             var dueDate        = new Date(node.due_date);
             var assigned_users = JSON.parse(JSON.stringify(node.assigned_users));
@@ -159,6 +180,7 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
             NodeStore.updateNode(node.node_idx, node.parent_idx, node.name, dueDate.toJSON(),
                 $scope.newDes,assigned_users, function (_node_idx, _node_list) {
 
+                    reduCheck.member = false;
                     node.assigned_users.splice(ParticipantIdx, 1);
 
                     if ($scope.modal_callback.updateNode)
@@ -224,7 +246,6 @@ app.controller('Modal_NodeView', ['$scope', '$modalInstance', 'NodeStore', 'User
         /* leaf */
         $scope.addLeafInModal = function (_newLeaf) {
            // onchange="angular.element(this).scope().addLeafInModal()"
-            console.log($scope.newLeaf);
             NodeStore.addLeaf(_newLeaf, $scope.modalNode.node_idx, function (_node_idx, _leaf, _node_list) {
                 document.getElementById('leafName').value = null;
                 $scope.newLeaf = null;
