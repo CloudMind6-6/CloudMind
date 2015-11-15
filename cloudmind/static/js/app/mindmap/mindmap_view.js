@@ -421,6 +421,8 @@ SceneGraph.prototype =
                 .attr("idx", node_idx)
                 .style("left", this.view_center_x + node.x - node.width/2 + "px")
                 .style("top", this.view_center_y + node.y - node.height/2 + "px");
+
+            this.updateName(node);
         }
         else
         {
