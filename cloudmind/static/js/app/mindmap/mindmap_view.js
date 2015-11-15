@@ -579,17 +579,19 @@ SceneGraph.prototype =
     {
         var node = this.node_map[node_idx];
 
-        if(node.type != 'leaf')
-        {
-            for(var i = 0; i < node.children.length; ++i)
-                this.removeNode(node.children[i].model.node_idx);
-        }
-
         this.disableEditMode(node);
         this.disableHighlightedParent(node);
 
         if(node.parent)
             node.parent.detachChild(node);
+
+        if(node.children != null)
+        {
+            var children_clone = node.children.splice(0);
+
+            for(var j = 0; j < children_clone.length; ++j)
+                this.removeNode(this.getNodeIdxFromModel(children_clone[j].model));
+        }
 
         this.view_node.selectAll("div[idx='" + node_idx +"']").remove();
         this.view_link.selectAll("path[idx='" + node_idx +"']").remove();
