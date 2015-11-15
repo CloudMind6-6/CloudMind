@@ -52,7 +52,7 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
             }
             count = count + 1;
         }
-        return_list = $scope.fncList.join(" ");
+        return_list = $scope.fncList.join("");
         if (return_list == "") {
         	return_list = "할당되지 않음";
         }
