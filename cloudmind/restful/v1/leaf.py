@@ -121,7 +121,8 @@ class LeafRemove(Resource):
         if root_node.check_member(session['user_id']) is False:
             abort(404, message="노드멤버 아님")
 
-        leaf.remove_all()
+        db.session.delete(leaf)
+        db.session.commit()
 
         nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
         return {
