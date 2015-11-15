@@ -114,12 +114,39 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             return nodeList;
         },
 
-        getLabelPalette : function(){
-            return labelPalette;
+        getNode : function(_idx)
+        {
+            for(var i = 0; i < nodeList.length; ++i)
+            {
+                var node = nodeList[i];
+
+                if(_idx == node.node_idx)
+                    return node;
+            }
+
+            return null;
         },
 
         getLeafList : function(){
             return leafList;
+        },
+
+        getLeaf : function(_idx)
+        {
+            for(var i = 0; i < leafList.length; ++i)
+            {
+                var leaf = leafList[i];
+
+                if(_idx == leaf.id)
+                    return leaf;
+            }
+
+            return null;
+        },
+
+
+        getLabelPalette : function(){
+            return labelPalette;
         },
 
         setRootList : function(callback){
@@ -191,19 +218,6 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             );
         },
 
-        getNode : function(_idx)
-        {
-            for(var i = 0; i < nodeList.length; ++i)
-            {
-                var node = nodeList[i];
-
-                if(_idx == node.node_idx)
-                    return node;
-            }
-
-            return null;
-        },
-
         /* Palette */
         updateLabelPalette : function(_palette_id, _name, _color, callback){
             HttpSvc.updateLabelpalette(_palette_id, _name, _color)
@@ -265,7 +279,7 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             HttpSvc.removeLeaf(_leaf_idx, callback)
                 .success(function(res){
                     if(res.success) {
-                        callback(res.leaf_list);
+                        callback(_leaf_idx, res.leaf_list);
                     }
                     else throw new Error;
                 })

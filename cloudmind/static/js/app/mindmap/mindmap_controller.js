@@ -18,16 +18,28 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
     node_store = NodeStore;
 
     var node_list = node_store.getNodeList();
+    var leaf_list = node_store.getLeafList();
 
     scene_graph = new SceneGraph();
 
     for (var i = 0; i < node_list.length; ++i)
         scene_graph.registerNode(node_list[i]);
 
+    for (var i = 0; i < leaf_list.length; ++i)
+        scene_graph.registerNode(leaf_list[i]);
+
     for (var i = 0; i < node_list.length; ++i)
         scene_graph.appendNode(node_list[i]);
 
+    for (var i = 0; i < leaf_list.length; ++i)
+        scene_graph.appendNode(leaf_list[i]);
+
     scene_graph.arrangeHorizontal();
+
+
+
+
+
 
     scope.onAddNode = function(new_model, model_list)
     {
@@ -42,23 +54,29 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         scene_graph.arrangeHorizontal();
     };
 
+    scope.onRemoveLeaf = function(remove_idx, model_list)
+    {
+        scene_graph.removeNode("leaf_" + remove_idx);
+        scene_graph.arrangeHorizontal();
+    };
+
     scope.onUpdateNode = function(model_idx, model_list)
     {
-        var node = scene_graph.node_map[model_idx];
+        var node = scene_graph.getNode(model_idx);
         node.model = node_store.getNode(model_idx);
         scene_graph.updateNodeView(node);
     };
 
     scope.onAddLabel = function(model_idx, model_list, palette_idx)
     {
-        var node = scene_graph.node_map[model_idx];
+        var node = scene_graph.getNode(model_idx);
         node.model = node_store.getNode(model_idx);
         scene_graph.updateLabel(node);
     };
 
     scope.onRemoveLabel = function(model_idx, model_list, palette_idx)
     {
-        var node = scene_graph.node_map[model_idx];
+        var node = scene_graph.getNode(model_idx);
         node.model = node_store.getNode(model_idx);
         scene_graph.updateLabel(node);
     };
@@ -75,6 +93,17 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
     {
         node_store.removeNode(node_idx, scope.onRemoveNode);
     };
+
+    scope.onEventDownload = function(leaf_idx)
+    {
+        var URL = "/api/v1/leaf/" + leaf_idx;
+        window.open(URL, '_blank');
+    }
+
+    scope.onEventRemoveLeaf = function(leaf_idx)
+    {
+        node_store.removeLeaf(leaf_idx, scope.onRemoveNode);
+    }
 
     scope.onEventAddPreliminary = function(node_idx)
     {
@@ -96,7 +125,7 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
 
     scope.onEventView = function(node_idx)
     {
-        scope.modalNode = JSON.parse(JSON.stringify( scene_graph.node_map[node_idx].model ));
+        scope.modalNode = JSON.parse(JSON.stringify( scene_graph.getNode(node_idx).model));
 
         modal.open
         ({
