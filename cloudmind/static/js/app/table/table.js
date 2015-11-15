@@ -41,7 +41,7 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
     $scope.assigned_list = function(AssignList) {
     	$scope.fncList = [];
     	var return_list;
-   		var count = 0;
+   		var count = 1;
     	for (var users in AssignList) {
             if (count < 4) {
                 $scope.fncList.push("<img width='20' height='20' src='/api/v1/profile/img/" + AssignList[users] + "' align='center' style='-webkit-border-radius:140px;-moz-border-radius: 140px; background-color :#d0d0d0; margin-right : 4px'>");
@@ -176,6 +176,8 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
 
             $scope.Name = "<a data-nodeidx='" + node_list[jsons].node_idx + "'>" + Nodename + "</a>";
 
+
+
             for (var n in labels_list) {
                 for (var s in labels) {
                     if (labels[s].palette_idx == labels_list[n]) {
@@ -184,7 +186,9 @@ app.controller('TableCtrl', ['$scope', '$timeout', 'HttpSvc' , '$http', 'NodeSto
                 }
             }
 
+
             var count = 1;
+            
             for (var users in node_list[jsons].assigned_users) {
                 if (count < 4) {
                     $scope.UserEmail.push("<img width='20' height='20' src='/api/v1/profile/img/" + node_list[jsons].assigned_users[users] + "' align='center' style='-webkit-border-radius:140px;-moz-border-radius: 140px; background-color :#d0d0d0; margin-right : 4px'>");
