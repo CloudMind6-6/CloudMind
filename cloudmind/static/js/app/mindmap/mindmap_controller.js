@@ -54,6 +54,13 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         scene_graph.arrangeHorizontal();
     };
 
+    scope.onAddLeaf = function(node_idx, leaf, leaf_list)
+    {
+        scene_graph.registerNode(leaf);
+        scene_graph.appendNode(leaf);
+        scene_graph.arrangeHorizontal();
+    };
+
     scope.onRemoveLeaf = function(remove_idx, model_list)
     {
         scene_graph.removeNode('leaf_' + remove_idx);
@@ -143,7 +150,7 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
         addLabel : null,
         removeLabel : null,
 
-        addLeaf : null,
+        addLeaf : scope.onAddLeaf,
         removeLeaf : null,
 
         addPalette : null,
