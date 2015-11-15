@@ -124,10 +124,10 @@ class LeafRemove(Resource):
         db.session.delete(leaf)
         db.session.commit()
 
-        nodes = db.session.query(Node).filter(Node.root_node_id == root_node.id).all()
+        leafs = db.session.query(Leaf).filter(Leaf.root_node_id == root_node.id).all()
         return {
             'success': True,
-            'node_list': [i.serialize for i in nodes]
+            'leaf_list': [i.serialize for i in leafs]
             }
 
 
@@ -152,7 +152,9 @@ class LeafUpdate(Resource):
 
         leaf.parent_node_id = node_parent_id
         db.session.commit()
-
+        leafs = db.session.query(Leaf).filter(Leaf.root_node_id == root_node.id).all()
         return {
-            'success': True
+            'success': True,
+            "leaf": leaf.serialize,
+            'leaf_list': [i.serialize for i in leafs]
             }
