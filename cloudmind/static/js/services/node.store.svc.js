@@ -260,6 +260,32 @@ app.service('NodeStore',  ['HttpSvc', function(HttpSvc){
             });
         },
 
+        removeLeaf: function (_leaf_idx, callback) {
+
+            HttpSvc.removeLeaf(_leaf_idx, callback)
+                .success(function(res){
+                    if(res.success) {
+                        callback(res.leaf_list);
+                    }
+                    else throw new Error;
+                })
+                .error(function(err){
+                    console.log(err);
+                });
+        },
+
+        updateLeaf: function (_leaf_idx, _node_parent_idx, callback) {
+            HttpSvc.removeLeaf(_leaf_idx, _node_parent_idx)
+                .success(function(res){
+                    if(res.success) {
+                        callback(res.leaf, res.leaf_list);
+                    }
+                    else throw new Error;
+                })
+                .error(function(err){
+                    console.log(err);
+                });
+        }
         
     };
 }]);

@@ -158,13 +158,23 @@ app.service('HttpSvc', ['$http', function ($http) { /* resource api 수정해야
                 })
             },
 
-            removeLeaf: function (_node_idx, _palette_idx) {
+            removeLeaf: function (_leaf_idx) {
                 return $http({
-                    url: urlBase + '/label/remove',
+                    url: urlBase + '/leaf/remove',
                     method: "POST",
                     data: {
-                        node_idx: _node_idx,
-                        palette_idx: _palette_idx
+                        leaf_idx: _leaf_idx
+                    }
+                });
+            },
+
+            updateLeaf: function (_leaf_idx, _node_parent_idx) {
+                return $http({
+                    url: urlBase + '/leaf/update',
+                    method: "POST",
+                    data: {
+                        leaf_idx: _leaf_idx,
+                        node_parent_idx: _node_parent_idx
                     }
                 });
             }
