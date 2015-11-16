@@ -1,6 +1,7 @@
 from cloudmind import db
 import datetime
 import magic
+import PIL
 from PIL import Image
 
 
@@ -28,9 +29,14 @@ class Leaf(db.Model):
         self.file_type = magic.from_file(file_path, mime=True).decode('utf-8')
 
         if self.file_type[0:5] == 'image':
-            size = 100, 100
             im = Image.open(file_path)
-            im.thumbnail(size)
+            w, h = im.size
+            size = ()
+            if w >= h:
+                size = ((int)(100*w/h), 100)
+            else:
+                size = (100, (int)(100*h/w))
+            im = im.resize(size)
             im.save(file_path + ".thumbnail", "JPEG")
 
     def __repr__(self):
