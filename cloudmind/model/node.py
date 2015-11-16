@@ -102,6 +102,6 @@ class Node(db.Model):
         db.session.query(Label).filter(Label.own_node_id == self.id).delete()
         db.session.query(LabelPalette).filter(LabelPalette.root_node_id == self.id).delete()
         db.session.query(Participant).filter(Participant.own_node_id == self.id).delete()
-        db.session.query(Leaf).filter(Leaf.own_node_id == self.id).delete()
+        db.session.query(Leaf).filter(Leaf.parent_node_id == self.id).delete()
         db.session.delete(self)
         db.session.commit()
