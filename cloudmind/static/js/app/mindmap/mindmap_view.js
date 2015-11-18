@@ -606,9 +606,10 @@ SceneGraph.prototype =
                 .style("top", this.view_center_y + node.y - node.height/2 + "px")
                 .style("overflow", "hidden");
 
+            var bg_layer = node.view_info.append('div');
+
             if(model.file_type.search("image") === 0)
             {
-              var bg_layer = node.view_info.append('div');
               bg_layer.style("width", "100%")
               .style("height", "75px")
               .style("position", "absolute")
@@ -617,7 +618,24 @@ SceneGraph.prototype =
               .style("background-size", "cover")
               .style("background-position", "center");
             }
-            
+            else
+            {
+              bg_layer.style("width", "100%")
+              .style("height", "75px")
+              .style("position", "absolute")
+              .style("background-color", "rgb(0, 0, 0)")
+              .style("background-size", "cover")
+              .style("background-position", "center");
+
+              var bg_extname = bg_layer.append('div');
+              name_ext = model.name.split('.');
+              name_ext = name_ext[name_ext.length - 1];
+              bg_extname.text(name_ext)
+              .style("font-size", "16pt")
+              .style("text-align", "center")
+              .style("margin-top", "25px");
+            }
+
             this.updateName(node);
         }
         else
