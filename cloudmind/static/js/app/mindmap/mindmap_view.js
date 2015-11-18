@@ -200,7 +200,20 @@ SceneGraphNode.prototype =
             child.getChildrenRecursive(children);
             children.push(child);
         }
-    }
+    },
+
+    move : function(dx, dy)
+    {
+        this.x += dx;
+        this.y += dy;
+        this.link_src_x += dx;
+        this.link_src_y += dy;
+        this.link_dst_x += dx;
+        this.link_dst_y += dy;
+
+        for(var i = 0; i < this.children.length; ++i)
+            this.children[i].move(dx, dy);
+    },
 };
 
 arrangeHorizontal = function(node, no_margin, dir)
@@ -218,7 +231,13 @@ arrangeHorizontal = function(node, no_margin, dir)
 
         var children_size_aligned = node.children.splice(0);
 
-        children_size_aligned.sort(function(l, r){ return r.bounding_height - l.bounding_height; });
+        children_size_aligned.sort(function(l, r)
+        {
+            if(l.bounding_height == r.bounding_height)
+                return l.id - r.id;
+            else
+                return r.bounding_height - l.bounding_height;
+        });
         //children_size_aligned.sort(function(l, r){ return l.id - r.id; });
 
         for(var i = 0; i < children_size_aligned.length; ++i)
@@ -428,7 +447,7 @@ SceneGraph = function()
 {
     this.node_map   = {};
     this.node_root  = null;
-    this.node_next_id = 0;
+    this.node_next_id = 1;
 
     this.view_body      = d3.select("body");
     this.view_node      = this.view_body.select("div[ng-controller='MindmapCtrl']");
@@ -451,7 +470,7 @@ SceneGraph = function()
             menu_remove:"fa fa-3x fa-minus-square",
             menu_view:"fa fa-5x fa-file-text",
             menu_edit_name:"fa fa-3x fa-pencil-square",
-            menu_movable:"fa fa-3x fa-arrows-alt",
+            menu_arrange:"fa fa-3x fa-sitemap",
             link:"mindmap_root_link",
             portrait:"mindmap_root_portrait"
         },
@@ -696,10 +715,28 @@ SceneGraph.prototype =
                 .attr("class", class_info.menu_edit_name)
                 .on("click", function(){ scene_graph.enableEditMode(scene_graph.getNode(d3.select(this).attr("idx"))) });
 
-            div_node_menu_right.append('div').append('i')
-                .attr("idx", node_idx)
-                .attr("class", class_info.menu_movable)
-                .on("mousedown", function(){ scene_graph.enableDraggingMode(scene_graph.getNode(d3.select(this).attr("idx"))) });
+            if(node.type == 'root')
+            {
+                div_node_menu_right.append('div').append('i')
+                    .attr("idx", node_idx)
+                    .attr("class", class_info.menu_arrange)
+                    .on("mousedown", function()
+                    {
+                        if(scene_graph.arrange_mode == 'horizontal')
+                            scene_graph.arrange_mode = 'vertical';
+                        else
+                            scene_graph.arrange_mode = 'horizontal';
+
+                        scene_graph.arrange();
+                    });
+            }
+            else
+            {
+                div_node_menu_right.append('div').append('i')
+                    .attr("idx", node_idx)
+                    .attr("class", class_info.menu_movable)
+                    .on("mousedown", function(){ scene_graph.enableDraggingMode(scene_graph.getNode(d3.select(this).attr("idx"))) });
+            }
 
 
             node.view_menu.append('div').attr("class", "center")
@@ -1122,6 +1159,7 @@ SceneGraph.prototype =
 
     enableSwipingMode : function()
     {
+        var started = false;
         var pre_x = null;
         var pre_y = null;
 
@@ -1135,18 +1173,30 @@ SceneGraph.prototype =
 
         this.view_body.on("mousemove.swipe", function()
         {
-            var cur_x = d3.mouse(this)[0];
-            var cur_y = d3.mouse(this)[1];
-            var d_x = pre_x ? cur_x - pre_x : 0;
-            var d_y = pre_y ? cur_y - pre_y : 0;
+            if(pre_x == null && pre_y == null)
+            {
+                pre_x = d3.mouse(this)[0];
+                pre_y = d3.mouse(this)[1];
+            }
+            else
+            {
+                var cur_x = d3.mouse(this)[0];
+                var cur_y = d3.mouse(this)[1];
+                var d_x = cur_x - pre_x;
+                var d_y = cur_y - pre_y;
 
-            scene_graph.node_root.x += d_x;
-            scene_graph.node_root.y += d_y;
+                if(Math.sqrt(d_x * d_x + d_y * d_y) > 50)
+                    started = true;
 
-            scene_graph.arrange(0);
+                if(started)
+                {
+                    scene_graph.node_root.move(d_x, d_y);
+                    scene_graph.updateNodePosition(scene_graph.node_root, 0);
 
-            pre_x = cur_x;
-            pre_y = cur_y;
+                    pre_x = cur_x;
+                    pre_y = cur_y;
+                }
+            }
         });
     },
 
