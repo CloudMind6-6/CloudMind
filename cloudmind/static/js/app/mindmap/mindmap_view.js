@@ -212,45 +212,58 @@ arrangeHorizontal = function(node, no_margin, dir)
     if(no_margin == null)
         no_margin = false;
 
-    if(dir == null)
+    if(dir == 'balanced' || dir == 'fixed')
     {
-        var bounding_height_left  = 0;
-        var bounding_height_right = 0;
-
         var children_left = [];
         var children_right = [];
+        var children_copy = node.children.splice(0);
 
-        var children_size_aligned = node.children.splice(0);
-
-        children_size_aligned.sort(function(l, r)
+        if(dir == 'balanced')
         {
-            if(l.bounding_height == r.bounding_height)
-                return l.id - r.id;
-            else
-                return r.bounding_height - l.bounding_height;
-        });
-        //children_size_aligned.sort(function(l, r){ return l.id - r.id; });
+            var bounding_height_left  = 0;
+            var bounding_height_right = 0;
 
-        for(var i = 0; i < children_size_aligned.length; ++i)
-        {
-            var child = children_size_aligned[i];
-
-            var left = true;
-
-            if(Math.abs(bounding_height_left - bounding_height_right) >= 250)
-                left = bounding_height_left <= bounding_height_right;
-            else
-                left = child.id % 2 == 0;
-
-            if(left)
+            children_copy.sort(function(l, r)
             {
-                bounding_height_left += child.bounding_height;
-                children_left.push(child);
+                if(l.bounding_height == r.bounding_height)
+                    return l.id - r.id;
+                else
+                    return r.bounding_height - l.bounding_height;
+            });
+
+            for(var i = 0; i < children_copy.length; ++i)
+            {
+                var child = children_copy[i];
+
+                var left = true;
+
+                if(Math.abs(bounding_height_left - bounding_height_right) >= 250)
+                    left = bounding_height_left <= bounding_height_right;
+                else
+                    left = child.id % 2 == 0;
+
+                if(left)
+                {
+                    bounding_height_left += child.bounding_height;
+                    children_left.push(child);
+                }
+                else
+                {
+                    bounding_height_right += child.bounding_height;
+                    children_right.push(child);
+                }
             }
-            else
+        }
+        if(dir == 'fixed')
+        {
+            for(var i = 0; i < children_copy.length; ++i)
             {
-                bounding_height_right += child.bounding_height;
-                children_right.push(child);
+                var child = children_copy[i];
+
+                if(child.x < node.x)
+                    children_left.push(child);
+                else
+                    children_right.push(child);
             }
         }
 
@@ -273,8 +286,11 @@ arrangeHorizontal = function(node, no_margin, dir)
 
         node.clearChildren();
 
-        for(var i = 0; i < children_size_aligned.length; ++i)
-            node.attachChild(children_size_aligned[i], true);
+        for(var i = 0; i < children_copy.length; ++i)
+            node.attachChild(children_copy[i], true);
+
+        for(var i = 0; i < children_right.length; ++i)
+            node.attachChild(children_right[i], true);
     }
     else
     {
@@ -326,38 +342,52 @@ arrangeVertical = function(node, no_margin, dir)
     if(no_margin == null)
         no_margin = false;
 
-    if(dir == null)
+    if(dir == 'balanced' || dir == 'fixed')
     {
-        var bounding_width_up  = 0;
-        var bounding_width_down = 0;
-
         var children_up = [];
         var children_down = [];
+        var children_copy = node.children.splice(0);
 
-        var children_size_aligned = node.children.splice(0);
-
-        children_size_aligned.sort(function(l, r){ return r.bounding_width - l.bounding_width; });
-
-        for(var i = 0; i < children_size_aligned.length; ++i)
+        if(dir == 'balanced')
         {
-            var child = children_size_aligned[i];
+            var bounding_width_up  = 0;
+            var bounding_width_down = 0;
 
-            var left = true;
+            children_copy.sort(function(l, r){ return r.bounding_width - l.bounding_width; });
 
-            if(Math.abs(bounding_width_up - bounding_width_down) >= 500)
-                left = bounding_width_up <= bounding_width_down;
-            else
-                left = child.id % 2 == 0;
-
-            if(left)
+            for(var i = 0; i < children_copy.length; ++i)
             {
-                bounding_width_up += child.bounding_width;
-                children_up.push(child);
+                var child = children_copy[i];
+
+                var left = true;
+
+                if(Math.abs(bounding_width_up - bounding_width_down) >= 500)
+                    left = bounding_width_up <= bounding_width_down;
+                else
+                    left = child.id % 2 == 0;
+
+                if(left)
+                {
+                    bounding_width_up += child.bounding_width;
+                    children_up.push(child);
+                }
+                else
+                {
+                    bounding_width_down += child.bounding_width;
+                    children_down.push(child);
+                }
             }
-            else
+        }
+        if(dir == 'fixed')
+        {
+            for(var i = 0; i < children_copy.length; ++i)
             {
-                bounding_width_down += child.bounding_width;
-                children_down.push(child);
+                var child = children_copy[i];
+
+                if(child.y < node.y)
+                    children_up.push(child);
+                else
+                    children_down.push(child);
             }
         }
 
@@ -380,8 +410,8 @@ arrangeVertical = function(node, no_margin, dir)
 
         node.clearChildren();
 
-        for(var i = 0; i < children_size_aligned.length; ++i)
-            node.attachChild(children_size_aligned[i], true);
+        for(var i = 0; i < children_copy.length; ++i)
+            node.attachChild(children_copy[i], true);
     }
     else
     {
@@ -663,7 +693,8 @@ SceneGraph.prototype =
                         timer = setTimeout(function()
                         {
                             node.attachChild(scene_graph.view_dragging_node);
-                            scene_graph.arrange();
+                            //scene_graph.arrange();
+                            scene_graph.arrangeChildren();
                         }, 250);
                     }
                     else
@@ -681,7 +712,7 @@ SceneGraph.prototype =
                     if(scene_graph.view_dragging_node && scene_graph.view_dragging_node.parent)
                     {
                         scene_graph.view_dragging_node.parent.detachChild(scene_graph.view_dragging_node);
-                        scene_graph.arrange();
+                        scene_graph.arrangeChildren();
                     }
                     else
                         d3.select(this).classed("over", false);
@@ -777,9 +808,19 @@ SceneGraph.prototype =
     arrange : function(duration)
     {
         if(this.arrange_mode == 'horizontal')
-            arrangeHorizontal(this.node_root);
+            arrangeHorizontal(this.node_root, false, 'balanced');
         else
-            arrangeVertical(this.node_root);
+            arrangeVertical(this.node_root, false, 'balanced');
+
+        this.updateNodePosition(this.node_root, duration);
+    },
+
+    arrangeChildren : function(duration)
+    {
+        if(this.arrange_mode == 'horizontal')
+            arrangeHorizontal(this.node_root, false, 'fixed');
+        else
+            arrangeVertical(this.node_root, false, 'fixed');
 
         this.updateNodePosition(this.node_root, duration);
     },
@@ -1072,7 +1113,7 @@ SceneGraph.prototype =
 
         scene_graph.updateNodePosition(node, 0);
 
-        this.arrange();
+        scene_graph.arrangeChildren();
 
         this.view_body.on("mouseup.drag", function()
         {
@@ -1118,8 +1159,6 @@ SceneGraph.prototype =
             {
                 node_store.updateLeaf(model.id, parent_model.node_idx, function(leaf_model, leaf_list)
                 {
-                    console.log(leaf_model);
-
                     var node_updated = scene_graph.getNode("leaf_" + leaf_model.id);
 
                     node_updated.model = leaf_model;
