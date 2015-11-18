@@ -361,7 +361,7 @@ arrangeVertical = function(node, no_margin, dir)
 
                 var left = true;
 
-                if(Math.abs(bounding_width_up - bounding_width_down) >= 500)
+                if(Math.abs(bounding_width_up - bounding_width_down) >= 300)
                     left = bounding_width_up <= bounding_width_down;
                 else
                     left = child.id % 2 == 0;
