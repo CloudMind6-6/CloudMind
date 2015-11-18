@@ -9,6 +9,7 @@ from flask import session
 from flask_restful import abort
 from flask_restful import Resource
 import json
+from sqlalchemy.sql.expression import true
 
 
 class NodeList(Resource):
@@ -168,7 +169,10 @@ class NodeUpdate(Resource):
         if parent_node_id is not None:
             node.parent_node_id = parent_node_id
 
-        db.session.query(Participant).filter(Participant.own_node_id == node_id).delete()
+        db.session.query(Participant)\
+            .filter(Participant.own_node_id == node_id)\
+            .filter(Participant.is_accepted == true())\
+            .delete()
         for user_id in users:
             participant = Participant(
                 is_accepted=True,
