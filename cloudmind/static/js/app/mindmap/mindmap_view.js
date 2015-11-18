@@ -17,14 +17,13 @@ var scene_graph_form =
 
 
 
-
 // Scene Graph Node Class
 
-SceneGraphNode = function(model)
+SceneGraphNode = function(model, id)
 {
     this.parent = null;
     this.children = [];
-    this.spanning_odd = true;
+    this.id = id;
 
     this.x = 0;
     this.y = 0;
@@ -97,13 +96,25 @@ SceneGraphNode.prototype =
             child.parent.detachChild(child);
 
         child.parent = this;
-        child.spanning_odd = this.spanning_odd;
         child.x = this.x;
         child.y = this.y;
         child.link_src_x = this.link_dst_x;
         child.link_src_y = this.link_dst_y;
         child.link_dst_x = this.link_dst_x;
         child.link_dst_y = this.link_dst_y;
+
+        this.children.push(child);
+
+        this.updateUpward();
+        child.updateDownward();
+    },
+
+    attachChildFixed : function(child)
+    {
+        if(child.parent)
+            child.parent.detachChild(child);
+
+        child.parent = this;
 
         this.children.push(child);
 
@@ -122,6 +133,16 @@ SceneGraphNode.prototype =
                 break;
             }
         }
+
+        this.updateUpward();
+    },
+
+    clearChildren : function()
+    {
+        for(var i = 0; i < this.children.length; ++i)
+            this.children[i].parent = null;
+
+        this.children = [];
 
         this.updateUpward();
     },
@@ -159,11 +180,8 @@ SceneGraphNode.prototype =
 
     updateDownward : function(include)
     {
-        if(include == null || include == true)
-        {
-            this.spanning_odd = this.parent.spanning_odd;
+        if(include != false)
             this.view_dragging = this.parent.view_dragging;
-        }
 
         for(var i = 0; i < this.children.length; ++i)
         {
@@ -182,79 +200,223 @@ SceneGraphNode.prototype =
             child.getChildrenRecursive(children);
             children.push(child);
         }
-    },
+    }
+};
 
-    arrangeHorizontal : function(no_margin)
+arrangeHorizontal = function(node, no_margin, dir)
+{
+    if(no_margin == null)
+        no_margin = false;
+
+    if(dir == null)
+    {
+        var bounding_height_left  = 0;
+        var bounding_height_right = 0;
+
+        var children_left = [];
+        var children_right = [];
+
+        var children_size_aligned = node.children.splice(0);
+
+        children_size_aligned.sort(function(l, r){ return r.bounding_height - l.bounding_height; });
+        //children_size_aligned.sort(function(l, r){ return l.id - r.id; });
+
+        for(var i = 0; i < children_size_aligned.length; ++i)
+        {
+            var child = children_size_aligned[i];
+
+            var left = true;
+
+            if(Math.abs(bounding_height_left - bounding_height_right) >= 250)
+                left = bounding_height_left <= bounding_height_right;
+            else
+                left = child.id % 2 == 0;
+
+            if(left)
+            {
+                bounding_height_left += child.bounding_height;
+                children_left.push(child);
+            }
+            else
+            {
+                bounding_height_right += child.bounding_height;
+                children_right.push(child);
+            }
+        }
+
+        children_left. sort(function(l, r){ return l.id - r.id; });
+        children_right.sort(function(l, r){ return l.id - r.id; });
+
+        node.clearChildren();
+
+        for(var i = 0; i < children_left.length; ++i)
+            node.attachChild(children_left[i]);
+
+        arrangeHorizontal(node, no_margin, 'left');
+
+        node.clearChildren();
+
+        for(var i = 0; i < children_right.length; ++i)
+            node.attachChild(children_right[i]);
+
+        arrangeHorizontal(node, no_margin, 'right');
+
+        node.clearChildren();
+
+        for(var i = 0; i < children_size_aligned.length; ++i)
+            node.attachChildFixed(children_size_aligned[i]);
+    }
+    else
     {
         var child_accum_pos = 0;
 
-        if(no_margin == null)
-            no_margin = false;
-
-        for(var i = 0; i < this.children.length; ++i)
+        for(var i = 0; i < node.children.length; ++i)
         {
-            var child = this.children[i];
+            var child = node.children[i];
 
             if(no_margin == true)
             {
-                child.y = this.y - this.bounding_height_no_margin/2 + child_accum_pos + child.bounding_height_no_margin/2;
+                child.y = node.y - node.bounding_height_no_margin/2 + child_accum_pos + child.bounding_height_no_margin/2;
                 child_accum_pos += child.bounding_height_no_margin;
             }
             else
             {
-                child.y = this.y - this.bounding_height/2 + child_accum_pos + child.bounding_height/2;
+                child.y = node.y - node.bounding_height/2 + child_accum_pos + child.bounding_height/2;
                 child_accum_pos += child.bounding_height;
             }
 
-            if(child.spanning_odd)
+            var dir_factor = (dir == 'left') ? -1 : 1;
+
+            if(no_margin == true)
             {
-                if(no_margin == true)
-                {
-                    child.x = this.x - (child.width/2 + this.width/2);
+                child.x = node.x + dir_factor * (child.width/2 + node.width/2);
 
-                    child.link_src_x = child.x;
-                    child.link_src_y = child.y;
-                    child.link_dst_x = child.x;
-                    child.link_dst_y = child.y;
-                }
-                else
-                {
-                    child.x = this.x - (scene_graph_form.stride_x + child.width/2 + this.width/2);
-
-                    child.link_src_x = this.x - this.width/2;
-                    child.link_src_y = this.y;
-                    child.link_dst_x = child.x + child.width/2;
-                    child.link_dst_y = child.y;
-                }
+                child.link_src_x = child.x;
+                child.link_src_y = child.y;
+                child.link_dst_x = child.x;
+                child.link_dst_y = child.y;
             }
             else
             {
-                if(no_margin == true)
-                {
-                    child.x = this.x + (child.width/2 + this.width/2);
+                child.x = node.x + dir_factor * (scene_graph_form.stride_x + child.width/2 + node.width/2);
 
-                    child.link_src_x = child.x;
-                    child.link_src_y = child.y;
-                    child.link_dst_x = child.x;
-                    child.link_dst_y = child.y;
-                }
-                else
-                {
-                    child.x = this.x + (scene_graph_form.stride_x + child.width/2 + this.width/2);
-
-                    child.link_src_x = this.x + this.width/2;
-                    child.link_src_y = this.y;
-                    child.link_dst_x = child.x - child.width/2;
-                    child.link_dst_y = child.y;
-                }
+                child.link_src_x = node.x + dir_factor * node.width/2;
+                child.link_src_y = node.y;
+                child.link_dst_x = child.x - dir_factor * child.width/2;
+                child.link_dst_y = child.y;
             }
 
-            child.arrangeHorizontal(no_margin);
+            arrangeHorizontal(child, no_margin, dir);
         }
     }
 };
 
+arrangeVertical = function(node, no_margin, dir)
+{
+    if(no_margin == null)
+        no_margin = false;
 
+    if(dir == null)
+    {
+        var bounding_width_up  = 0;
+        var bounding_width_down = 0;
+
+        var children_up = [];
+        var children_down = [];
+
+        var children_size_aligned = node.children.splice(0);
+
+        children_size_aligned.sort(function(l, r){ return r.bounding_width - l.bounding_width; });
+
+        for(var i = 0; i < children_size_aligned.length; ++i)
+        {
+            var child = children_size_aligned[i];
+
+            var left = true;
+
+            if(Math.abs(bounding_width_up - bounding_width_down) >= 500)
+                left = bounding_width_up <= bounding_width_down;
+            else
+                left = child.id % 2 == 0;
+
+            if(left)
+            {
+                bounding_width_up += child.bounding_width;
+                children_up.push(child);
+            }
+            else
+            {
+                bounding_width_down += child.bounding_width;
+                children_down.push(child);
+            }
+        }
+
+        children_up.  sort(function(l, r){ return l.id - r.id; });
+        children_down.sort(function(l, r){ return l.id - r.id; });
+
+        node.clearChildren();
+
+        for(var i = 0; i < children_up.length; ++i)
+            node.attachChild(children_up[i]);
+
+        arrangeVertical(node, no_margin, 'up');
+
+        node.clearChildren();
+
+        for(var i = 0; i < children_down.length; ++i)
+            node.attachChild(children_down[i]);
+
+        arrangeVertical(node, no_margin, 'down');
+
+        node.clearChildren();
+
+        for(var i = 0; i < children_size_aligned.length; ++i)
+            node.attachChildFixed(children_size_aligned[i]);
+    }
+    else
+    {
+        var child_accum_pos = 0;
+
+        for(var i = 0; i < node.children.length; ++i)
+        {
+            var child = node.children[i];
+
+            if(no_margin == true)
+            {
+                child.x = node.x - node.bounding_width_no_margin/2 + child_accum_pos + child.bounding_width_no_margin/2;
+                child_accum_pos += child.bounding_width_no_margin;
+            }
+            else
+            {
+                child.x = node.x - node.bounding_width/2 + child_accum_pos + child.bounding_width/2;
+                child_accum_pos += child.bounding_width;
+            }
+
+            var dir_factor = (dir == 'up') ? -1 : 1;
+
+            if(no_margin == true)
+            {
+                child.y = node.y + dir_factor * (child.height/2 + node.height/2);
+
+                child.link_src_x = child.x;
+                child.link_src_y = child.y;
+                child.link_dst_x = child.x;
+                child.link_dst_y = child.y;
+            }
+            else
+            {
+                child.y = node.y + dir_factor * (scene_graph_form.stride_y + child.height/2 + node.height/2);
+
+                child.link_src_x = node.x;
+                child.link_src_y = node.y + dir_factor * node.height/2;
+                child.link_dst_x = child.x;
+                child.link_dst_y = child.y - dir_factor * child.height/2;
+            }
+
+            arrangeVertical(child, no_margin, dir);
+        }
+    }
+};
 
 
 
@@ -266,8 +428,7 @@ SceneGraph = function()
 {
     this.node_map   = {};
     this.node_root  = null;
-    this.node_odd   = null;
-    this.node_even  = null;
+    this.node_next_id = 0;
 
     this.view_body      = d3.select("body");
     this.view_node      = this.view_body.select("div[ng-controller='MindmapCtrl']");
@@ -277,6 +438,7 @@ SceneGraph = function()
 
     this.view_dragging_node = null;
     this.view_dragging_node_parent = null;
+    this.arrange_mode = 'horizontal';
 
     this.view_class_map =
     {
@@ -332,7 +494,7 @@ SceneGraph = function()
             scene_graph.node_root.x = 0;
             scene_graph.node_root.y = 0;
 
-            scene_graph.arrangeHorizontal();
+            scene_graph.arrange();
         });
 };
 
@@ -365,7 +527,10 @@ SceneGraph.prototype =
 
     registerNode : function(model)
     {
-        this.node_map[this.getNodeIdxFromModel(model)] = new SceneGraphNode(model);
+        this.node_map[this.getNodeIdxFromModel(model)] = new SceneGraphNode(model, this.node_next_id);
+
+        if(model.node_idx != -1)
+            ++this.node_next_id;
     },
 
     appendNode : function(model)
@@ -374,35 +539,13 @@ SceneGraph.prototype =
         var node_parent_idx = this.getParentNodeIdxFromModel(model);
         var node = this.getNode(node_idx);
         var node_parent = this.getNode(node_parent_idx);
-        var model_parent = node_parent ? node_parent.model : null;
 
 
 
-        if (node.type != 'leaf' && model.node_idx == model.root_idx)
-        {
+        if (node.type == 'root')
             this.node_root = node;
-
-            this.node_odd  = new SceneGraphNode();
-            this.node_even = new SceneGraphNode();
-
-            this.node_root.attachChild(this.node_odd);
-            this.node_root.attachChild(this.node_even);
-
-            this.node_odd.spanning_odd = true;
-            this.node_even.spanning_odd = false;
-        }
         else
-        {
-            if(model_parent.node_idx == model_parent.root_idx)
-            {
-                if(this.node_odd.bounding_height <= this.node_even.bounding_height)
-                    this.node_odd.attachChild(node);
-                else
-                    this.node_even.attachChild(node);
-            }
-            else
-                node_parent.attachChild(node);
-        }
+            node_parent.attachChild(node);
 
 
 
@@ -510,7 +653,7 @@ SceneGraph.prototype =
                         timer = setTimeout(function()
                         {
                             node.attachChild(scene_graph.view_dragging_node);
-                            scene_graph.arrangeHorizontal();
+                            scene_graph.arrange();
                         }, 250);
                     }
                     else
@@ -528,7 +671,7 @@ SceneGraph.prototype =
                     if(scene_graph.view_dragging_node && scene_graph.view_dragging_node.parent)
                     {
                         scene_graph.view_dragging_node.parent.detachChild(scene_graph.view_dragging_node);
-                        scene_graph.arrangeHorizontal();
+                        scene_graph.arrange();
                     }
                     else
                         d3.select(this).classed("over", false);
@@ -603,15 +746,12 @@ SceneGraph.prototype =
         this.node_map[node_idx] = null;
     },
 
-    arrangeHorizontal : function(duration)
+    arrange : function(duration)
     {
-        this.node_odd.x     = this.node_root.x - this.node_root.width/2;
-        this.node_odd.y     = this.node_root.y;
-        this.node_even.x    = this.node_root.x + this.node_root.width/2;
-        this.node_even.y    = this.node_root.y;
-
-        this.node_odd.arrangeHorizontal();
-        this.node_even.arrangeHorizontal();
+        if(this.arrange_mode == 'horizontal')
+            arrangeHorizontal(this.node_root);
+        else
+            arrangeVertical(this.node_root);
 
         this.updateNodePosition(this.node_root, duration);
     },
@@ -643,23 +783,36 @@ SceneGraph.prototype =
             .style("left", this.view_center_x + node.x - node.width/2 + "px")
             .style("top", this.view_center_y + node.y - node.height/2 + "px");
 
+        var diagonal;
+
+        if(scene_graph.arrange_mode == 'horizontal')
+        {
+            diagonal = d3.svg.diagonal()
+                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
+                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
+                .projection(function(d) { return [d.y, d.x]; });
+        }
+        else
+        {
+            diagonal = d3.svg.diagonal()
+                .source({x : this.view_center_x + node.link_src_x, y : this.view_center_y - 50 + node.link_src_y})
+                .target({x : this.view_center_x + node.link_dst_x, y : this.view_center_y - 50 + node.link_dst_y})
+        }
+
         node.view_link
             .transition()
             .duration(duration)
             .each("end", function(){node.view_transitioning = false; node.view_positioning = false;})
-            .attr("d", d3.svg.diagonal()
-                .source({x : this.view_center_y - 50 + node.link_src_y, y : this.view_center_x + node.link_src_x})
-                .target({x : this.view_center_y - 50 + node.link_dst_y, y : this.view_center_x + node.link_dst_x})
-                .projection(function(d) { return [d.y, d.x]; }))
+            .attr("d", diagonal)
             .style("stroke-width",  node.view_editing                       ?   "4px" :
-                                    node.view_highlighted_parent == true    ?  "6px" :
-                                    node.view_highlighted_children == true  ?  "4px" :
+                                    node.view_highlighted_parent == true    ?   "6px" :
+                                    node.view_highlighted_children == true  ?   "4px" :
                                                                                 "2px")
-            .style("stroke",        node.view_editing                        ?   "#D5D66B" :
+            .style("stroke",        node.view_editing                       ?   "#D5D66B" :
                                     node.view_highlighted_parent == true    ?   "#957acb" :
                                     node.view_highlighted_children == true  ?   "#F09446" :
-                                    node.type == 'leaf'                      ?   "#486B90" :
-                                                                                 "#5aa0b3");
+                                    node.type == 'leaf'                     ?   "#486B90" :
+                                                                                "#5aa0b3");
     },
 
     updateNodePosition : function(node, duration)
@@ -712,7 +865,8 @@ SceneGraph.prototype =
                     if(model.node_idx == -1)
                     {
                         scope.onEventAdd(d3.select(this).attr("idx"), this.value)
-                        scope.onEventRemovePreliminary();
+                        //scope.onEventRemovePreliminary();
+                        scene_graph.removeNode(-1);
                     }
                     else
                         node_store.updateNode(model.node_idx, model.parent_idx, this.value, model.due_date, model.description, model.assigned_users, function(node_idx, node_list)
@@ -880,7 +1034,7 @@ SceneGraph.prototype =
 
         node.parent.detachChild(node);
 
-        this.arrangeHorizontal();
+        this.arrange();
 
         this.view_body.on("mouseup.drag", function()
         {
@@ -898,7 +1052,11 @@ SceneGraph.prototype =
             node.link_src_x = node.link_dst_x = node.x;
             node.link_src_y = node.link_dst_y = node.y;
 
-            node.arrangeHorizontal(true);
+            if(scene_graph.arrange_mode == 'horizontal')
+                arrangeHorizontal(node, true);
+            else
+                arrangeVertical(node, true);
+
             scene_graph.updateNodePosition(node, 0);
         });
     },
@@ -931,7 +1089,7 @@ SceneGraph.prototype =
                     scene_graph.getParentNodeFromModel(leaf_model).attachChild(node_updated);
                     scene_graph.disableHighlightedParent(node, 0);
                     scene_graph.disableHighlightedChildren(node, 0);
-                    scene_graph.arrangeHorizontal();
+                    scene_graph.arrange();
                 });
             }
             else
@@ -946,7 +1104,7 @@ SceneGraph.prototype =
                     scene_graph.getParentNodeFromModel(model_updated).attachChild(node_updated);
                     scene_graph.disableHighlightedParent(node, 0);
                     scene_graph.disableHighlightedChildren(node, 0);
-                    scene_graph.arrangeHorizontal();
+                    scene_graph.arrange();
                 });
             }
         }
@@ -955,7 +1113,7 @@ SceneGraph.prototype =
             this.view_dragging_node_parent.attachChild(this.view_dragging_node);
             this.disableHighlightedParent(this.view_dragging_node, 0);
             this.disableHighlightedChildren(this.view_dragging_node, 0);
-            this.arrangeHorizontal();
+            this.arrange();
         }
 
         this.view_dragging_node = null;
@@ -985,7 +1143,7 @@ SceneGraph.prototype =
             scene_graph.node_root.x += d_x;
             scene_graph.node_root.y += d_y;
 
-            scene_graph.arrangeHorizontal(0);
+            scene_graph.arrange(0);
 
             pre_x = cur_x;
             pre_y = cur_y;
