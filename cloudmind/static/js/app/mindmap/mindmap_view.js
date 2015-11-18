@@ -1078,6 +1078,9 @@ SceneGraph.prototype =
         {
             if(node_clicked == false)
             {
+                scene_graph.disableHighlightedParent(node.parent);
+                scene_graph.disableHighlightedChildren(node.parent);
+
                 if(node.model.node_idx == -1)
                     scope.onEventRemovePreliminary();
                 else
@@ -1090,6 +1093,9 @@ SceneGraph.prototype =
         {
             if(d3.event.keyCode == 27)
             {
+                scene_graph.disableHighlightedParent(node.parent);
+                scene_graph.disableHighlightedChildren(node.parent);
+
                 if(node.model.node_idx == -1)
                     scope.onEventRemovePreliminary();
                 else
