@@ -604,10 +604,20 @@ SceneGraph.prototype =
                 .attr("idx", node_idx)
                 .style("left", this.view_center_x + node.x - node.width/2 + "px")
                 .style("top", this.view_center_y + node.y - node.height/2 + "px")
-                .style("background-size", "cover")
-                .style("background-position", "center")
-                .style("background-image", model.file_type.search("image") == 0 ? "url(/api/v1/leaf/"+model.id+"?t=true)" : "");
+                .style("overflow", "hidden");
 
+            if(model.file_type.search("image") === 0)
+            {
+              var bg_layer = node.view_info.append('div');
+              bg_layer.style("width", "100%")
+              .style("height", "75px")
+              .style("position", "absolute")
+              .style("background-image", "url(/api/v1/leaf/"+model.id+"?t=true)")
+              .style("background-color", "rgb(85, 124, 162)")
+              .style("background-size", "cover")
+              .style("background-position", "center");
+            }
+            
             this.updateName(node);
         }
         else
