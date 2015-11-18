@@ -623,7 +623,7 @@ SceneGraph.prototype =
               bg_layer.style("width", "100%")
               .style("height", "75px")
               .style("position", "absolute")
-              .style("background-color", "rgb(0, 0, 0)")
+              .style("background-color", "rgba(0, 0, 0, 0.3)")
               .style("background-size", "cover")
               .style("background-position", "center");
 
