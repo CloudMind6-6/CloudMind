@@ -90,31 +90,22 @@ SceneGraphNode = function(model, id)
 
 SceneGraphNode.prototype =
 {
-    attachChild : function(child)
+    attachChild : function(child, keep_pos)
     {
         if(child.parent)
             child.parent.detachChild(child);
 
         child.parent = this;
-        child.x = this.x;
-        child.y = this.y;
-        child.link_src_x = this.link_dst_x;
-        child.link_src_y = this.link_dst_y;
-        child.link_dst_x = this.link_dst_x;
-        child.link_dst_y = this.link_dst_y;
 
-        this.children.push(child);
-
-        this.updateUpward();
-        child.updateDownward();
-    },
-
-    attachChildFixed : function(child)
-    {
-        if(child.parent)
-            child.parent.detachChild(child);
-
-        child.parent = this;
+        if(keep_pos == null)
+        {
+            child.x = this.x;
+            child.y = this.y;
+            child.link_src_x = this.link_dst_x;
+            child.link_src_y = this.link_dst_y;
+            child.link_dst_x = this.link_dst_x;
+            child.link_dst_y = this.link_dst_y;
+        }
 
         this.children.push(child);
 
@@ -283,7 +274,7 @@ arrangeHorizontal = function(node, no_margin, dir)
         node.clearChildren();
 
         for(var i = 0; i < children_size_aligned.length; ++i)
-            node.attachChildFixed(children_size_aligned[i]);
+            node.attachChild(children_size_aligned[i], true);
     }
     else
     {
@@ -390,7 +381,7 @@ arrangeVertical = function(node, no_margin, dir)
         node.clearChildren();
 
         for(var i = 0; i < children_size_aligned.length; ++i)
-            node.attachChildFixed(children_size_aligned[i]);
+            node.attachChild(children_size_aligned[i], true);
     }
     else
     {
@@ -806,12 +797,12 @@ SceneGraph.prototype =
             .each("end", function(){node.view_transitioning = false; node.view_positioning = false;})
             .style("left", this.view_center_x + node.x - node.width/2 + "px")
             .style("top", this.view_center_y + node.y - node.height/2 + "px")
-            .style("background-color",  node.view_editing                           ? "#E9EA7A" :
-                                        node.view_highlighted_parent == true       ? "#957acb" :
-                                        node.view_highlighted_children == true     ? "#F0B449" :
-                                        node.type == 'leaf'                         ? '#557CA2' :
-                                        node.model.node_idx == node.model.root_idx  ? "#7FD6BA" :
-                                                                                      "#82cadd");
+            .style("background-color",  node.view_editing                                               ?   "#E9EA7A" :
+                                        node.view_highlighted_parent == true    && node.type != 'root'  ?   "#957acb" :
+                                        node.view_highlighted_children == true  && node.type != 'root'  ?   "#F0B449" :
+                                        node.type == 'leaf'                                             ?   '#557CA2' :
+                                        node.model.node_idx == node.model.root_idx                      ?   "#7FD6BA" :
+                                                                                                            "#82cadd");
 
         node.view_menu
             .transition()
@@ -841,15 +832,15 @@ SceneGraph.prototype =
             .duration(duration)
             .each("end", function(){node.view_transitioning = false; node.view_positioning = false;})
             .attr("d", diagonal)
-            .style("stroke-width",  node.view_editing                       ?   "4px" :
-                                    node.view_highlighted_parent == true    ?   "6px" :
-                                    node.view_highlighted_children == true  ?   "4px" :
-                                                                                "2px")
-            .style("stroke",        node.view_editing                       ?   "#D5D66B" :
-                                    node.view_highlighted_parent == true    ?   "#957acb" :
-                                    node.view_highlighted_children == true  ?   "#F09446" :
-                                    node.type == 'leaf'                     ?   "#486B90" :
-                                                                                "#5aa0b3");
+            .style("stroke-width",  node.view_editing                                               ?   "4px" :
+                                    node.view_highlighted_parent == true    && node.type != 'root'  ?   "6px" :
+                                    node.view_highlighted_children == true  && node.type != 'root'  ?   "4px" :
+                                                                                                        "2px")
+            .style("stroke",        node.view_editing                                               ?   "#D5D66B" :
+                                    node.view_highlighted_parent == true    && node.type != 'root'  ?   "#957acb" :
+                                    node.view_highlighted_children == true && node.type != 'root'  ?   "#F09446" :
+                                    node.type == 'leaf'                                             ?   "#486B90" :
+                                                                                                        "#5aa0b3");
     },
 
     updateNodePosition : function(node, duration)
@@ -949,7 +940,7 @@ SceneGraph.prototype =
 
     enableHighlightedParent : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_positioning == true || node.view_dragging == true)
+        if(node == null || node.view_positioning == true || node.view_dragging == true)
             return;
 
         node.view_highlighted_parent = true;
@@ -961,7 +952,7 @@ SceneGraph.prototype =
 
     disableHighlightedParent : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_positioning == true || node.view_dragging == true)
+        if(node == null || node.view_positioning == true || node.view_dragging == true)
             return;
 
         node.view_highlighted_parent = false;
@@ -973,7 +964,7 @@ SceneGraph.prototype =
 
     enableHighlightedChildren : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_positioning == true || node.view_dragging == true)
+        if(node == null || node.view_positioning == true || node.view_dragging == true)
             return;
 
         node.view_highlighted_children = true;
@@ -989,7 +980,7 @@ SceneGraph.prototype =
 
     disableHighlightedChildren : function(node, duration)
     {
-        if(node.type == 'null' || node.parent == null || node.view_positioning == true || node.view_dragging == true)
+        if(node == null || node.view_positioning == true || node.view_dragging == true)
             return;
 
         node.view_highlighted_children = false;
@@ -1070,6 +1061,16 @@ SceneGraph.prototype =
         this.view_dragging_node_parent = node.parent;
 
         node.parent.detachChild(node);
+
+        node.link_src_x = node.link_dst_x = node.x;
+        node.link_src_y = node.link_dst_y = node.y;
+
+        if(scene_graph.arrange_mode == 'horizontal')
+            arrangeHorizontal(node, true);
+        else
+            arrangeVertical(node, true);
+
+        scene_graph.updateNodePosition(node, 0);
 
         this.arrange();
 

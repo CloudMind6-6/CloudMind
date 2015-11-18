@@ -4,14 +4,15 @@ var node_store = null;
 var user_store = null;
 var scope = null;
 var modal = null;
+var state = null;
 
 
 // Angular JS Link
 
-app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', function($scope, $modal, UserStore, NodeStore)
+app.controller('MindmapCtrl', ['$scope', '$state', '$modal', 'UserStore', 'NodeStore', function($scope, $state, $modal, UserStore, NodeStore)
 {
     scope = $scope;
-
+    state = $state;
     modal = $modal;
 
     user_store = UserStore;
@@ -50,6 +51,9 @@ app.controller('MindmapCtrl', ['$scope', '$modal', 'UserStore', 'NodeStore', fun
 
     scope.onRemoveNode = function(remove_idx, model_list)
     {
+        if(remove_idx == scene_graph.node_root.model.node_idx)
+            state.go('app.list');
+
         scene_graph.removeNode(remove_idx);
         scene_graph.arrange();
     };
