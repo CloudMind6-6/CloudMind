@@ -1,4 +1,5 @@
-# CloudMind
+![logo](https://raw.githubusercontent.com/CloudMind6-6/CloudMind/combine/logo.png)
+---------
 ## Demo
  http://cloud-mind.net/
  
