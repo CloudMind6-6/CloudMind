@@ -1,7 +1,7 @@
 ![logo](https://raw.githubusercontent.com/CloudMind6-6/CloudMind/combine/logo.png)
 ---------
 ## Demo
- http://cloudmind.rainclab.net
+ http://cloudmind.rainclab.net:44444
  
 ## Installation
  1. Download
